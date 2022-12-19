@@ -13,6 +13,11 @@ sender_spec: SenderSpecification = SenderSpecification('TDataScience')
 receiver_spec: ReceiverSpecification = ReceiverSpecification('JuanPabloCadena')
 tweets_collected: list[dict] = better_filter.filter(
     sender_spec, limit=5, func=decode_tweet_to_json)
+raw_tweets_df: pd.DataFrame = pd.DataFrame(tweets_collected)
+raw_tweets_df.to_csv('data/raw/raw_tweets.csv', index=False)
+
+# TODO: encapsulate cleaning process into simple functions
+
 clean_tweets: list[dict] = []
 for element in tweets_collected:
     print(f"Tweet id: {element['id']}")
@@ -34,3 +39,4 @@ clean_tweets_df.drop(
     errors='ignore')
 print(clean_tweets_df)
 print(clean_tweets_df.columns)
+clean_tweets_df.to_csv('data/processed/processed_tweets.csv', index=False)

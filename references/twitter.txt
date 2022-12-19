@@ -1,0 +1,9 @@
+Adavanced Search for twitter:
+From: (from:JuanPabloCadena)
+To: (to:JuanPabloCadena)
+Include owner: (@JuanPabloCadena)
+OR: (dota2 OR moba)
+MultipleHashtags: (#Dota2 OR #Moba)
+Date: dota2 until:2022-11-10 since:2022-11-05
+Exclude: moba -dota2
+Language: moba lang:es

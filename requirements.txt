@@ -7,3 +7,4 @@ nltk
 pydantic
 tweepy
 python-dotenv
+jupyter

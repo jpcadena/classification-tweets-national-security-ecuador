@@ -30,6 +30,19 @@ class BetterFilter(Filter):
 
     def filter(self, spec: Specification, exclude: str = None,
                limit: int = 100, func: callable = None) -> list[dict]:
+        """
+        Filter method inherited from Filter
+        :param spec: Specification to use as filter
+        :type spec: Specification
+        :param exclude: word to exclude
+        :type exclude: str
+        :param limit: number of tweets to search
+        :type limit: int
+        :param func: function to apply as default for decode json
+        :type func: function
+        :return: list of raw tweets as dictionaries
+        :rtype: list[dict]
+        """
         raw_tweets: list[dict] = []
         query: str = spec.spec
         if exclude:

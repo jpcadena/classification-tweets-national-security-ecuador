@@ -1,4 +1,4 @@
-Adavanced Search for twitter:
+Advanced Search for twitter used on SNScrape API:
 From: (from:TDataScience)
 To: (to:TDataScience)
 Include owner: (@TDataScience)

@@ -1,0 +1,10 @@
+pylint
+numpy
+pandas
+snscrape
+transformers
+nltk
+nest_asyncio
+pydantic
+tweepy
+python-dotenv

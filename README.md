@@ -1,14 +1,17 @@
 # classification-tweets-national-security-ecuador
 
 ## Classification of Tweets about national security at Ecuador 2022
+Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+when an unknown printer took a galley of type and scrambled it to make a type
+specimen book. It has survived not only five centuries, but also the leap into
+electronic typesetting, remaining essentially unchanged. It was popularised in
+the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
+and more recently with desktop publishing software like Aldus PageMaker
+including versions of Lorem Ipsum.
 
-### Environment credentials
-
-Rename **sample.env** to **.env** and replace your Twitter API credentials if you
-will work with *Tweepy* data collection.
-Ask for **Elevated** privileges for your developer account which is required for
-**Twitter API v2**. Check more info
-at [Twitter Developers](https://developer.twitter.com/en/portal/dashboard).
+### Requirements:
+Python 3.10+
 
 ### Environement and execution
 
@@ -27,15 +30,20 @@ cd classification-tweets-national-security-ecuador
 source sample_venv/bin/activate
 ```
 
-+ Install dependencies with:
+### Installation
 ```
 pip install -r requirements.txt
 ```
 
-+ Execute main script with:
+### Execution:
 ```
 python main.py
 ```
 
-PD:
-If you want to give more style for this README.md file, check documentation at [Github Docs](https://docs.github.com/es/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
+### Environment credentials
+
+Rename **sample.env** to **.env** and replace your Twitter API credentials if you will work with **Tweepy** data collection.
+Ask for **Elevated** privileges for your developer account which is required for **Twitter API v2**. Check more info at [Twitter Developers](https://developer.twitter.com/en/portal/dashboard).
+
+### Additional information
+If you want to give more to this README.md file, check documentation at [Github Docs](https://docs.github.com/es/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).

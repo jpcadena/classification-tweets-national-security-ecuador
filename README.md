@@ -10,32 +10,36 @@ the 1960s with the release of Letraset sheets containing Lorem Ipsum passages,
 and more recently with desktop publishing software like Aldus PageMaker
 including versions of Lorem Ipsum.
 
+
 ### Requirements
 Python 3.10+
 
+
 ### Git
-+ Clone repository:
++ First, clone repository:
 ```
 git clone https://github.com/jpcadena/classification-tweets-national-security-ecuador.git
 ```
 
 + Change directory to root project with:
-
 ```
   cd classification-tweets-national-security-ecuador
 ```
 
-+ First create your git branch with the following:
++ Create your git branch with the following:
 ```
 git checkout -b <new_branch>
 ```
 
 For *<new_branch>* use some convention as following:
-- **yourgithubusername**
+```
+yourgithubusername
+```
 
-If some work in progress (WIP) or bug shows up, you can use:
-- **yourgithubusername_feature**
-
+Or if some work in progress (WIP) or bug shows up, you can use:
+```
+yourgithubusername_feature
+```
 
 + Switch to your branch:
 ```
@@ -62,40 +66,38 @@ git push --set-upstream origin <new_branch>
 git push origin
 ```
 
+
 ### Environment
 
-+ Create a **virtualenvironment** 'sample_venv' with:
-
++ Create a **virtual environment** 'sample_venv' with:
 ```
 python3 -m venv sample_venv
 ```
 
 + Activate environment in Windows with:
-
 ```
 .\sample_venv\Scripts\activate
 ```
 
 + Or with Unix or Mac:
-
 ```
 source sample_venv/bin/activate
 ```
 
-### Installation
 
+### Installation
 ```
 pip install -r requirements.txt
 ```
 
-### Execution
 
+### Execution
 ```
 python main.py
 ```
 
-### Environment credentials
 
+### Environment credentials
 Rename **sample.env** to **.env** and replace your Twitter API credentials if
 you will work with **Tweepy** data collection.
 Ask for **Elevated** privileges for your developer account which is required
@@ -104,4 +106,4 @@ at [Twitter Developers](https://developer.twitter.com/en/portal/dashboard).
 
 
 ### Additional information
-If you want to give more to this README.md file, check documentation at [Github Docs](https://docs.github.com/es/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
+If you want to give more style and a better format to this README.md file, check documentation at [Github Docs](https://docs.github.com/es/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).

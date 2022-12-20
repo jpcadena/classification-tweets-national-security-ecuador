@@ -33,7 +33,9 @@ git checkout -b <new_branch>
 For *<new_branch>* use some convention as following:
 - **yourgithubusername**
 
-If some work in progress (WIP) or bug shows up, **yourgithubusername_feature**
+If some work in progress (WIP) or bug shows up, you can use:
+- **yourgithubusername_feature**
+
 
 + Switch to your branch:
 ```

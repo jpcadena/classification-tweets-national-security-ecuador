@@ -19,6 +19,7 @@ from lightgbm import LGBMClassifier
 from catboost import CatBoostClassifier
 from engineering.visualization import FIG_SIZE
 
+# TODO: Check data type of parameters and fill documentation of the functions.
 
 def analyze_models(x_train, y_train, x_test, y_test) -> pd.DataFrame:
     """

@@ -13,7 +13,7 @@ FIG_SIZE: tuple[int] = (15, 8)
 colors: list[str] = ['lightskyblue', 'coral', 'palegreen']
 FONT_SIZE: int = 15
 
-# TODO: Add WORDCLOUD plot
+# TODO: Add WORDCLOUD plot and complete documentation for parameters.
 
 
 def plot_count(dataframe: pd.DataFrame, variables) -> None:

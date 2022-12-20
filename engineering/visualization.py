@@ -16,7 +16,7 @@ FONT_SIZE: int = 15
 # TODO: Add WORDCLOUD plot and complete documentation for parameters.
 
 
-def plot_count(dataframe: pd.DataFrame, variables) -> None:
+def plot_count(dataframe: pd.DataFrame, variables, hue: str) -> None:
     """
     This method plots the counts of observations from the given variables
     :param dataframe:
@@ -31,13 +31,13 @@ def plot_count(dataframe: pd.DataFrame, variables) -> None:
     plot_iterator: int = 1
     for i in variables:
         plt.subplot(1, 3, plot_iterator)
-        sns.countplot(x=dataframe[i], hue=dataframe.Exited, palette=PALETTE)
+        sns.countplot(x=dataframe[i], hue=dataframe[hue], palette=PALETTE)
         label = re.sub(pattern=RE_PATTERN, repl=RE_REPL, string=i)
         plt.xlabel(label, fontsize=15)
         plt.ylabel('Count', fontsize=15)
         plot_iterator += 1
-        plt.show()
         plt.savefig(f'reports/figures/discrete_{i}.png')
+        plt.show()
 
 
 def plot_distribution(df_column: pd.Series, color: str) -> None:
@@ -57,8 +57,8 @@ def plot_distribution(df_column: pd.Series, color: str) -> None:
     plt.title('Distribution Plot for ' + label)
     plt.xlabel(label, fontsize=FONT_SIZE)
     plt.ylabel('Frequency', fontsize=FONT_SIZE)
-    plt.show()
     plt.savefig('reports/figures/' + str(df_column.name) + '.png')
+    plt.show()
 
 
 def boxplot_dist(
@@ -84,9 +84,9 @@ def boxplot_dist(
     plt.title(x_label + ' in regards to ' + y_label, fontsize=FONT_SIZE)
     plt.xlabel(x_label, fontsize=FONT_SIZE)
     plt.ylabel(y_label, fontsize=FONT_SIZE)
-    plt.show()
     plt.savefig(
         f'reports/figures/discrete_{first_variable}_{second_variable}.png')
+    plt.show()
 
 
 def plot_scatter(dataframe: pd.DataFrame, x: str, y: str, hue: str) -> None:
@@ -108,9 +108,9 @@ def plot_scatter(dataframe: pd.DataFrame, x: str, y: str, hue: str) -> None:
                     palette=PALETTE)
     label = re.sub(pattern=RE_PATTERN, repl=RE_REPL, string=y)
     plt.title(f'{x} Wise {label} Distribution')
-    plt.show()
     print(dataframe[[x, y]].corr())
     plt.savefig(f'reports/figures/{x}_{y}_{hue}.png')
+    plt.show()
 
 
 def plot_heatmap(dataframe: pd.DataFrame) -> None:
@@ -124,5 +124,5 @@ def plot_heatmap(dataframe: pd.DataFrame) -> None:
     plt.figure(figsize=FIG_SIZE)
     sns.heatmap(data=dataframe.corr(), annot=True, cmap="RdYlGn")
     plt.title('Heatmap showing correlations among columns', fontsize=FONT_SIZE)
-    plt.show()
     plt.savefig('reports/figures/correlations_heatmap.png')
+    plt.show()

@@ -2,12 +2,17 @@
 Main script for ML project
 """
 import pandas as pd
-from engineering.persistence_manager import PersistenceManager, DataType
+from matplotlib import pyplot as plt
 from engineering.snscrape_collection import decode_tweet_to_json, flatten, \
     str_to_datetime_values, nested_camel, get_nested_dict_structure, \
     combine_flattened
+from engineering.persistence_manager import PersistenceManager, DataType
+from engineering.visualization import plot_count, plot_distribution, \
+    boxplot_dist, plot_scatter, plot_heatmap
 from schemas.filter import BetterFilter
 from schemas.specification import SenderSpecification, ReceiverSpecification
+
+plt.rcParams.update({'figure.max_open_warning': 0})
 
 better_filter: BetterFilter = BetterFilter()
 sender_spec: SenderSpecification = SenderSpecification('TDataScience')
@@ -44,3 +49,10 @@ print(clean_tweets_df)
 #     clean_tweets_df, DataType.PROCESSED.value, 'processed_tweets')
 # if processed_saved:
 #     print('clean tweets saved!')
+
+# Testing plot functions
+# plot_count(clean_tweets_df, ['content', 'retweet_count'], 'lang')
+# plot_distribution(clean_tweets_df.date, 'red')
+# boxplot_dist(clean_tweets_df, 'retweet_count', 'like_count')
+# plot_scatter(clean_tweets_df, 'content', 'date', 'lang')
+# plot_heatmap(clean_tweets_df)

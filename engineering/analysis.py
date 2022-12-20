@@ -16,7 +16,7 @@ missing_values = (tweets_df.isnull().sum())
 print(missing_values[missing_values > 0])
 print(missing_values[missing_values > 0] / tweets_df.shape[0] * 100)
 
-# Identifying Class Imbalance in Exited
+# Identifying Class Imbalance in interest column
 print(tweets_df[interest_column].value_counts())
 print(tweets_df[interest_column].unique())
 print(tweets_df[interest_column].value_counts(normalize=True) * 100)

@@ -7,11 +7,13 @@ from matplotlib import pyplot as plt
 import seaborn as sns
 
 RE_PATTERN: str = "([a-z])([A-Z])"
-RE_REPL: str = "\g<1> \g<2>"
+RE_REPL: str = r"\g<1> \g<2>"
 PALETTE: str = 'pastel'
 FIG_SIZE: tuple[int] = (15, 8)
 colors: list[str] = ['lightskyblue', 'coral', 'palegreen']
 FONT_SIZE: int = 15
+
+# TODO: Add WORDCLOUD plot
 
 
 def plot_count(dataframe: pd.DataFrame, variables) -> None:

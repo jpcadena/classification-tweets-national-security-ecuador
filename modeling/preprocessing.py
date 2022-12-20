@@ -9,8 +9,9 @@ from nltk.corpus import stopwords
 from sklearn.neighbors import LocalOutlierFactor
 from textblob import TextBlob
 
-STOPWORDS_REGEX: str = r'[^\W\d]*$'
+STOPWORDS_PATTERN: str = r'[^\W\d]*$'
 
+# TODO: add anonymization functions for user_id, tweet_id, etc and more cleaning functions.
 
 def lof_observation(dataframe: pd.DataFrame) -> pd.DataFrame:
     """
@@ -54,7 +55,7 @@ def clear_outliers(dataframe: pd.DataFrame, column: str) -> pd.DataFrame:
     iqr: float = third_quartile - first_quartile
     lower: float = first_quartile - 1.5 * iqr
     upper: float = third_quartile + 1.5 * iqr
-    print("Age - Lower score: ", lower, "and upper score: ", upper)
+    print(f"{column}- Lower score: ", lower, "and upper score: ", upper)
     df_outlier = dataframe[column][(dataframe[column] > upper)]
     print(df_outlier)
     return dataframe
@@ -83,7 +84,7 @@ def clean_stopwords(tweet: str) -> list[str]:
     """
     tweet_list: str = [ele for ele in tweet.split() if ele != 'user']
     clean_tokens: list[str] = [t for t in tweet_list if re.match(
-        STOPWORDS_REGEX, t)]
+        STOPWORDS_PATTERN, t)]
     clean_s: str = ' '.join(clean_tokens)
     clean_mess: list[str] = [word for word in clean_s.split() if word.lower()
                              not in stopwords.words('spanish')]

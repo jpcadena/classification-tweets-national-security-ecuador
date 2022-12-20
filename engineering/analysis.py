@@ -3,7 +3,7 @@ First Analysis script
 """
 import pandas as pd
 
-# TODO: Get dataframe to analyze and set it as tweets_df.
+# TODO: Get dataframe to analyze and set it as tweets_df and more tests for EDA.
 tweets_df: pd.DataFrame = pd.DataFrame()
 
 interest_column: str = 'sentiment'

@@ -6,8 +6,8 @@ from datetime import date, datetime
 import snscrape.modules.twitter as sn_twitter
 import pandas as pd
 
-# TODO: define operations if data will be required to be written to disk
-# If so, define persistence methods to save as csv or any file extension
+# TODO: define operations if data will be required to be written to disk.
+#  If so, define persistence methods to save as csv or any file extension
 
 
 def decode_tweet_to_json(obj: sn_twitter.Tweet) -> str:
@@ -22,40 +22,40 @@ def decode_tweet_to_json(obj: sn_twitter.Tweet) -> str:
         isinstance(obj, (date, datetime)) else obj.__dict__
 
 
-def str_to_datetime_values(my_dict: dict) -> dict:
+def str_to_datetime_values(data: dict) -> dict:
     """
     Function to cast string values to datetime from dictionary
-    :param my_dict: Tweet data
-    :type my_dict: dict
+    :param data: Tweet data
+    :type data: dict
     :return: Tweet with datetime data type
     :rtype: dict
     """
     try:
-        tweet_date: str = my_dict['date']
-        my_dict.update({'date': datetime.strptime(
+        tweet_date: str = data['date']
+        data.update({'date': datetime.strptime(
             tweet_date, "%Y-%m-%d %H:%M:%S")})
     except TypeError as t_err:
         print(t_err, "date field does not exist.")
     try:
-        user_created: str = my_dict['user']['created']
-        my_dict['user']['created'] = datetime.strptime(
+        user_created: str = data['user']['created']
+        data['user']['created'] = datetime.strptime(
             user_created, "%Y-%m-%d %H:%M:%S")
     except TypeError as t_err:
         print(t_err, "user created field does not exist.")
     try:
-        quoted_tweet_date: str = my_dict['quotedTweet']['date']
-        my_dict['quotedTweet']['date'] = datetime.strptime(
+        quoted_tweet_date: str = data['quotedTweet']['date']
+        data['quotedTweet']['date'] = datetime.strptime(
             quoted_tweet_date, "%Y-%m-%d %H:%M:%S")
     except TypeError as t_err:
         print(t_err, "quotedTweet date field does not exist.")
     try:
-        quoted_tweet_user_creation_date: str = my_dict['quotedTweet'][
+        quoted_tweet_user_creation_date: str = data['quotedTweet'][
             'user']['created']
-        my_dict['quotedTweet']['user']['created'] = datetime.strptime(
+        data['quotedTweet']['user']['created'] = datetime.strptime(
             quoted_tweet_user_creation_date, "%Y-%m-%d %H:%M:%S")
     except TypeError as t_err:
         print(t_err, "quotedTweet user created field does not exist.")
-    return my_dict
+    return data
 
 
 def camel_to_snake(name: str) -> str:
@@ -85,11 +85,11 @@ def nested_camel(data) -> list | dict:
         b, (dict, list)) else b for a, b in data.items()}
 
 
-def flatten(data: dict, column_name: str, structure: list[str]) -> pd.Series:
+def flatten(raw_tweet: dict, column_name: str, structure: list[str]) -> pd.Series:
     """
     Flat method to nested dictionaries as dataframe column
-    :param data: Tweet data
-    :type data: dict
+    :param raw_tweet: Tweet data
+    :type raw_tweet: dict
     :param column_name: Column name to apply function
     :type column_name: str
     :param structure: Nested dictionary structure keys
@@ -97,21 +97,21 @@ def flatten(data: dict, column_name: str, structure: list[str]) -> pd.Series:
     :return: Series created with prefix column_name + original name
     :rtype: pd.Series
     """
-    my_dict: dict = {}
+    data: dict = {}
     mod_keys = [column_name + '_' + sub for sub in structure]
-    if not data:
-        my_dict = dict.fromkeys(mod_keys, '')
+    if not raw_tweet:
+        data = dict.fromkeys(mod_keys, '')
     else:
-        for key, value in data.items():
+        for key, value in raw_tweet.items():
             if isinstance(value, list):
                 if isinstance(value[0], dict):
                     for k_s, v_s in value[0].items():
-                        my_dict[f"{column_name}_{key}_{k_s}"] = v_s
+                        data[f"{column_name}_{key}_{k_s}"] = v_s
                 else:
-                    my_dict[f'{column_name}_{key}'] = value
+                    data[f'{column_name}_{key}'] = value
             else:
-                my_dict[f'{column_name}_{key}'] = value
-    return pd.Series(my_dict)
+                data[f'{column_name}_{key}'] = value
+    return pd.Series(data)
 
 
 def get_nested_dict_structure(

@@ -3,6 +3,8 @@ Transformation including: Scaling, Decomposition, Aggregation
 """
 from nltk import WordNetLemmatizer
 
+# TODO: Create scaling functions and splitting functions
+
 
 def normalization(tweet_list: list[str]) -> list[str]:
     """

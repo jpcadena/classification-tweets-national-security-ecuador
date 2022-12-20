@@ -1,10 +1,15 @@
 """
-Data cleaning
+Preprocessing section including: Formatting, Cleaning, Anonymization, Sampling
 """
+import re
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
+from nltk.corpus import stopwords
 from sklearn.neighbors import LocalOutlierFactor
+from textblob import TextBlob
+
+STOPWORDS_REGEX: str = r'[^\W\d]*$'
 
 
 def lof_observation(dataframe: pd.DataFrame) -> pd.DataFrame:
@@ -53,3 +58,33 @@ def clear_outliers(dataframe: pd.DataFrame, column: str) -> pd.DataFrame:
     df_outlier = dataframe[column][(dataframe[column] > upper)]
     print(df_outlier)
     return dataframe
+
+
+def form_sentence(tweet: str) -> str:
+    """
+    Function to clean hashtags, mentions and punctuation
+    :param tweet: raw tweet
+    :type tweet: str
+    :return: clean tweet
+    :rtype: str
+    """
+    tweet_blob: TextBlob = TextBlob(text=tweet)
+    clean_tweet: str = ' '.join(tweet_blob.words)
+    return clean_tweet
+
+
+def clean_stopwords(tweet: str) -> list[str]:
+    """
+    Remove stopwords from spanish to a single tweet
+    :param tweet: tweet
+    :type tweet: str
+    :return: clean tweet as single words in a list
+    :rtype: list[str]
+    """
+    tweet_list: str = [ele for ele in tweet.split() if ele != 'user']
+    clean_tokens: list[str] = [t for t in tweet_list if re.match(
+        STOPWORDS_REGEX, t)]
+    clean_s: str = ' '.join(clean_tokens)
+    clean_mess: list[str] = [word for word in clean_s.split() if word.lower()
+                             not in stopwords.words('spanish')]
+    return clean_mess

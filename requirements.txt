@@ -9,3 +9,13 @@ tweepy
 python-dotenv
 jupyter
 matplotlib
+seaborn
+scikit-learn
+scikit-plot
+textblob
+wordcloud
+xgboost
+lightgbm
+catboost
+tensorflow
+keras

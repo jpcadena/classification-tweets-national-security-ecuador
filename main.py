@@ -14,10 +14,10 @@ sender_spec: SenderSpecification = SenderSpecification('TDataScience')
 receiver_spec: ReceiverSpecification = ReceiverSpecification('JuanPabloCadena')
 tweets_collected: list[dict] = better_filter.filter(
     sender_spec, limit=5, func=decode_tweet_to_json)
-raw_saved: bool = PersistenceManager.save_to_file(
-    tweets_collected, DataType.RAW.value, 'my_raw_tweets')
-if raw_saved:
-    print('raw tweets saved!')
+# raw_saved: bool = PersistenceManager.save_to_file(
+#     tweets_collected, DataType.RAW.value, 'my_raw_tweets')
+# if raw_saved:
+#     print('raw tweets saved!')
 
 # TODO: encapsulate cleaning process into simple functions
 
@@ -40,7 +40,7 @@ clean_tweets_df.drop(
      'quoted_tweet_source_url', 'quoted_tweet_cashtags'], axis=1, inplace=True,
     errors='ignore')
 print(clean_tweets_df)
-processed_saved: bool = PersistenceManager.save_to_file(
-    clean_tweets_df, DataType.PROCESSED.value, 'processed_tweets')
-if processed_saved:
-    print('clean tweets saved!')
+# processed_saved: bool = PersistenceManager.save_to_file(
+#     clean_tweets_df, DataType.PROCESSED.value, 'processed_tweets')
+# if processed_saved:
+#     print('clean tweets saved!')

@@ -1,10 +1,37 @@
 """
 Specification schema
 """
+from abc import ABC, abstractmethod
 from datetime import datetime
 
 
-class Specification:
+class BaseSpecification(ABC):
+    """
+    Specification class
+    """
+
+    @abstractmethod
+    def __init__(self, spec: str, lang: str = 'es') -> None:
+        """
+        Abstract constructor for Base Specification
+        :param spec: specification
+        :type spec: str
+        :param lang: language to use, by default spanish
+        :type lang: str
+        """
+
+    @abstractmethod
+    def __or__(self, *args: tuple) -> None:
+        """
+        OR method to create OrSpecification
+        :param args: Multiple Specifications
+        :type args: tuple
+        :return: OrSpecification instance
+        :rtype: OrSpecification
+        """
+
+
+class Specification(BaseSpecification):
     """
     Specification class
     """

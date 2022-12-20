@@ -20,8 +20,8 @@ class PersistenceManager:
 
     @staticmethod
     def save_to_file(
-            data: list[dict] | pd.DataFrame, data_type: str, filename: str = 'data'
-    ) -> bool:
+            data: list[dict] | pd.DataFrame, data_type: str,
+            filename: str = 'data') -> bool:
         """
         Save list of dictionaries as csv file
         :param data: list of tweets as dictionaries

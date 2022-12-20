@@ -2,18 +2,21 @@
 Filter schema
 """
 import json
+from abc import ABC, abstractmethod
+
 import snscrape.modules.twitter as sn_twitter
 from schemas.specification import Specification
 
 
-class Filter:
+class Filter(ABC):
     """
-    Filter class
+    Filter class based on Abstract Base Class.
     """
 
+    @abstractmethod
     def filter(self, spec: Specification, exclude: str = None) -> None:
         """
-        Filter method
+        Abstract method to filter
         :param spec: Object to filter by
         :type spec: Specification
         :param exclude: Text to exclude
@@ -25,7 +28,7 @@ class Filter:
 
 class BetterFilter(Filter):
     """
-    Better Filter class based on Filter
+    Better Filter class based on Abstract Filter.
     """
 
     def filter(self, spec: Specification, exclude: str = None,

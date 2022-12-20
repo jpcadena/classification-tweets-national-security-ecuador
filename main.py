@@ -2,6 +2,7 @@
 Main script for ML project
 """
 import pandas as pd
+from engineering.persistence_manager import PersistenceManager, DataType
 from engineering.snscrape_collection import decode_tweet_to_json, flatten, \
     str_to_datetime_values, nested_camel, get_nested_dict_structure, \
     combine_flattened
@@ -13,8 +14,10 @@ sender_spec: SenderSpecification = SenderSpecification('TDataScience')
 receiver_spec: ReceiverSpecification = ReceiverSpecification('JuanPabloCadena')
 tweets_collected: list[dict] = better_filter.filter(
     sender_spec, limit=5, func=decode_tweet_to_json)
-raw_tweets_df: pd.DataFrame = pd.DataFrame(tweets_collected)
-raw_tweets_df.to_csv('data/raw/raw_tweets.csv', index=False)
+raw_saved: bool = PersistenceManager.save_to_file(
+    tweets_collected, DataType.RAW.value, 'my_raw_tweets')
+if raw_saved:
+    print('raw tweets saved!')
 
 # TODO: encapsulate cleaning process into simple functions
 
@@ -23,7 +26,6 @@ for element in tweets_collected:
     print(f"Tweet id: {element['id']}")
     element: dict = str_to_datetime_values(element)
     element: dict = nested_camel(element)
-    print(element)
     clean_tweets.append(element)
 tweets_df: pd.DataFrame = pd.DataFrame(clean_tweets)
 user_structure: list[str] = get_nested_dict_structure(tweets_df, 'user')
@@ -38,5 +40,7 @@ clean_tweets_df.drop(
      'quoted_tweet_source_url', 'quoted_tweet_cashtags'], axis=1, inplace=True,
     errors='ignore')
 print(clean_tweets_df)
-print(clean_tweets_df.columns)
-clean_tweets_df.to_csv('data/processed/processed_tweets.csv', index=False)
+processed_saved: bool = PersistenceManager.save_to_file(
+    clean_tweets_df, DataType.PROCESSED.value, 'processed_tweets')
+if processed_saved:
+    print('clean tweets saved!')

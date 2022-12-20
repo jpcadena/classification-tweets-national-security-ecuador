@@ -98,19 +98,16 @@ python main.py
 
 
 ### Environment credentials
-Rename **sample.env** to **.env** and replace your Twitter API credentials if
-you will work with **Tweepy** data collection.
-Ask for **Elevated** privileges for your developer account which is required
-for **Twitter API v2**. Check more info
-at [Twitter Developers](https://developer.twitter.com/en).
+Rename **sample.env** to **.env** and replace your Twitter API credentials if you will work with **Tweepy** data collection.\
+Ask for **Elevated** privileges for your developer account which is required for **Twitter API v2**. Check more info at [Twitter Developers](https://developer.twitter.com/en).
 
 
 ### Documentation
-Use docstrings with **reStructuredText** format by adding triple double quotes **'''** after function definition.
-Add brief function description, also for the parameters including the return value and its corresponding data type.
+Use docstrings with **reStructuredText** format by adding triple double quotes **"""** after function definition.\
+Add a brief function description, also for the parameters including the return value and its corresponding data type.
 
 
 ### Additional information
-If you want to give more style and a better format to this README.md file, check documentation at [Github Docs](https://docs.github.com/es/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
-Please use **linting** to check your code quality following [PEP 8](https://peps.python.org/pep-0008/). Check documentation for [Visual Studio Code](https://code.visualstudio.com/docs/python/linting#_run-linting) or for [Jetbrains Pycharm](https://github.com/leinardi/pylint-pycharm/blob/master/README.md).
+If you want to give more style and a better format to this README.md file, check documentation at [Github Docs](https://docs.github.com/es/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).\
+Please use **linting** to check your code quality following [PEP 8](https://peps.python.org/pep-0008/). Check documentation for [Visual Studio Code](https://code.visualstudio.com/docs/python/linting#_run-linting) or for [Jetbrains Pycharm](https://github.com/leinardi/pylint-pycharm/blob/master/README.md).\
 Recommended plugin for autocompletion: [Tabnine](https://www.tabnine.com/install)

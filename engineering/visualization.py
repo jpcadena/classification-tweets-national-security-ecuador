@@ -51,8 +51,8 @@ def plot_distribution(df_column: pd.Series, color: str) -> None:
     :return: None
     :rtype: NoneType
     """
-    label: str = re.sub(pattern=RE_PATTERN, repl=RE_REPL,
-                   string=str(df_column.name))
+    label: str = re.sub(
+        pattern=RE_PATTERN, repl=RE_REPL, string=str(df_column.name))
     sns.displot(x=df_column, kde=True, color=color, height=8, aspect=1.875)
     plt.title('Distribution Plot for ' + label)
     plt.xlabel(label, fontsize=FONT_SIZE)

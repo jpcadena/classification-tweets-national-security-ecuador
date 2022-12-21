@@ -3,7 +3,6 @@ Filter schema
 """
 import json
 from abc import ABC, abstractmethod
-
 import snscrape.modules.twitter as sn_twitter
 from schemas.specification import Specification
 

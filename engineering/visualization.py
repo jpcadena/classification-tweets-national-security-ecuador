@@ -51,7 +51,7 @@ def plot_distribution(df_column: pd.Series, color: str) -> None:
     :return: None
     :rtype: NoneType
     """
-    label = re.sub(pattern=RE_PATTERN, repl=RE_REPL,
+    label: str = re.sub(pattern=RE_PATTERN, repl=RE_REPL,
                    string=str(df_column.name))
     sns.displot(x=df_column, kde=True, color=color, height=8, aspect=1.875)
     plt.title('Distribution Plot for ' + label)
@@ -77,8 +77,10 @@ def boxplot_dist(
     :rtype: NoneType
     """
     plt.figure(figsize=FIG_SIZE)
-    x_label = re.sub(pattern=RE_PATTERN, repl=RE_REPL, string=first_variable)
-    y_label = re.sub(pattern=RE_PATTERN, repl=RE_REPL, string=second_variable)
+    x_label: str = re.sub(
+        pattern=RE_PATTERN, repl=RE_REPL, string=first_variable)
+    y_label: str = re.sub(
+        pattern=RE_PATTERN, repl=RE_REPL, string=second_variable)
     sns.boxplot(x=first_variable, y=second_variable, data=dataframe,
                 palette=PALETTE)
     plt.title(x_label + ' in regards to ' + y_label, fontsize=FONT_SIZE)
@@ -106,7 +108,7 @@ def plot_scatter(dataframe: pd.DataFrame, x: str, y: str, hue: str) -> None:
     plt.figure(figsize=FIG_SIZE)
     sns.scatterplot(x=x, data=dataframe, y=y, hue=hue,
                     palette=PALETTE)
-    label = re.sub(pattern=RE_PATTERN, repl=RE_REPL, string=y)
+    label: str = re.sub(pattern=RE_PATTERN, repl=RE_REPL, string=y)
     plt.title(f'{x} Wise {label} Distribution')
     print(dataframe[[x, y]].corr())
     plt.savefig(f'reports/figures/{x}_{y}_{hue}.png')

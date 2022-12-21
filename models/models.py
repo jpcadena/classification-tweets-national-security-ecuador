@@ -21,6 +21,7 @@ from engineering.visualization import FIG_SIZE
 
 # TODO: Check data type of parameters and fill documentation of the functions.
 
+
 def analyze_models(x_train, y_train, x_test, y_test) -> pd.DataFrame:
     """
     Function to analyze some Classification models from Scikit-Learn
@@ -35,13 +36,12 @@ def analyze_models(x_train, y_train, x_test, y_test) -> pd.DataFrame:
     :return: results ordered by accuracy score
     :rtype: pd.DataFrame
     """
-    models = [('LOGR', LogisticRegression()), ('KNN', KNeighborsClassifier()),
-              ('CART', DecisionTreeClassifier()),
-              ('RF', RandomForestClassifier()),
-              ('SVC', SVC()), ('GBM', GradientBoostingClassifier()),
-              ('XGBoost', XGBClassifier()), ('LightGBM', LGBMClassifier()),
-              ('CatBoost', CatBoostClassifier()),
-              ('ABoost', AdaBoostClassifier())]
+    models: list[tuple] = [
+        ('LOGR', LogisticRegression()), ('KNN', KNeighborsClassifier()),
+        ('CART', DecisionTreeClassifier()), ('RF', RandomForestClassifier()),
+        ('SVC', SVC()), ('GBM', GradientBoostingClassifier()),
+        ('XGBoost', XGBClassifier()), ('LightGBM', LGBMClassifier()),
+        ('CatBoost', CatBoostClassifier()), ('ABoost', AdaBoostClassifier())]
     models_df: pd.DataFrame = pd.DataFrame(
         columns=["model", "accuracy_score", "scale_method",
                  "0_precision", "0_recall", "1_precision",
@@ -50,7 +50,7 @@ def analyze_models(x_train, y_train, x_test, y_test) -> pd.DataFrame:
     for name, model in models:
         model.fit(x_train, y_train)
         y_pred = model.predict(x_test)
-        score = accuracy_score(y_test, y_pred)
+        score: float = accuracy_score(y_test, y_pred)
         class_report = classification_report(y_test, y_pred, digits=2,
                                              output_dict=True)
         zero_report = class_report['0']
@@ -110,6 +110,7 @@ def plot_confusion_matrix(
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
     plt.savefig('reports/figures/' + name + '_confusion_matrix.png')
+    plt.show()
 
 
 def get_model_results(model, x, y, y2, x2, classes: list[str],
@@ -154,5 +155,5 @@ def get_model_results(model, x, y, y2, x2, classes: list[str],
     # ROC CURVE
     y_pred_proba = model.predict_proba(x2)
     plot_roc(y2, y_pred_proba, figsize=FIG_SIZE)
-    plt.show()
     plt.savefig('reports/figures/' + str(model_name) + '_roc_curves.png')
+    plt.show()

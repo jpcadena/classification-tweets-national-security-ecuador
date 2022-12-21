@@ -2,7 +2,6 @@
 Tweepy data collection
 """
 import os
-
 import pandas as pd
 import tweepy
 from dotenv import load_dotenv

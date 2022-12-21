@@ -85,7 +85,8 @@ def nested_camel(data) -> list | dict:
         b, (dict, list)) else b for a, b in data.items()}
 
 
-def flatten(raw_tweet: dict, column_name: str, structure: list[str]) -> pd.Series:
+def flatten(raw_tweet: dict, column_name: str, structure: list[str]
+            ) -> pd.Series:
     """
     Flat method to nested dictionaries as dataframe column
     :param raw_tweet: Tweet data

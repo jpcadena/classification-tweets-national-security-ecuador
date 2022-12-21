@@ -11,7 +11,10 @@ from textblob import TextBlob
 
 STOPWORDS_PATTERN: str = r'[^\W\d]*$'
 
-# TODO: add anonymization functions for user_id, tweet_id, etc., add more cleaning functions and complete function documentation with datat type validation for parameters.
+# TODO: add anonymization functions for user_id, tweet_id, etc.,
+#  add more cleaning functions and complete function documentation with
+#  data type validation for parameters.
+
 
 def lof_observation(dataframe: pd.DataFrame) -> pd.DataFrame:
     """

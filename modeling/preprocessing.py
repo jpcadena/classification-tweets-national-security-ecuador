@@ -17,6 +17,33 @@ STOPWORDS_PATTERN: str = r'[^\W\d]*$'
 #  add more cleaning functions.
 
 
+def downcast_type(dataframe: pd.DataFrame):
+    """
+    Optimization of numeric columns by down-casting its datatype
+    :param dataframe: dataframe to optimize
+    :type dataframe: pd.DataFrame
+    :return: optimized dataframe
+    :rtype: pd.DataFrame
+    """
+    numerics: list[str] = [
+        'uint8', 'uint16', 'uint32', 'uint64', 'int8', 'int16', 'int32',
+        'int64']
+    numeric_ranges: list[tuple] = [
+        (0, 255), (0, 65535), (0, 4294967295), (0, 18446744073709551615),
+        (-128, 127), (-32768, 32767), (-2147483648, 2147483647),
+        (-18446744073709551616, 18446744073709551615)]
+    df_num_cols: pd.DataFrame = dataframe.select_dtypes(include=numerics)
+    for column in df_num_cols:
+        new_type: str = numerics[numeric_ranges.index(
+            [num_range for num_range in numeric_ranges if
+             df_num_cols[column].min() > num_range[0] and
+             num_range[1] <= df_num_cols[column].max()][0])]
+        df_num_cols[column] = df_num_cols[column].apply(
+            pd.to_numeric, downcast=new_type)  # check map for Pd.Series
+    dataframe[df_num_cols.columns] = df_num_cols
+    return dataframe
+
+
 def lof_observation(dataframe: pd.DataFrame) -> pd.DataFrame:
     """
     This function identifies outliers with LOF method
@@ -95,3 +122,22 @@ def clean_stopwords(tweet: str) -> list[str]:
     clean_mess: list[str] = [word for word in clean_s.split() if word.lower()
                              not in stopwords.words('spanish')]
     return clean_mess
+
+
+def str_to_category(dataframe: pd.DataFrame) -> pd.DataFrame:
+    """
+    Cast object (str) columns from dataframe to categorical
+    :param dataframe: raw dataframe to optimize
+    :type dataframe: pd.DataFrame
+    :return: converted dataframe
+    :rtype: pd.DataFrame
+    """
+    # if more than 50% of values in an object(str) column are unique,
+    # its more feasible to continue using object rather than converting
+    # them to category.
+    df_object = dataframe.select_dtypes(include=['object']).copy()
+    for column in df_object:
+        if len(df_object[column].unique()) < df_object[column].size / 2:
+            df_object[column] = df_object[column].astype('category')
+    dataframe[df_object.columns] = df_object
+    return dataframe

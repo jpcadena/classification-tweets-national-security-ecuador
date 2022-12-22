@@ -22,7 +22,7 @@ tweets_collected: list[dict] = better_filter.filter(
     sender_spec, limit=5, func=decode_tweet_to_json)
 
 # Save raw dataframe
-raw_saved: bool = PersistenceManager.save_to_file(
+raw_saved: bool = PersistenceManager.save_to_csv(
     tweets_collected, DataType.RAW.value, 'my_raw_tweets')
 if raw_saved:
     print('raw tweets saved!')
@@ -50,7 +50,7 @@ clean_tweets_df.drop(
 print(clean_tweets_df)
 
 # Save processed dataframe
-processed_saved: bool = PersistenceManager.save_to_file(
+processed_saved: bool = PersistenceManager.save_to_csv(
     clean_tweets_df, DataType.PROCESSED.value, 'processed_tweets')
 if processed_saved:
     print('clean tweets saved!')

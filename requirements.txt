@@ -1,5 +1,5 @@
-pylint
-numpy
+pylint==2.15.9
+numpy==1.24.0
 pandas
 snscrape
 transformers

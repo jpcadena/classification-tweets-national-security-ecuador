@@ -2,9 +2,10 @@
 Visualization script
 """
 import re
+
 import pandas as pd
-from matplotlib import pyplot as plt
 import seaborn as sns
+from matplotlib import pyplot as plt
 
 RE_PATTERN: str = "([a-z])([A-Z])"
 RE_REPL: str = r"\g<1> \g<2>"
@@ -13,16 +14,17 @@ FIG_SIZE: tuple[int] = (15, 8)
 colors: list[str] = ['lightskyblue', 'coral', 'palegreen']
 FONT_SIZE: int = 15
 
-# TODO: Add WORDCLOUD plot and complete documentation for parameters.
+
+# TODO: Add WORDCLOUD plot.
 
 
 def plot_count(dataframe: pd.DataFrame, variables, hue: str) -> None:
     """
     This method plots the counts of observations from the given variables
-    :param dataframe:
+    :param dataframe: dataframe containing tweets info
     :type dataframe: pd.DataFrame
-    :param variables:
-    :type variables:
+    :param variables: list of columns to plot
+    :type variables: list
     :return: None
     :rtype: NoneType
     """
@@ -46,8 +48,8 @@ def plot_distribution(df_column: pd.Series, color: str) -> None:
      continuous variable
     :param df_column: Single column
     :type df_column: pd.Series
-    :param color:
-    :type color:
+    :param color: color for the distribution
+    :type color: str
     :return: None
     :rtype: NoneType
     """
@@ -69,9 +71,9 @@ def boxplot_dist(
     in regard to the second variable data in a boxplot
     :param dataframe: data to use for plot
     :type dataframe: pd.DataFrame
-    :param first_variable: first variable
+    :param first_variable: first variable to plot
     :type first_variable: str
-    :param second_variable: second variable
+    :param second_variable: second variable to plot
     :type second_variable: str
     :return: None
     :rtype: NoneType
@@ -94,14 +96,14 @@ def boxplot_dist(
 def plot_scatter(dataframe: pd.DataFrame, x: str, y: str, hue: str) -> None:
     """
     This method plots the relationship between x and y for hue subset
-    :param dataframe:
+    :param dataframe: dataframe containing tweets
     :type dataframe: pd.DataFrame
-    :param x:
-    :type x:
-    :param y:
-    :type y:
-    :param hue:
-    :type hue:
+    :param x: x-axis column name from dataframe
+    :type x: str
+    :param y: y-axis column name from dataframe
+    :type y: str
+    :param hue: grouping variable to filter plot
+    :type hue: str
     :return: None
     :rtype: NoneType
     """
@@ -118,7 +120,7 @@ def plot_scatter(dataframe: pd.DataFrame, x: str, y: str, hue: str) -> None:
 def plot_heatmap(dataframe: pd.DataFrame) -> None:
     """
     Plot heatmap to analyze correlation between features
-    :param dataframe:
+    :param dataframe: dataframe containing tweets
     :type dataframe: pd.DataFrame
     :return: None
     :rtype: NoneType

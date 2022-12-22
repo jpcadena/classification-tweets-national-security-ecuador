@@ -2,6 +2,7 @@
 Preprocessing section including: Formatting, Cleaning, Anonymization, Sampling
 """
 import re
+
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
@@ -11,9 +12,9 @@ from textblob import TextBlob
 
 STOPWORDS_PATTERN: str = r'[^\W\d]*$'
 
+
 # TODO: add anonymization functions for user_id, tweet_id, etc.,
-#  add more cleaning functions and complete function documentation with
-#  data type validation for parameters.
+#  add more cleaning functions.
 
 
 def lof_observation(dataframe: pd.DataFrame) -> pd.DataFrame:
@@ -52,7 +53,7 @@ def clear_outliers(dataframe: pd.DataFrame, column: str) -> pd.DataFrame:
     :type dataframe: pd.DataFrame
     :param column: Column name
     :type column: str
-    :return:
+    :return: clean dataframe from outliers using IQR
     :rtype: pd.DataFrame
     """
     first_quartile: float = dataframe[column].quantile(0.25)

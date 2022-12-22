@@ -2,8 +2,11 @@
 Models script
 """
 import itertools
+
 import numpy as np
 import pandas as pd
+from catboost import CatBoostClassifier
+from lightgbm import LGBMClassifier
 from matplotlib import pyplot as plt
 from scikitplot.metrics import plot_roc
 from sklearn.ensemble import RandomForestClassifier, \
@@ -15,9 +18,9 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 from xgboost import XGBClassifier
-from lightgbm import LGBMClassifier
-from catboost import CatBoostClassifier
+
 from engineering.visualization import FIG_SIZE
+
 
 # TODO: Check data type of parameters and fill documentation of the functions.
 
@@ -68,7 +71,7 @@ def analyze_models(x_train, y_train, x_test, y_test) -> pd.DataFrame:
 
 
 def plot_confusion_matrix(
-        cm, classes, name, normalize=False, title='Confusion matrix',
+        cm, classes, name, normalize=False, title: str = 'Confusion matrix',
         cmap=plt.cm.Blues) -> None:
     """
     This function plots the Confusion Matrix of the test and pred arrays
@@ -80,8 +83,8 @@ def plot_confusion_matrix(
     :type name:
     :param normalize:
     :type normalize:
-    :param title:
-    :type title:
+    :param title: title for Confusion Matrix plot
+    :type title: str
     :param cmap:
     :type cmap:
     :return: None

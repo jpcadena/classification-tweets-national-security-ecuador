@@ -3,10 +3,11 @@ Main script for ML project
 """
 import pandas as pd
 from matplotlib import pyplot as plt
+
+from engineering.persistence_manager import PersistenceManager, DataType
 from engineering.snscrape_collection import decode_tweet_to_json, flatten, \
     str_to_datetime_values, nested_camel, get_nested_dict_structure, \
     combine_flattened
-from engineering.persistence_manager import PersistenceManager, DataType
 from engineering.visualization import plot_count, plot_distribution, \
     boxplot_dist, plot_scatter, plot_heatmap
 from schemas.filter import BetterFilter
@@ -19,10 +20,12 @@ sender_spec: SenderSpecification = SenderSpecification('TDataScience')
 receiver_spec: ReceiverSpecification = ReceiverSpecification('JuanPabloCadena')
 tweets_collected: list[dict] = better_filter.filter(
     sender_spec, limit=5, func=decode_tweet_to_json)
-# raw_saved: bool = PersistenceManager.save_to_file(
-#     tweets_collected, DataType.RAW.value, 'my_raw_tweets')
-# if raw_saved:
-#     print('raw tweets saved!')
+
+# Save raw dataframe
+raw_saved: bool = PersistenceManager.save_to_file(
+    tweets_collected, DataType.RAW.value, 'my_raw_tweets')
+if raw_saved:
+    print('raw tweets saved!')
 
 # TODO: encapsulate cleaning process into simple functions
 
@@ -45,14 +48,16 @@ clean_tweets_df.drop(
      'quoted_tweet_source_url', 'quoted_tweet_cashtags'], axis=1, inplace=True,
     errors='ignore')
 print(clean_tweets_df)
-# processed_saved: bool = PersistenceManager.save_to_file(
-#     clean_tweets_df, DataType.PROCESSED.value, 'processed_tweets')
-# if processed_saved:
-#     print('clean tweets saved!')
+
+# Save processed dataframe
+processed_saved: bool = PersistenceManager.save_to_file(
+    clean_tweets_df, DataType.PROCESSED.value, 'processed_tweets')
+if processed_saved:
+    print('clean tweets saved!')
 
 # Testing plot functions
-# plot_count(clean_tweets_df, ['content', 'retweet_count'], 'lang')
-# plot_distribution(clean_tweets_df.date, 'red')
-# boxplot_dist(clean_tweets_df, 'retweet_count', 'like_count')
-# plot_scatter(clean_tweets_df, 'content', 'date', 'lang')
-# plot_heatmap(clean_tweets_df)
+plot_count(clean_tweets_df, ['content', 'retweet_count'], 'lang')
+plot_distribution(clean_tweets_df.date, 'red')
+boxplot_dist(clean_tweets_df, 'retweet_count', 'like_count')
+plot_scatter(clean_tweets_df, 'content', 'date', 'lang')
+plot_heatmap(clean_tweets_df)

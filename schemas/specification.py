@@ -13,8 +13,8 @@ class BaseSpecification(ABC):
     @abstractmethod
     def __init__(self, spec: str, lang: str = 'es') -> None:
         """
-        Abstract constructor for Base Specification
-        :param spec: specification
+        Abstract constructor for Base object
+        :param spec: Specification to be created
         :type spec: str
         :param lang: language to use, by default spanish
         :type lang: str
@@ -37,7 +37,7 @@ class Specification(BaseSpecification):
     """
 
     def __init__(self, spec: str, lang: str = 'es') -> None:
-        self.spec: str = spec
+        self.spec: str = spec + ' lang:' + lang
         self.lang: str = 'lang:' + lang
 
     def __or__(self, *args: tuple):
@@ -67,8 +67,8 @@ class TextSpecification(Specification):
     """
 
     def __init__(self, spec: str, lang: str = 'es') -> None:
-        super().__init__(spec, lang)
-        self.text: str = spec
+        self.text: str = spec + ' #ecuador'
+        super().__init__(self.text, lang)
 
 
 class SenderSpecification(Specification):
@@ -77,8 +77,8 @@ class SenderSpecification(Specification):
     """
 
     def __init__(self, spec: str, lang: str = 'es') -> None:
-        super().__init__(spec, lang)
         self.sender: str = 'from:' + spec
+        super().__init__(self.sender, lang)
 
 
 class ReceiverSpecification(Specification):
@@ -87,8 +87,8 @@ class ReceiverSpecification(Specification):
     """
 
     def __init__(self, spec: str, lang: str = 'es') -> None:
-        super().__init__(spec, lang)
         self.receiver: str = 'to:' + spec
+        super().__init__(self.receiver, lang)
 
 
 class IncludeUserSpecification(Specification):
@@ -97,8 +97,8 @@ class IncludeUserSpecification(Specification):
     """
 
     def __init__(self, spec: str, lang: str = 'es') -> None:
-        super().__init__(spec, lang)
         self.user: str = '@' + spec
+        super().__init__(self.user, lang)
 
 
 class HashtagSpecification(Specification):
@@ -107,8 +107,8 @@ class HashtagSpecification(Specification):
     """
 
     def __init__(self, spec: str, lang: str = 'es') -> None:
-        super().__init__(spec, lang)
-        self.hashtag: str = '#' + spec
+        self.hashtag: str = '#' + spec + ' #ecuador'
+        super().__init__(self.hashtag, lang)
 
 
 class MultipleHashtagsSpecification(Specification):

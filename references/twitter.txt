@@ -7,3 +7,5 @@ MultipleHashtags: (#violencia OR #toquedequeda)
 Date: violencia until:2022-11-10 since:2022-11-05
 Exclude: robos -quito
 Language: matanza lang:es
+
+documentation: https://help.twitter.com/en/using-twitter/twitter-advanced-search

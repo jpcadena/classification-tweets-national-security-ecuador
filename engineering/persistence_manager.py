@@ -1,10 +1,14 @@
 """
 Persistence script
 """
+import json
 from enum import Enum
+from typing import Union
 
 import pandas as pd
 from pandas.io.parsers import TextFileReader
+
+from core.config import ENCODING, CHUNK_SIZE
 
 
 class DataType(Enum):
@@ -22,7 +26,7 @@ class PersistenceManager:
 
     @staticmethod
     def save_to_csv(
-            data: list[dict] | pd.DataFrame, data_type: str,
+            data: Union[list[dict], pd.DataFrame], data_type: str,
             filename: str = 'data') -> bool:
         """
         Save list of dictionaries as csv file
@@ -42,12 +46,16 @@ class PersistenceManager:
             if not data:
                 return False
             dataframe = pd.DataFrame(data)
-        dataframe.to_csv(f'{str(data_type)}{filename}.csv', index=False)
+        dataframe.to_csv(f'{str(data_type)}{filename}.csv', index=False,
+                         encoding=ENCODING)
         return True
 
     @staticmethod
     def load_from_csv(
-            filename: str = 'processed_data.csv', chunk_size: int = 100000
+            filename: str = 'processed_data.csv', chunk_size: int = CHUNK_SIZE,
+            dtypes: dict = None,
+            parse_dates: list[str] = None,
+            converters: dict = None
     ) -> pd.DataFrame:
         """
         Load dataframe from CSV using chunk scheme
@@ -58,16 +66,16 @@ class PersistenceManager:
         :return: dataframe retrieved from CSV after optimization with chunks
         :rtype: pd.DataFrame
         """
-        dtypes: dict = {}
-        dates = ['created', 'date']
         # TODO: define column names and its data type to add it to
         #  read_csv method and also the date columns to parse
-        chunks: TextFileReader = pd.read_csv(
-            filename, header=0, chunksize=chunk_size)
-        chunk_list: list = []
-        for chunk in chunks:
-            chunk_list.append(chunk)
-        dataframe: pd.DataFrame = pd.concat(chunk_list)
+        text_file_reader: TextFileReader = pd.read_csv(
+            filename, header=0, chunksize=chunk_size, encoding=ENCODING,
+            dtype=dtypes,
+            parse_dates=parse_dates,
+            converters=converters
+        )
+        dataframe: pd.DataFrame = pd.concat(
+            text_file_reader, ignore_index=True)
         return dataframe
 
     @staticmethod
@@ -96,3 +104,10 @@ class PersistenceManager:
         """
         dataframe: pd.DataFrame = pd.read_pickle(f'data/processed/{filename}')
         return dataframe
+
+    @staticmethod
+    def read_from_json(
+            filename: str = 'references/related_words_users.json') -> dict:
+        with open(filename, encoding=ENCODING) as file:
+            data: dict[str, list[str]] = json.load(file)
+        return data

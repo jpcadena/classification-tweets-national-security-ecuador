@@ -2,19 +2,38 @@
 Preprocessing section including: Formatting, Cleaning, Anonymization, Sampling
 """
 import re
+import string
 
+import es_core_news_sm
 import numpy as np
 import pandas as pd
+import spacy
 from matplotlib import pyplot as plt
+from nltk import WhitespaceTokenizer, RegexpTokenizer, WordNetLemmatizer, \
+    TweetTokenizer
 from nltk.corpus import stopwords
 from sklearn.neighbors import LocalOutlierFactor
 from textblob import TextBlob
 
+spacy.prefer_gpu()
 STOPWORDS_PATTERN: str = r'[^\W\d]*$'
-
+nlp = es_core_news_sm.load()
+tokenizer = RegexpTokenizer(r'\w +')
+lemmatizer = WordNetLemmatizer()
+stop = set(stopwords.words('spanish'))
+punctuation = list(
+    string.punctuation)  # already taken care of with the cleaning function.
+stop.update(punctuation)
+w_tokenizer = WhitespaceTokenizer()
 
 # TODO: add anonymization functions for user_id, tweet_id, etc.,
 #  add more cleaning functions.
+
+tweet_tokenizer: TweetTokenizer = TweetTokenizer()
+
+
+def tokenize(tweet: str) -> str:
+    tweet_tokenizer.tokenize(tweet)
 
 
 def downcast_type(dataframe: pd.DataFrame):
@@ -75,7 +94,7 @@ def lof_observation(dataframe: pd.DataFrame) -> pd.DataFrame:
 
 def clear_outliers(dataframe: pd.DataFrame, column: str) -> pd.DataFrame:
     """
-    This function remove the outliers from specific column dataframe
+    This function remove the outliers from specific column
     :param dataframe: Dataframe containing data
     :type dataframe: pd.DataFrame
     :param column: Column name
@@ -141,3 +160,14 @@ def str_to_category(dataframe: pd.DataFrame) -> pd.DataFrame:
             df_object[column] = df_object[column].astype('category')
     dataframe[df_object.columns] = df_object
     return dataframe
+
+
+def furnished(text) -> str:
+    print(type(text))
+    final_text: list[str] = []
+    word: str = ''
+    for i in w_tokenizer.tokenize(text):
+        if i.lower() not in stop:
+            word = lemmatizer.lemmatize(i)
+        final_text.append(word.lower())
+    return " ".join(final_text)

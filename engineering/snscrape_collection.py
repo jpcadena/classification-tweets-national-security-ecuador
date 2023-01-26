@@ -3,8 +3,11 @@ Data collection process
 """
 import re
 from datetime import date, datetime
-import snscrape.modules.twitter as sn_twitter
+from typing import Union
+
 import pandas as pd
+import snscrape.modules.twitter as sn_twitter
+
 
 # TODO: define operations if data will be required to be written to disk.
 #  If so, define persistence methods to save as csv or any file extension
@@ -70,7 +73,7 @@ def camel_to_snake(name: str) -> str:
     return re.sub('([a-z0-9])([A-Z])', r'\1_\2', name).lower()
 
 
-def nested_camel(data) -> list | dict:
+def nested_camel(data) -> Union[list, dict]:
     """
     Apply camel_to_snake method to full dictionary
     :param data: data from Tweet

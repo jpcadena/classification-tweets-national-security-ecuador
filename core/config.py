@@ -31,8 +31,10 @@ DTYPES: dict = {
 converters: dict = {
     'TotalCharges': lambda x: float16(x.replace(' ', '0.0'))}
 NUMERICS: list[str] = [
-    'uint8', 'uint16', 'uint32', 'uint64', 'int8', 'int16', 'int32',
-    'int64', 'float16', 'float32', 'float64']
+    'uint8', 'uint16', 'uint32', 'uint64',
+    'int8', 'int16', 'int32',
+    'int64',
+    'float16', 'float32', 'float64']
 RANGES: list[tuple] = [
     (0, 255), (0, 65535), (0, 4294967295), (0, 18446744073709551615),
     (-128, 127), (-32768, 32767), (-2147483648, 2147483647),

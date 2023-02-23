@@ -2,8 +2,8 @@
 Tweepy data collection
 """
 import os
-import pandas as pd
-import tweepy
+
+# import tweepy
 from dotenv import load_dotenv
 
 # TODO: Wait for Twitter API approval for Elevated access to be approved.
@@ -16,9 +16,9 @@ access_token: str = os.environ["ACCESS_TOKEN"]
 access_token_secret: str = os.environ["ACCESS_TOKEN_SECRET"]
 bearer_token: str = os.environ["BEARER_TOKEN"]
 
-authenticate = tweepy.OAuthHandler(consumer_key, consumer_secret)
-authenticate.set_access_token(access_token, access_token_secret)
-api = tweepy.API(authenticate, wait_on_rate_limit=True)
+# authenticate = tweepy.OAuthHandler(consumer_key, consumer_secret)
+# authenticate.set_access_token(access_token, access_token_secret)
+# api = tweepy.API(authenticate, wait_on_rate_limit=True)
 
 # Client seems to be the best option for new API version
 
@@ -44,13 +44,13 @@ api = tweepy.API(authenticate, wait_on_rate_limit=True)
 
 # Another way can be Cursor but got same issue with privileges.
 
-keywords: str = 'World Cup Qatar 2022'
-limit: int = 10
-tweets = tweepy.Cursor(
-    api.search_tweets, q=keywords, count=5, tweet_mode='extended').items(limit)
-columns: list[str] = ['User', 'Tweet']
-data: list = []
-for tweet in tweets:
-    data.append([tweet.user.screen_name, tweet.full_text])
-df: pd.DataFrame = pd.DataFrame(data, columns=columns)
-print(df)
+# keywords: str = 'World Cup Qatar 2022'
+# limit: int = 10
+# tweets = tweepy.Cursor(
+#     api.search_tweets, q=keywords, count=5, tweet_mode='extended').items(limit)
+# columns: list[str] = ['User', 'Tweet']
+# data: list = []
+# for tweet in tweets:
+#     data.append([tweet.user.screen_name, tweet.full_text])
+# df: pd.DataFrame = pd.DataFrame(data, columns=columns)
+# print(df)

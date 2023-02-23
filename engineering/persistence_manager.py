@@ -66,8 +66,6 @@ class PersistenceManager:
         :return: dataframe retrieved from CSV after optimization with chunks
         :rtype: pd.DataFrame
         """
-        # TODO: define column names and its data type to add it to
-        #  read_csv method and also the date columns to parse
         text_file_reader: TextFileReader = pd.read_csv(
             filename, header=0, chunksize=chunk_size, encoding=ENCODING,
             dtype=dtypes,
@@ -108,6 +106,13 @@ class PersistenceManager:
     @staticmethod
     def read_from_json(
             filename: str = 'references/related_words_users.json') -> dict:
+        """
+        Read dataframe from JSON file
+        :param filename: Name of the file to read
+        :type filename: str
+        :return: Data read from file
+        :rtype: dict[str, list[str]]
+        """
         with open(filename, encoding=ENCODING) as file:
             data: dict[str, list[str]] = json.load(file)
         return data

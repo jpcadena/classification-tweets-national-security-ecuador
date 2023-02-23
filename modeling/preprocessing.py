@@ -3,6 +3,7 @@ Preprocessing section including: Formatting, Cleaning, Anonymization, Sampling
 """
 import re
 import string
+from re import Pattern
 
 import es_core_news_sm
 import numpy as np
@@ -33,6 +34,13 @@ tweet_tokenizer: TweetTokenizer = TweetTokenizer()
 
 
 def tokenize(tweet: str) -> str:
+    """
+    Tokenize the input tweet text
+    :param tweet: The tweet text to be tokenized
+    :type tweet: str
+    :return: The tokenized tweet text as a string
+    :rtype: str
+    """
     tweet_tokenizer.tokenize(tweet)
 
 
@@ -129,9 +137,9 @@ def form_sentence(tweet: str) -> str:
 def clean_stopwords(tweet: str) -> list[str]:
     """
     Remove stopwords from spanish to a single tweet
-    :param tweet: tweet
+    :param tweet: Text from a single tweet
     :type tweet: str
-    :return: clean tweet as single words in a list
+    :return: clean tweet as single words in a list of words
     :rtype: list[str]
     """
     tweet_list: str = [ele for ele in tweet.split() if ele != 'user']
@@ -162,8 +170,15 @@ def str_to_category(dataframe: pd.DataFrame) -> pd.DataFrame:
     return dataframe
 
 
-def furnished(text) -> str:
-    print(type(text))
+def furnished(text: str) -> str:
+    """
+    Clean and preprocess the text by tokenizing, removing stop words
+     and lemmatizing.
+    :param text: The text to be cleaned and preprocessed
+    :type text: str
+    :return: The preprocessed text as a string
+    :rtype: str
+    """
     final_text: list[str] = []
     word: str = ''
     for i in w_tokenizer.tokenize(text):
@@ -171,3 +186,98 @@ def furnished(text) -> str:
             word = lemmatizer.lemmatize(i)
         final_text.append(word.lower())
     return " ".join(final_text)
+
+
+def twitter_text_cleaning(text: str):
+    """
+    Clean a text message that might have @mentions, "#" symbol or URLs
+    :param text: The text message to clean
+    :type text: str
+    :return: The cleaned text message without @mentions, "#" and URLs
+    :rtype: str
+    """
+    text = text.lower()
+    text = re.sub(r'@[A-Za-z0-9]+', '', text)
+    text = re.sub(r'@[A-Za-zA-Z0-9]+', '', text)
+    text = re.sub(r'@[A-Za-z0-9_]+', '', text)
+    text = re.sub(r'@[A-Za-z]+', '', text)
+    text = re.sub(r'@[-)]+', '', text)
+    text = re.sub(r'#', '', text)
+    text = re.sub(r"http\S+", "", text)
+    text = re.sub(r'https?\/\/\S+', '', text)
+    text = re.sub(r'http?\/\/\S+', '', text)
+    text = re.sub(r'https?\/\/.*[\r\n]*', '', text)
+    text = re.sub(r'^https?\/\/.*[\r\n]*', '', text)
+    text = re.sub(r'^https?:\/\/.*[\r\n]*', '', text)
+    return text
+
+
+def remove_emoji(text: str) -> str:
+    """
+    Remove emojis from a text
+    :param text: The text to remove emojis from
+    :type text: str
+    :return: The input text with emojis removed.
+    :rtype: str
+    """
+    emoji_pattern: Pattern[str] = re.compile(
+        "["u"\U0001f600-\U0001f64f"  # emoticons
+        u"\U0001f300-\U0001f5ff"  # symbols & pictographs
+        u"\U0001f680-\U0001f6ff"  # transport & map symbols
+        u"\U0001f1e0-\U0001f1ff"  # flags (iOS)
+        u"\U0001f900-\U0001f9ff"  # Unicode 9.0 emojis
+        u"\U0001f980-\U0001f9ff"  # Unicode 10.0 emojis
+        u"\U0001fa80-\U0001faff"  # Unicode 11.0 emojis
+        u"\U0001fbc0-\U0001fbc9"  # Unicode 12.0 emojis
+        u"\U0001fcc0-\U0001fcc9"  # Unicode 13.0 emojis
+        u"\U0001fcd0-\U0001fcd9"  # Unicode 14.0 emojis
+        u"\U0001fdd0-\U0001fdd9"  # Unicode 15.0 emojis
+        "]+", flags=re.UNICODE)
+    return emoji_pattern.sub('', text)
+
+
+def remove_punc(message):
+    """
+    Remove punctuation from the given message.
+    :param message: Text message that might have punctuations
+    :type message: str
+    :return: Message without punctuations
+    :rtype: str
+    """
+    return ''.join(
+        [char for char in message if char not in string.punctuation])
+
+
+def jaccard_similarity(query: list[str], document: list[str]) -> float:
+    """
+    Calculates the Jaccard similarity between two sets of strings
+    :param query: A list of strings representing a set of items
+    :type query: list[str]
+    :param document: A list of strings representing another set of
+     items
+    :type document: list[str]
+    :return: The Jaccard similarity score between the two sets of items
+    :rtype: float
+    """
+    intersection: set[str] = set(query).intersection(set(document))
+    union: set[str] = set(query).union(set(document))
+    return len(intersection) / len(union)
+
+
+def get_scores(group: list[str], tweets: list[list[str]]) -> list[float]:
+    """
+    Calculates the Jaccard similarity scores between a group of
+     keywords and a list of tweets.
+    :param group: A list of keywords
+    :type group: list[str]
+    :param tweets: A list of tweets represented as a list of words
+    :type tweets: list[list[str]]
+    :return: A list of Jaccard similarity scores between the group and
+     each tweet
+    :rtype: list[float]
+    """
+    scores: list[float] = []
+    for tweet in tweets:
+        score: float = jaccard_similarity(group, tweet)
+        scores.append(score)
+    return scores

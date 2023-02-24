@@ -39,7 +39,7 @@ tweets_from_users: list[str] = []
 for user in users:
     sender_spec: SenderSpecification = SenderSpecification(user)
     tweets_from_users.extend(better_filter.filter(
-        sender_spec, limit=80, func=decode_tweet_to_json))
+        sender_spec, limit=25, func=decode_tweet_to_json))
 
 tweets_collected: list[dict] = []
 for word in insecurity_words:
@@ -48,7 +48,7 @@ for word in insecurity_words:
         continue
     text_spec: TextSpecification = TextSpecification(word)
     tweets_collected.extend(better_filter.filter(
-        text_spec, limit=200, func=decode_tweet_to_json))
+        text_spec, limit=50, func=decode_tweet_to_json))
 
 raw_tweets_df: pd.DataFrame = pd.DataFrame(tweets_collected)
 

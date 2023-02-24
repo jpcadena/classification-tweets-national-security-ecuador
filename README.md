@@ -17,12 +17,12 @@
     <img src="assets/static/images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-<h3 align="center">car-sales-etl</h3>
+<h3 align="center">classification-tweets-national-security-ecuador</h3>
 
   <p align="center">
-    Description for car-sales-etl project
+    Description for Tweets Classification about national security at Ecuador.
     <br />
-    <a href="https://github.com/jpcadena/car-sales-etl"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/jpcadena/classification-tweets-national-security-ecuador"><strong>Explore the docs »</strong></a>
     <br />
   </p>
 </div>
@@ -86,11 +86,11 @@ This project is in development with an estimated presentation at March.
 
 1. Clone the **repository**
     ```
-    git clone https://github.com/jpcadena/car-sales-etl.git
+    git clone https://github.com/jpcadena/classification-tweets-national-security-ecuador.git
     ```
 2. Change the directory to **root project**
     ```
-    cd car-sales-etl
+    cd classification-tweets-national-security-ecuador
     ```
 3. Create a **virtual environment** *venv*
     ```
@@ -174,7 +174,7 @@ Distributed under the MIT License.
 
 LinkedIn: [Juan Pablo Cadena Aguilar][linkedin-url]
 
-E-mail: [Juan Pablo Cadena Aguilar](mailto:jpcadena@espol.edu.ec?subject=[GitHub]car-sales-etl)
+E-mail: [Juan Pablo Cadena Aguilar](mailto:jpcadena@espol.edu.ec?subject=[GitHub]classification-tweets-national-security-ecuador)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

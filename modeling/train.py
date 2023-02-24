@@ -9,7 +9,7 @@ from sklearn.model_selection import train_test_split
 
 
 def training(
-        bow: csr_matrix, dataframe: pd.Dataframe,
+        bow: csr_matrix, dataframe: pd.DataFrame,
         target_column: str = 'insecurity'
 ) -> tuple[csr_matrix, csr_matrix, np.ndarray, np.ndarray]:
     """

@@ -59,7 +59,7 @@
 
 ## About the project
 
-[Project][project-screenshot]
+![Project][project-screenshot]
 
 This project is in development with an estimated presentation at March.
 

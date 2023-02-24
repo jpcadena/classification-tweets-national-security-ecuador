@@ -47,7 +47,7 @@ def prepare_data(dataframe: pd.DataFrame):
     :return:
     :rtype:
     """
-    dataframe['ngram'] = dataframe['ngram'].apply(lambda x: ','.join(x))
+    dataframe['ngram'] = dataframe['ngram'].apply(','.join)
     vocab_size = len(dataframe['ngram'].unique())
     # find the max length of the lists in the count column
     max_len = dataframe['count'].map(len).max()
@@ -74,16 +74,19 @@ def prepare_data(dataframe: pd.DataFrame):
 
 
 # df_exploded = tweets_df.apply(lambda x_array: pd.Series(
-#     [(x_array['ngram'], x_array['count']) for i in range(len(x_array['ngram']))]),
-#                               axis=1).stack().reset_index(level=1, drop=True)
+#     [(x_array['ngram'], x_array['count']) for i in range(len(
+#         x_array['ngram']))]), axis=1).stack().reset_index(level=1, drop=True)
 # df_exploded = df_exploded.to_frame(name='ngram_count').reset_index()
-# df['ngram'] = df['ngram'].apply(lambda x_array: ','.join(x_array))
+# dataframe['ngram'] = dataframe['ngram'].apply(
+#     lambda x_array: ','.join(x_array))
 
-def train(df, epochs, learning_rate, hidden_dim, embedding_dim):
+def train(
+        dataframe: pd.DataFrame, epochs, learning_rate, hidden_dim,
+        embedding_dim):
     """
 
-    :param df:
-    :type df:
+    :param dataframe:
+    :type dataframe: pd.DataFrame
     :param epochs:
     :type epochs:
     :param learning_rate:
@@ -95,7 +98,7 @@ def train(df, epochs, learning_rate, hidden_dim, embedding_dim):
     :return:
     :rtype:
     """
-    bow, hour, target, vocab_size = prepare_data(df)
+    bow, hour, target, vocab_size = prepare_data(dataframe)
     model = TextClassifier(vocab_size, embedding_dim, hidden_dim)
     criterion = nn.BCEWithLogitsLoss()
     optimizer = optim.SGD(model.parameters(), lr=learning_rate)
@@ -113,8 +116,8 @@ def train(df, epochs, learning_rate, hidden_dim, embedding_dim):
             print(f'Epoch [{epoch + 1}/{epochs}], Loss: {loss.item()}')
 
 
-epochs = 100
-learning_rate = 0.001
-hidden_dim = 100
-embedding_dim = 100
-# train(df, epochs, learning_rate, hidden_dim, embedding_dim)
+EPOCHS = 100
+LEARNING_RATE = 0.001
+HIDDEN_DIM = 100
+EMBEDDING_DIM = 100
+# train(dataframe, epochs, learning_rate, hidden_dim, embedding_dim)

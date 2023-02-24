@@ -56,7 +56,7 @@ class OrSpecification(Specification):
     OrSpecification class based on Specification
     """
 
-    def __init__(self, lang: str = 'es', *args: tuple) -> None:
+    def __init__(self, *args: tuple, lang: str = 'es') -> None:
         self.args: str = ' OR '.join(map(str, list(args)))
         super().__init__(self.args, lang)
 
@@ -116,7 +116,7 @@ class MultipleHashtagsSpecification(Specification):
     Multiple Hashtags Specification class based on Specification
     """
 
-    def __init__(self, lang: str = 'es', *args: tuple) -> None:
+    def __init__(self, *args: tuple, lang: str = 'es') -> None:
         self.multiple_hashtags: str = ' OR '.join(
             map(str, ['#' + arg for arg in list(args)]))
         super().__init__(self.multiple_hashtags, lang)

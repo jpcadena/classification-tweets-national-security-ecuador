@@ -389,7 +389,7 @@ iterate_models(bow, tweets_df, 'insecurity')
 # print(new_groups_df)
 #
 # # K-Means clustering
-# # df.a = StandardScaler().fit_transform(df.a.values.reshape(-1, 1))
+# # dataframe.a = StandardScaler().fit_transform(dataframe.a.values.reshape(-1, 1))
 # # if it's needed to standardize
 #
 # X = new_groups_df[['insecurity', 'not_insecurity']].values

@@ -14,7 +14,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="assets/static/logo.png" alt="Logo" width="80" height="80">
+    <img src="assets/static/images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
 <h3 align="center">car-sales-etl</h3>
@@ -59,7 +59,7 @@
 
 ## About the project
 
-[![Project][project-screenshot]]
+[Project][project-screenshot]
 
 This project is in development with an estimated presentation at March.
 
@@ -185,7 +185,7 @@ E-mail: [Juan Pablo Cadena Aguilar](mailto:jpcadena@espol.edu.ec?subject=[GitHub
 
 [linkedin-url]: https://linkedin.com/in/juanpablocadenaaguilar
 
-[project-screenshot]: assets/static/project.png
+[project-screenshot]: assets/static/images/project.png
 
 [Python.org]: https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54
 

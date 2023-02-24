@@ -52,5 +52,5 @@ bearer_token: str = os.environ["BEARER_TOKEN"]
 # data: list = []
 # for tweet in tweets:
 #     data.append([tweet.user.screen_name, tweet.full_text])
-# df: pd.DataFrame = pd.DataFrame(data, columns=columns)
-# print(df)
+# dataframe: pd.DataFrame = pd.DataFrame(data, columns=columns)
+# print(dataframe)

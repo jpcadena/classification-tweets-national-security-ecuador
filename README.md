@@ -185,7 +185,7 @@ E-mail: [Juan Pablo Cadena Aguilar](mailto:jpcadena@espol.edu.ec?subject=[GitHub
 
 [linkedin-url]: https://linkedin.com/in/juanpablocadenaaguilar
 
-[project-screenshot]: assets/static/logo.png
+[project-screenshot]: assets/static/project.png
 
 [Python.org]: https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54
 

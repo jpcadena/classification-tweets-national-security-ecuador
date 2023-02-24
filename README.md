@@ -1,140 +1,194 @@
 # classification-tweets-national-security-ecuador
 
-## Classification of Tweets about national security at Ecuador 2022
+<!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
+<a name="readme-top"></a>
 
-This project is in development with an estimated presentation at February, 2023.\
+<!-- PROJECT SHIELDS -->
+<!--
+*** Markdown "reference style" links for readability.
+*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
+-->
 
-![Twitter Sentiment Analysis](https://miro.medium.com/max/1000/1*vp1M37AGMOFwCvLxVm62IA.jpeg)
 
-### Requirements
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/othneildrew/Best-README-Template">
+    <img src="assets/static/logo.png" alt="Logo" width="80" height="80">
+  </a>
 
-Python 3.10+
+<h3 align="center">car-sales-etl</h3>
 
-### Git
+  <p align="center">
+    Description for car-sales-etl project
+    <br />
+    <a href="https://github.com/jpcadena/car-sales-etl"><strong>Explore the docs »</strong></a>
+    <br />
+  </p>
+</div>
 
-+ First, clone repository:
 
-```
-git clone https://github.com/jpcadena/classification-tweets-national-security-ecuador.git
-```
 
-+ Change directory to root project with:
+<!-- TABLE OF CONTENTS -->
+<details>
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#about-the-project">About The Project</a>
+      <ul>
+        <li><a href="#built-with">Built With</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#getting-started">Getting Started</a>
+      <ul>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#installation">Installation</a></li>
+      </ul>
+    </li>
+    <li><a href="#usage">Usage</a></li>
+    <li><a href="#contributing">Contributing</a></li>
+    <li><a href="#license">License</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ol>
+</details>
 
-```
-  cd classification-tweets-national-security-ecuador
-```
 
-+ Create your git branch with the following:
 
-```
-git checkout -b <new_branch>
-```
+<!-- ABOUT THE PROJECT -->
 
-For *<new_branch>* use some convention as following:
+## About the project
 
-```
-yourgithubusername
-```
+[![Project][project-screenshot]]
 
-Or if some work in progress (WIP) or bug shows up, you can use:
+This project is in development with an estimated presentation at March.
 
-```
-yourgithubusername_feature
-```
 
-+ Switch to your branch:
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-```
-git checkout <new_branch>
-```
+## Built with
 
-+ **Before** you start working on some section, retrieve the latest changes
-  with:
+* [![Python][Python.org]][Python-url]
 
-```
-git pull
-```
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-+ Add your new files and changes:
 
-```
-git add .
-```
 
-+ Make your commit with a reference message about the fix/changes.
+<!-- GETTING STARTED -->
 
-```
-git commit -m "Commit message"
-```
+## Getting started
 
-+ First push for remote branch:
+### Prerequisites
 
-```
-git push --set-upstream origin <new_branch>
-```
+* [Python 3.10+][Python-docs-url]
 
-+ Latter pushes:
+### Installation
 
-```
-git push origin
-```
+1. Clone the **repository**
+    ```
+    git clone https://github.com/jpcadena/car-sales-etl.git
+    ```
+2. Change the directory to **root project**
+    ```
+    cd car-sales-etl
+    ```
+3. Create a **virtual environment** *venv*
+    ```
+    python3 -m venv venv
+    ```
+4. Activate **environment** in Windows
+    ```
+    .\venv\Scripts\activate
+    ```
+5. Or with Unix/Mac OS X
+    ```
+    source venv/bin/activate
+    ```
+6. Install requirements with PIP
+    ```
+    pip install -r requirements.txt
+    ```
 
-### Environment
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-+ Create a **virtual environment** 'sample_venv' with:
 
-```
-python3 -m venv sample_venv
-```
 
-+ Activate environment in Windows with:
+<!-- USAGE EXAMPLES -->
 
-```
-.\sample_venv\Scripts\activate
-```
+### Usage
 
-+ Or with Unix or Mac:
+1. Rename file **sample.env** to **.env**.
+2. Replace your **credentials** into the *.env* file.
+3. Execute with console.
+    ```
+    python main.py
+    ```
 
-```
-source sample_venv/bin/activate
-```
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-### Installation of libraries and dependencies
 
-```
-pip install -r requirements.txt
-```
 
-### Execution
+<!-- CONTRIBUTING -->
 
-```
-python main.py
-```
+## Contributing
 
-### Environment credentials
+If you have a suggestion that would make this better, please fork the repo and
+create a pull request.
 
-Rename **sample.env** to **.env** and replace your Twitter API credentials if
-you will work with **Tweepy** data collection.\
-Ask for **Elevated** privileges for your developer account which is required
-for **Twitter API v2** and it takes around 48 hours to be accepted. Check more
-info at [Twitter Developers](https://developer.twitter.com/en).
-
-### Documentation
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 Use docstrings with **reStructuredText** format by adding triple double quotes
 **"""** after function definition.\
 Add a brief function description, also for the parameters including the return
-value and its corresponding data type.
-
-### Additional information
-
-If you want to give more style and a better format to this README.md file,
-check documentation
-at [Github Docs](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).\
+value and its corresponding data type.\
 Please use **linting** to check your code quality
-following [PEP 8](https://peps.python.org/pep-0008/). Check documentation
+following [PEP 8](https://peps.python.org/pep-0008/).\
+Check documentation
 for [Visual Studio Code](https://code.visualstudio.com/docs/python/linting#_run-linting)
-or
-for [Jetbrains Pycharm](https://github.com/leinardi/pylint-pycharm/blob/master/README.md).\
+or [Jetbrains Pycharm](https://github.com/leinardi/pylint-pycharm/blob/master/README.md).\
+
 Recommended plugin for
 autocompletion: [Tabnine](https://www.tabnine.com/install)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- LICENSE -->
+
+## License
+
+Distributed under the MIT License.
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- CONTACT -->
+
+## Contact
+
+LinkedIn: [Juan Pablo Cadena Aguilar][linkedin-url]
+
+E-mail: [Juan Pablo Cadena Aguilar](mailto:jpcadena@espol.edu.ec?subject=[GitHub]car-sales-etl)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+<!-- MARKDOWN LINKS & IMAGES -->
+<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
+
+[linkedin-url]: https://linkedin.com/in/juanpablocadenaaguilar
+
+[project-screenshot]: assets/static/logo.png
+
+[Python.org]: https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54
+
+[Python-url]: https://www.python.org/
+
+[Python-docs-url]: https://docs.python.org/3.10/

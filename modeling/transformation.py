@@ -5,6 +5,7 @@ import pandas as pd
 from gensim.utils import simple_preprocess
 from nltk import WordNetLemmatizer
 from scipy.sparse import csr_matrix
+from sklearn.exceptions import FitFailedWarning, NotFittedError
 from sklearn.feature_extraction.text import CountVectorizer
 
 
@@ -51,19 +52,15 @@ def get_ngram_counts(tweet: str, stop_words: list[str]) -> dict[str, int]:
     """
     token_counts_matrix: CountVectorizer = CountVectorizer(
         stop_words=stop_words, ngram_range=(1, 3))
+    vocabulary: dict
+    ngrams_count: dict = {}
     try:
         doc_term_matrix = token_counts_matrix.fit_transform(tweet.split('\n'))
-    except Exception as exc:
-        doc_term_matrix = None
-        print(exc)
-    vocabulary: dict
-    try:
         vocabulary = token_counts_matrix.vocabulary_
         ngrams_count = dict(zip(vocabulary.keys(),
                                 doc_term_matrix.sum(axis=0).tolist()[0]))
-    except Exception as exc:
+    except (FitFailedWarning, NotFittedError) as exc:
         print(exc)
-        ngrams_count = {}
     return ngrams_count
 
 

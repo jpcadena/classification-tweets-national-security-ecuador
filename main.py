@@ -27,7 +27,6 @@ from schemas.specification import TextSpecification, SenderSpecification
 plt.rcParams.update({'figure.max_open_warning': 0})
 
 json_file: dict[str, list[str]] = PersistenceManager.read_from_json()
-print(json_file)
 insecurity_words: list[str] = json_file.get('words')
 users: list[str] = json_file.get('users')
 better_filter: BetterFilter = BetterFilter()
@@ -53,7 +52,6 @@ for word in insecurity_words:
 raw_tweets_df: pd.DataFrame = pd.DataFrame(tweets_collected)
 
 tweets_collected.extend(tweets_from_users)
-# Save raw dataframe
 raw_saved: bool = PersistenceManager.save_to_csv(
     tweets_collected, DataType.RAW.value, 'insecurity_raw_tweets')
 if raw_saved:
@@ -63,7 +61,6 @@ if raw_saved:
 
 clean_tweets: list[dict] = []
 for element in tweets_collected:
-    # print(f"Tweet id: {element['id']}")
     element: dict = str_to_datetime_values(element)
     element: dict = nested_camel(element)
     clean_tweets.append(element)
@@ -96,8 +93,6 @@ stop_words.extend(exclude_words)
 stop_words = list(set(stop_words))
 
 snscrape_columns: list[str] = stopwords_file.get('tweets')
-# 'mm/dd/yyyy HH:MM:SS
-# 'date', 'user_created'
 clean_tweets_df.drop(snscrape_columns, axis=1, inplace=True, errors='ignore')
 print(clean_tweets_df)
 
@@ -122,8 +117,8 @@ clean_tweets_df['word_count'] = clean_tweets_df['word_count'].astype(uint8)
 print(clean_tweets_df)
 
 clean_tweets_df['vocabulary'] = clean_tweets_df[
-    'cleaned_text_wo_punctuation'].apply(lambda x: get_ngram_counts(
-    x, stop_words))
+    'cleaned_text_wo_punctuation'].apply(
+    lambda x: get_ngram_counts(x, stop_words))
 
 # for idx, row in clean_tweets_df.iterrows():
 #     df_ngrams = pd.DataFrame.from_dict(
@@ -155,18 +150,20 @@ clean_tweets_df['hour'] = clean_tweets_df['time_only'].apply(lambda x: x.hour)
 
 # vectorizer = CountVectorizer(stop_words=stop_words)
 # hashtags_vectors = vectorizer.fit_transform(
-#     clean_tweets_df['hashtags'].apply(lambda x_array: ' '.join(x_array) if x_array else ''))
+#     clean_tweets_df['hashtags'].apply(lambda x_array: ' '.join(x_array)
+#     if x_array else ''))
 #
 # encoder = OneHotEncoder(dtype=uint8)
 # hashtags_onehot = encoder.fit_transform(hashtags_vectors.toarray())
 # hashtag_names = encoder.get_feature_names_out()
 # hashtags_df = pd.DataFrame(hashtags_onehot.toarray(), columns=hashtag_names)
-
+#
 # hashtags_df: pd.DataFrame = clean_tweets_df['hashtags'].apply(
 #     lambda x_array: pd.Series(x_array)).stack().str.get_dummies()
 #
 # # Change the column names
-# hashtags_df.columns = ['hashtag_' + x_array for x_array in list(set(hashtags_df.columns))]
+# hashtags_df.columns = ['hashtag_' + x_array for x_array in list(set(
+#     hashtags_df.columns))]
 #
 # # Concatenate the hashtags_df with the original DataFrame
 # processed_tweets: pd.DataFrame = pd.concat(
@@ -185,7 +182,8 @@ clean_tweets_df['hour'] = clean_tweets_df['time_only'].apply(lambda x: x.hour)
 # top_hashtags = hashtag_counts.nlargest(n)
 #
 # hashtags_df = hashtags_df[
-#     [x_array for x_array in hashtags_df.columns if 'hashtag_' + x_array in top_hashtags.index]]
+#     [x_array for x_array in hashtags_df.columns if 'hashtag_' + x_array in
+#      top_hashtags.index]]
 
 
 x_topics: np.ndarray = latent_dirichlet_allocation(
@@ -263,7 +261,8 @@ tweets_df.drop(['coordinates', 'place', 'user_location'], axis=1, inplace=True)
 # tweets_df['location'] = tweets_df['location'].replace(
 #     ['Quito, Ecuador', 'Quito - Ecuador', 'Quito-Ecuador', 'QUITO',
 #      'Quito Ecuador', 'Quito ', 'Quito , Ecuador', 'Quito -Ecuador',
-#      'QUITO-ECUADOR', 'Quito, Ecuador 🇪🇨', 'Quito, Ecuador ', 'Ecuador-Quito',
+#      'QUITO-ECUADOR', 'Quito, Ecuador 🇪🇨', 'Quito, Ecuador ',
+#      'Ecuador-Quito',
 #      'Quito D.M. - Ecuador 🇪🇨', 'Quito. Ecuador', 'Kito(Quito) Ecuador',
 #      'QUITO, ECUADOR', 'Quito, Ec'], 'Quito')
 # tweets_df['location'] = tweets_df['location'].replace(
@@ -275,7 +274,8 @@ tweets_df.drop(['coordinates', 'place', 'user_location'], axis=1, inplace=True)
 #      'Guayaquil,Ecuador', 'Guayaquil de mis amores', 'Guayaquil City',
 #      'guayaquil- ecuador', 'Guayaquil, Ecuador    Te sigue', 'Gye',
 #      'Ecuador-Guayaquil', 'Guayaquil, EC', 'Guayaquil 🇪🇨 ', 'Gquil, Ecuador',
-#      'República de Guayaquil', 'Cedros y Víctor Emilio Estrada'], 'Guayaquil')
+#      'República de Guayaquil', 'Cedros y Víctor Emilio Estrada'],
+#     'Guayaquil')
 # tweets_df['location'] = tweets_df['location'].replace(
 #     ['ECUADOR', 'Ecuador ', 'ecuador ', ' Ecuador', 'E C U A D O R ',
 #      '        ECUADOR País Bendecido', 'ecuador', '#AllYouNeedIsEcuador',
@@ -294,15 +294,18 @@ tweets_df.drop(['coordinates', 'place', 'user_location'], axis=1, inplace=True)
 # tweets_df['location'] = tweets_df['location'].replace(
 #     ['Ecuador-Duran', 'Duran, Ecuador'], 'Duran')
 # tweets_df['location'] = tweets_df['location'].replace(
-#     ['Samborondon, Ecuador', 'Edif. XIMA Of#315, Samborondón'], 'Samborondon')
+#     ['Samborondon, Ecuador', 'Edif. XIMA Of#315, Samborondón'],
+#     'Samborondon')
 # tweets_df['location'] = tweets_df['location'].replace(
 #     ['Sangolquí ', 'Sangolqui '], 'Sangolqui')
 # tweets_df['location'] = tweets_df['location'].replace(
-#     ['Machala, El Oro, Ecuador', 'Machala - Ecuador', 'Machala-El Oro-Ecuador',
+#     ['Machala, El Oro, Ecuador', 'Machala - Ecuador',
+#      'Machala-El Oro-Ecuador',
 #      'Machala Ecuador', 'Machala - El Oro - Ecuador', 'Machala, Ecuador'],
 #     'Machala')
 # tweets_df['location'] = tweets_df['location'].replace(
-#     ['Salinas - Ecuador ', 'Salinas, Ecuador', 'Salinas, Sta Elena, Ecuador'],
+#     ['Salinas - Ecuador ', 'Salinas, Ecuador', 'Salinas,'
+#                                                ' Sta Elena, Ecuador'],
 #     'Salinas')
 # tweets_df['location'] = tweets_df['location'].replace(
 #     ['Milagro, Ecuador'], 'Milagro')
@@ -321,7 +324,8 @@ tweets_df.drop(['coordinates', 'place', 'user_location'], axis=1, inplace=True)
 # tweets_df['location'] = tweets_df['location'].replace(
 #     ['Ibarra - Ecuador ', 'Ibarra, Ecuador'], 'Ibarra')
 # tweets_df['location'] = tweets_df['location'].replace(
-#     ['Galápagos,  Ecuador ', 'Galápagos ', 'Galapagos-Ecuador'], 'Galápagos')
+#     ['Galápagos,  Ecuador ', 'Galápagos ', 'Galapagos-Ecuador'],
+#     'Galápagos')
 # tweets_df['location'] = tweets_df['location'].replace(
 #     ['Manabi, Ecuador', 'Manabí Ecuador '], 'Manabí')
 # tweets_df['location'] = tweets_df['location'].replace(
@@ -389,7 +393,8 @@ iterate_models(bow, tweets_df, 'insecurity')
 # print(new_groups_df)
 #
 # # K-Means clustering
-# # dataframe.a = StandardScaler().fit_transform(dataframe.a.values.reshape(-1, 1))
+# dataframe.a = StandardScaler().fit_transform(dataframe.a.values.reshape(
+#     -1, 1))
 # # if it's needed to standardize
 #
 # X = new_groups_df[['insecurity', 'not_insecurity']].values
@@ -417,8 +422,8 @@ iterate_models(bow, tweets_df, 'insecurity')
 # plt.scatter(X[Y_kmeans == 1, 0], X[Y_kmeans == 1, 1], s=70, c='cyan',
 #             label='Cluster 2')
 #
-# plt.scatter(kmeans.cluster_centers_[:, 0], kmeans.cluster_centers_[:, 1], s=70,
-#             c='black', label='Centroids')
+# plt.scatter(kmeans.cluster_centers_[:, 0], kmeans.cluster_centers_[:, 1],
+#             s=70, c='black', label='Centroids')
 # plt.title('Clusters of tweets in economic and social groups')
 # plt.xlabel('economic tweets')
 # plt.ylabel('social tweets')

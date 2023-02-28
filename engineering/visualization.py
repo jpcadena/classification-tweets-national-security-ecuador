@@ -7,7 +7,7 @@ import re
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from matplotlib import pyplot as plt
+from matplotlib import pyplot as plt, cm
 from sklearn.cluster import KMeans
 
 RE_PATTERN: str = "([a-z])([A-Z])"
@@ -175,8 +175,8 @@ def visualize_clusters(matrix: np.ndarray, labels: np.ndarray) -> None:
     plt.xlabel("Feature 1")
     plt.ylabel("Feature 2")
     legend_handles = [
-        plt.Line2D([], [], color=plt.cm.rainbow(i / 2), label=f'Group {i}') for
-        i in range(2)]
+        plt.Line2D([], [], color=cm.get_cmap('plasma', i / 2),
+                   label=f'Group {i}') for i in range(2)]
     plt.legend(handles=legend_handles)
     plt.show()
     for i in range(np.unique(labels).shape[0]):
@@ -196,9 +196,7 @@ def visualize_clusters(matrix: np.ndarray, labels: np.ndarray) -> None:
 
 def plot_confusion_matrix(
         conf_matrix: np.ndarray, classes: list[str], name: str,
-        normalize: bool = False, title: str = 'Confusion matrix',
-        cmap=plt.cm.Blues
-) -> None:
+        normalize: bool = False, title: str = 'Confusion matrix') -> None:
     """
     This function plots the Confusion Matrix of the test and pred arrays
     :param conf_matrix:
@@ -212,9 +210,6 @@ def plot_confusion_matrix(
     :type normalize: bool
     :param title: title for Confusion Matrix plot
     :type title: str
-    :param cmap: Color map for the confusion matrix. The default is
-     plt.cm.Blues
-    :type cmap: plt.cm,
     :return: None
     :rtype: NoneType
     """
@@ -227,7 +222,8 @@ def plot_confusion_matrix(
     print(conf_matrix)
     plt.figure(figsize=FIG_SIZE)
     plt.rcParams.update({'font.size': 16})
-    plt.imshow(conf_matrix, interpolation='nearest', cmap=cmap)
+    plt.imshow(conf_matrix, interpolation='nearest', cmap=cm.get_cmap(
+        'viridis', 8))
     plt.title(title)
     plt.colorbar()
     tick_marks = np.arange(len(classes))

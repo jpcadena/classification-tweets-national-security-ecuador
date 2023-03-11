@@ -52,14 +52,14 @@ class BetterFilter(Filter):
         if exclude:
             query = query + ' -' + exclude
 
-        # tweet by ID for front end
-        # tweet_test: sn_twitter.TwitterTweetScraper = \
-        #     sn_twitter.TwitterTweetScraper(
-        #         1620587742588551169,
-        #         mode=sn_twitter.TwitterTweetScraperMode.SINGLE)
-        # tweet_retrieve: list[sn_twitter.Tweet] = list(tweet_test.get_items())
-        # for tw in tweet_retrieve:
-        #     print(tw.json())
+        tweet_test: sn_twitter.TwitterTweetScraper = \
+            sn_twitter.TwitterTweetScraper(
+                1620587742588551169,
+                mode=sn_twitter.TwitterTweetScraperMode.SINGLE)
+        tweet_retrieve: list[sn_twitter.Tweet] = list(tweet_test.get_items())
+        tweet_dict: dict
+        for tw in tweet_retrieve:
+            tweet_dict = json.loads(tw.json())
 
         for idx, tweet in enumerate(sn_twitter.TwitterSearchScraper(
                 query).get_items()):

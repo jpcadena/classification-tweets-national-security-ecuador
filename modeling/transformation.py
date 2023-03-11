@@ -5,7 +5,6 @@ import pandas as pd
 from gensim.utils import simple_preprocess
 from nltk import WordNetLemmatizer
 from scipy.sparse import csr_matrix
-from sklearn.exceptions import FitFailedWarning, NotFittedError
 from sklearn.feature_extraction.text import CountVectorizer
 
 
@@ -50,18 +49,27 @@ def get_ngram_counts(tweet: str, stop_words: list[str]) -> dict[str, int]:
     :return: A dictionary with the count of each n-gram.
     :rtype: dict[str, int]
     """
-    token_counts_matrix: CountVectorizer = CountVectorizer(
-        stop_words=stop_words, ngram_range=(1, 3))
-    vocabulary: dict
-    ngrams_count: dict = {}
-    try:
-        doc_term_matrix = token_counts_matrix.fit_transform(tweet.split('\n'))
-        vocabulary = token_counts_matrix.vocabulary_
-        ngrams_count = dict(zip(vocabulary.keys(),
-                                doc_term_matrix.sum(axis=0).tolist()[0]))
-    except (FitFailedWarning, NotFittedError) as exc:
-        print(exc)
-    return ngrams_count
+    # Tokenize the tweet and remove stop words
+    tokens = [w for w in simple_preprocess(tweet) if
+              w not in stop_words and len(w) >= 3]
+
+    # Check if the tweet contains at least one non-stop word
+    if not tokens:
+        return {}
+
+    # Create a CountVectorizer with the specified ngram range
+    vectorizer = CountVectorizer(ngram_range=(1, 3))
+
+    # Compute the ngram counts
+    counts = vectorizer.fit_transform([tweet]).toarray().flatten()
+    ngrams = vectorizer.get_feature_names_out()
+
+    # Create a dictionary of ngram counts
+    ngram_counts = {}
+    for ngram, count in zip(ngrams, counts):
+        ngram_counts[ngram] = count
+
+    return ngram_counts
 
 
 def text_to_bow(

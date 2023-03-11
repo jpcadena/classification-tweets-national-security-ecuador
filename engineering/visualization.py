@@ -174,10 +174,10 @@ def visualize_clusters(matrix: np.ndarray, labels: np.ndarray) -> None:
     plt.title("Clusters")
     plt.xlabel("Feature 1")
     plt.ylabel("Feature 2")
-    legend_handles = [
-        plt.Line2D([], [], color=cm.get_cmap('plasma', i / 2),
-                   label=f'Group {i}') for i in range(2)]
-    plt.legend(handles=legend_handles)
+    # legend_handles = [
+    #     plt.Line2D([], [], color=cm.get_cmap('plasma', int(i / 2)),
+    #                label=f'Group {i}') for i in range(2)]
+    # plt.legend(handles=legend_handles)
     plt.show()
     for i in range(np.unique(labels).shape[0]):
         cluster = matrix[labels == i]

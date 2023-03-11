@@ -26,14 +26,16 @@ class PersistenceManager:
 
     @staticmethod
     def save_to_csv(
-            data: Union[list[dict], pd.DataFrame], data_type: str,
-            filename: str = 'data') -> bool:
+            data: Union[list[dict], pd.DataFrame],
+            data_type: DataType = DataType.PROCESSED,
+            filename: str = 'data.csv') -> bool:
         """
         Save list of dictionaries as csv file
         :param data: list of tweets as dictionaries
         :type data: list[dict]
-        :param data_type: folder where data will be saved from DataType
-        :type data_type: str
+        :param data_type: folder where data will be saved: RAW or
+         PROCESSED
+        :type data_type: DataType
         :param filename: name of the file
         :type filename: str
         :return: confirmation for csv file created
@@ -46,13 +48,15 @@ class PersistenceManager:
             if not data:
                 return False
             dataframe = pd.DataFrame(data)
-        dataframe.to_csv(f'{str(data_type)}{filename}.csv', index=False,
+        dataframe.to_csv(f'{str(data_type.value)}{filename}', index=False,
                          encoding=ENCODING)
         return True
 
     @staticmethod
     def load_from_csv(
-            filename: str = 'processed_data.csv', chunk_size: int = CHUNK_SIZE,
+            filename: str = 'raw_tweets.csv',
+            data_type: DataType = DataType.RAW,
+            chunk_size: int = CHUNK_SIZE,
             dtypes: dict = None,
             parse_dates: list[str] = None,
             converters: dict = None
@@ -61,13 +65,23 @@ class PersistenceManager:
         Load dataframe from CSV using chunk scheme
         :param filename: name of the file
         :type filename: str
+        :param data_type: Path where data will be saved: RAW or
+         PROCESSED
+        :type data_type: DataType
         :param chunk_size: Number of chunks to split dataset
         :type chunk_size: int
+        :param dtypes: Dictionary of columns and datatypes
+        :type dtypes: dict
+        :param parse_dates: List of date columns to parse
+        :type parse_dates: list[str]
+        :param converters: Dictionary of functions to convert
+        :type converters: dict
         :return: dataframe retrieved from CSV after optimization with chunks
         :rtype: pd.DataFrame
         """
+        filepath: str = f'{data_type.value}{filename}'
         text_file_reader: TextFileReader = pd.read_csv(
-            filename, header=0, chunksize=chunk_size, encoding=ENCODING,
+            filepath, header=0, chunksize=chunk_size, encoding=ENCODING,
             dtype=dtypes,
             parse_dates=parse_dates,
             converters=converters
@@ -78,7 +92,8 @@ class PersistenceManager:
 
     @staticmethod
     def save_to_pickle(
-            dataframe: pd.DataFrame, filename: str = 'optimized_df.pkl'
+            dataframe: pd.DataFrame, filename: str = 'optimized_df.pkl',
+            data_type: DataType = DataType.PROCESSED
     ) -> None:
         """
         Save dataframe to pickle file
@@ -86,21 +101,33 @@ class PersistenceManager:
         :type dataframe: pd.DataFrame
         :param filename: name of the file
         :type filename: str
+        :param data_type: Path where data will be saved: RAW or PROCESSED
+        :type data_type: DataType
         :return: None
         :rtype: NoneType
         """
-        dataframe.to_pickle(f'data/processed/{filename}')
+        filepath: str = f'{data_type.value}{filename}'
+        dataframe.to_pickle(filepath)
+        # logger.info('Dataframe saved as pickle: %s', filepath)
 
     @staticmethod
-    def load_from_pickle(filename: str = 'optimized_df.pkl') -> pd.DataFrame:
+    def load_from_pickle(
+            filename: str = 'optimized_df.pkl',
+            data_type: DataType = DataType.PROCESSED
+    ) -> pd.DataFrame:
         """
         Load dataframe from Pickle file
         :param filename: name of the file to search and load
         :type filename: str
+        :param data_type: Path where data will be loaded from: RAW or
+         PROCESSED
+        :type data_type: DataType
         :return: dataframe read from pickle
         :rtype: pd.DataFrame
         """
-        dataframe: pd.DataFrame = pd.read_pickle(f'data/processed/{filename}')
+        filepath: str = f'{data_type.value}{filename}'
+        dataframe: pd.DataFrame = pd.read_pickle(filepath)
+        # logger.info('Dataframe loaded from pickle: %s', filepath)
         return dataframe
 
     @staticmethod

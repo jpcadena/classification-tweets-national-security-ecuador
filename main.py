@@ -34,26 +34,33 @@ better_filter: BetterFilter = BetterFilter()
 # receiver_spec: ReceiverSpecification = ReceiverSpecification(
 # 'JuanPabloCadena')
 
-tweets_from_users: list[str] = []
+tweets_from_users: list[dict] = []
 for user in users:
     sender_spec: SenderSpecification = SenderSpecification(user)
     tweets_from_users.extend(better_filter.filter(
-        sender_spec, limit=25, func=decode_tweet_to_json))
+        sender_spec, limit=150, func=decode_tweet_to_json))
 
 tweets_collected: list[dict] = []
 for word in insecurity_words:
     if ' ' in word:
-        print("space in:", word)
         continue
     text_spec: TextSpecification = TextSpecification(word)
     tweets_collected.extend(better_filter.filter(
-        text_spec, limit=50, func=decode_tweet_to_json))
+        text_spec, limit=350, func=decode_tweet_to_json))
+
+additional_tweets: list[dict] = []
+additional_words: list[str] = ['turismo', 'gastronomia', 'futbol']
+for add_word in additional_words:
+    new_spec: TextSpecification = TextSpecification(add_word)
+    additional_tweets.extend(better_filter.filter(
+        new_spec, limit=1500, func=decode_tweet_to_json))
 
 raw_tweets_df: pd.DataFrame = pd.DataFrame(tweets_collected)
 
 tweets_collected.extend(tweets_from_users)
+tweets_collected.extend(additional_tweets)
 raw_saved: bool = PersistenceManager.save_to_csv(
-    tweets_collected, DataType.RAW.value, 'insecurity_raw_tweets')
+    tweets_collected, DataType.RAW, 'insecurity_raw_tweets')
 if raw_saved:
     print('raw tweets saved!')
 
@@ -94,8 +101,8 @@ stop_words = list(set(stop_words))
 
 snscrape_columns: list[str] = stopwords_file.get('tweets')
 clean_tweets_df.drop(snscrape_columns, axis=1, inplace=True, errors='ignore')
-print(clean_tweets_df)
 
+# preprocessing
 clean_tweets_df['no_emojis'] = clean_tweets_df['raw_content'].apply(
     remove_emoji)
 clean_tweets_df['cleaned_text'] = clean_tweets_df['no_emojis'].apply(
@@ -110,11 +117,11 @@ clean_tweets_df['cleaned_text_wo_punctuation_and_stopwords'] = clean_tweets_df[
 
 clean_tweets_df['preprocessed_text'] = clean_tweets_df[
     'cleaned_text_wo_punctuation_and_stopwords'].apply(" ".join)
+# preprocessing
 
 clean_tweets_df['word_count'] = clean_tweets_df[
     'cleaned_text_wo_punctuation_and_stopwords'].apply(len)
 clean_tweets_df['word_count'] = clean_tweets_df['word_count'].astype(uint8)
-print(clean_tweets_df)
 
 clean_tweets_df['vocabulary'] = clean_tweets_df[
     'cleaned_text_wo_punctuation'].apply(
@@ -196,26 +203,8 @@ silhouette_scores(x_topics, cluster_range)
 cluster_index: np.ndarray = kmeans_clustering(x_topics, 2)
 visualize_clusters(x_topics, cluster_index)
 
-# df_ngrams = pd.DataFrame.from_dict(
-#     clean_tweets_df['vocabulary'], orient='index')
-# df_ngrams.reset_index(inplace=True)
-# df_ngrams.columns = ['ngram', 'count']
-
-# clean_tweets_df.tweet = clean_tweets_df.tweet.apply(furnished)
-# Testing plot functions
-# plot_count(clean_tweets_df, ['raw_content', 'retweet_count'], 'lang')
-# plot_distribution(clean_tweets_df.date, 'red')
-# boxplot_dist(clean_tweets_df, 'retweet_count', 'like_count')
-# plot_scatter(clean_tweets_df, 'raw_content', 'date', 'lang')
-# plot_heatmap(clean_tweets_df)
-
-
 i_score: list[float16] = get_scores(
     " ".join(insecurity_words), clean_tweets_df['preprocessed_text'].to_list())
-print(i_score)
-print(np.mean(np.array(i_score)), np.std(np.array(i_score)),
-      np.min(np.array(i_score)), np.max(np.array(i_score)),
-      np.median(np.array(i_score)))
 
 sns.displot(np.array(i_score))
 plt.show()
@@ -225,18 +214,14 @@ clean_tweets_df['insecurity'] = np.where(
     clean_tweets_df['score'] >= np.mean(np.array(i_score)) - np.std(
         np.array(i_score)), 1, 0)
 clean_tweets_df['insecurity'] = clean_tweets_df['insecurity'].astype('uint8')
-print(clean_tweets_df['insecurity'].value_counts())
 clean_tweets_df.drop(
     ["no_emojis", "cleaned_text", "cleaned_text_wo_punctuation",
      "cleaned_text_wo_punctuation_and_stopwords", "word_count"], axis=1,
     inplace=True)
 
 # Save processed dataframe
-processed_saved: bool = PersistenceManager.save_to_csv(
-    clean_tweets_df, DataType.PROCESSED.value,
-    'insecurity_processed_tweets')
-if processed_saved:
-    print('processed tweets saved!')
+# processed_saved: bool = PersistenceManager.save_to_csv(
+#     data=clean_tweets_df, filename='insecurity_processed_tweets.csv')
 
 tweets_df = clean_tweets_df.drop(
     ['date', 'reply_count', 'retweet_count', 'like_count',
@@ -244,7 +229,6 @@ tweets_df = clean_tweets_df.drop(
      'view_count', 'user_username', 'user_created', 'user_followers_count',
      'user_friends_count', 'user_favourites_count', 'time_only', 'vocabulary',
      'hashtags', 'source_label', 'score',
-     'raw_content',
      # 'location'
      ], axis=1)
 
@@ -252,7 +236,43 @@ tweets_df = clean_tweets_df.drop(
 #     tweets_df['user_location'].notna(), tweets_df['place'])
 # tweets_df['location'] = tweets_df['location'].where(
 #     tweets_df['location'].notna(), tweets_df['coordinates'])
-tweets_df.drop(['coordinates', 'place', 'user_location'], axis=1, inplace=True)
+tweets_df = tweets_df.drop(['coordinates', 'place', 'user_location'], axis=1)
+tweets_df['hour'] = tweets_df['hour'].astype(uint8)
+tweets_df['insecurity'] = tweets_df['insecurity'].astype(uint8)
+
+
+def update_target(
+        list_of_dicts: list[dict], dataframe: pd.DataFrame
+) -> pd.DataFrame:
+    """
+    Updates tweet targets to 0 for any tweets in `tweets_df` that have
+     a matching `id` in `additional_tweets`
+    :param list_of_dicts: The list of tweets from other subject
+    :type list_of_dicts: list[dict]
+    :param dataframe: The tweets dataframe
+    :type dataframe: pd.DataFrame
+    :return: The fixed dataframe
+    :rtype: pd.DataFrame
+    """
+    df_copy: pd.DataFrame = dataframe.copy()
+    for tweet in list_of_dicts:
+        tweet_id: int = tweet.get("id")
+        if tweet_id is not None:
+            mask = df_copy["id"] == tweet_id
+            if mask.any():
+                df_copy.loc[mask, "insecurity"] = 0
+    return df_copy
+
+
+print(tweets_df['insecurity'].value_counts())
+updated_tweets: pd.DataFrame = update_target(additional_tweets, tweets_df)
+tweets_df = updated_tweets.copy()
+tweets_df = tweets_df.drop(['raw_content', 'id'], axis=1)
+classified_tweets: bool = PersistenceManager.save_to_csv(
+    data=tweets_df, filename='tweets_to_analyze.csv')
+print(tweets_df['insecurity'].value_counts())
+print(tweets_df.shape)
+print("--------------------------------")
 
 # tweets_df['location'] = tweets_df['location'].replace(
 #     ['CUENCA, ATENAS DEL ECUADOR', 'Ecuador - Cuenca', 'Cuenca-Ecuador',
@@ -333,29 +353,7 @@ tweets_df.drop(['coordinates', 'place', 'user_location'], axis=1, inplace=True)
 # tweets_df['location'] = tweets_df['location'].replace(
 #     ['Santo Domingo-Ecuador', 'Santo Domingo, Ecuador'], 'Santo Domingo')
 
-
-# tweets_df.to_csv('insecurity_tweets.csv', index=False, encoding='UTF-8')
-
-
-# Apply the function to the preprocessed_text column in the DataFrame
 bow, vect = text_to_bow(tweets_df, 'preprocessed_text')
-
-# X_train, X_test, y_train, y_test = train_test_split(
-#     bow, tweets_df['insecurity'], test_size=0.2, random_state=42)
-#
-# # Train the SVM classifier on the training data
-# clf = SVC()
-# clf.fit(X_train, y_train)
-#
-# # Make predictions on the test data
-# y_pred = clf.predict(X_test)
-#
-# # Evaluate the ml_model using accuracy metric
-# accuracy = accuracy_score(y_test, y_pred)
-# print('Accuracy: ', accuracy)
-
-# Clustered DataFrame
-
 
 iterate_models(bow, tweets_df, 'insecurity')
 

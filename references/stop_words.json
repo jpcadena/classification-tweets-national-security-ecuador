@@ -613,7 +613,6 @@
   "tweets": [
     "url",
     "rendered_content",
-    "id",
     "conversation_id",
     "card",
     "vibe",

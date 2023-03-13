@@ -17,6 +17,7 @@ class DataType(Enum):
     """
     RAW: str = 'data/raw/'
     PROCESSED: str = 'data/processed/'
+    REFERENCES: str = 'references/'
 
 
 class PersistenceManager:
@@ -132,14 +133,19 @@ class PersistenceManager:
 
     @staticmethod
     def read_from_json(
-            filename: str = 'references/related_words_users.json') -> dict:
+            filename: str = 'related_words_users.json',
+            data_type: DataType = DataType.REFERENCES) -> dict:
         """
         Read dataframe from JSON file
         :param filename: Name of the file to read
         :type filename: str
+        :param data_type: Path where data will be loaded from. The
+         default is REFERENCES
+        :type data_type: DataType
         :return: Data read from file
         :rtype: dict[str, list[str]]
         """
-        with open(filename, encoding=ENCODING) as file:
+        filepath: str = f'{data_type.value}{filename}'
+        with open(filepath, encoding=ENCODING) as file:
             data: dict[str, list[str]] = json.load(file)
         return data

@@ -5,8 +5,6 @@ import os
 
 from dotenv import load_dotenv
 
-# TODO: Wait for Twitter API approval for Elevated access to be approved
-
 load_dotenv()
 consumer_key: str = os.environ["API_KEY"]
 consumer_secret: str = os.environ["API_KEY_SECRET"]

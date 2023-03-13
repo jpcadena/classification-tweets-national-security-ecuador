@@ -1,18 +1,20 @@
 """
 Main script for ML project
 """
+import logging
 
-import nltk
 import numpy as np
 import pandas as pd
 import seaborn as sns
 from matplotlib import pyplot as plt
 from numpy import uint32, float16, uint8
 
+from core import logging_config
 from engineering.analysis import silhouette_scores, \
     latent_dirichlet_allocation, kmeans_clustering
+from engineering.extraction import collect_tweets, get_stop_words
 from engineering.persistence_manager import PersistenceManager, DataType
-from engineering.snscrape_collection import decode_tweet_to_json, flatten, \
+from engineering.snscrape_collection import flatten, \
     str_to_datetime_values, nested_camel, get_nested_dict_structure, \
     combine_flattened
 from engineering.visualization import elbow_method, visualize_clusters
@@ -21,46 +23,18 @@ from modeling.preprocessing import twitter_text_cleaning, remove_emoji, \
 from modeling.transformation import remove_stopwords_and_tokenize, \
     get_ngram_counts, text_to_bow
 from models.models import iterate_models
-from schemas.filter import BetterFilter
-from schemas.specification import TextSpecification, SenderSpecification
 
+logging_config.setup_logging()
+logger: logging.Logger = logging.getLogger(__name__)
 plt.rcParams.update({'figure.max_open_warning': 0})
 
 json_file: dict[str, list[str]] = PersistenceManager.read_from_json()
-insecurity_words: list[str] = json_file.get('words')
-users: list[str] = json_file.get('users')
-better_filter: BetterFilter = BetterFilter()
-# sender_spec: SenderSpecification = SenderSpecification('TDataScience')
-# receiver_spec: ReceiverSpecification = ReceiverSpecification(
-# 'JuanPabloCadena')
-
-tweets_from_users: list[dict] = []
-for user in users:
-    sender_spec: SenderSpecification = SenderSpecification(user)
-    tweets_from_users.extend(better_filter.filter(
-        sender_spec, limit=150, func=decode_tweet_to_json))
-
-tweets_collected: list[dict] = []
-for word in insecurity_words:
-    if ' ' in word:
-        continue
-    text_spec: TextSpecification = TextSpecification(word)
-    tweets_collected.extend(better_filter.filter(
-        text_spec, limit=350, func=decode_tweet_to_json))
-
-additional_tweets: list[dict] = []
-additional_words: list[str] = ['turismo', 'gastronomia', 'futbol']
-for add_word in additional_words:
-    new_spec: TextSpecification = TextSpecification(add_word)
-    additional_tweets.extend(better_filter.filter(
-        new_spec, limit=1500, func=decode_tweet_to_json))
+tweets_collected, additional_tweets = collect_tweets(json_file)
 
 raw_tweets_df: pd.DataFrame = pd.DataFrame(tweets_collected)
 
-tweets_collected.extend(tweets_from_users)
-tweets_collected.extend(additional_tweets)
 raw_saved: bool = PersistenceManager.save_to_csv(
-    tweets_collected, DataType.RAW, 'insecurity_raw_tweets')
+    raw_tweets_df, DataType.RAW, 'raw_tweets.csv')
 if raw_saved:
     print('raw tweets saved!')
 
@@ -93,11 +67,8 @@ clean_tweets_df['user_created'] = pd.to_datetime(
     clean_tweets_df['user_created'])
 
 stopwords_file: dict[str, list[str]] = PersistenceManager.read_from_json(
-    'references/stop_words.json')
-exclude_words: list[str] = stopwords_file.get('spanish')
-stop_words: list[str] = nltk.corpus.stopwords.words('spanish')
-stop_words.extend(exclude_words)
-stop_words = list(set(stop_words))
+    'stop_words.json')
+stop_words: list[str] = get_stop_words(stopwords_file)
 
 snscrape_columns: list[str] = stopwords_file.get('tweets')
 clean_tweets_df.drop(snscrape_columns, axis=1, inplace=True, errors='ignore')
@@ -202,7 +173,7 @@ silhouette_scores(x_topics, cluster_range)
 
 cluster_index: np.ndarray = kmeans_clustering(x_topics, 2)
 visualize_clusters(x_topics, cluster_index)
-
+insecurity_words: list[str] = json_file.get('words')
 i_score: list[float16] = get_scores(
     " ".join(insecurity_words), clean_tweets_df['preprocessed_text'].to_list())
 
@@ -218,10 +189,6 @@ clean_tweets_df.drop(
     ["no_emojis", "cleaned_text", "cleaned_text_wo_punctuation",
      "cleaned_text_wo_punctuation_and_stopwords", "word_count"], axis=1,
     inplace=True)
-
-# Save processed dataframe
-# processed_saved: bool = PersistenceManager.save_to_csv(
-#     data=clean_tweets_df, filename='insecurity_processed_tweets.csv')
 
 tweets_df = clean_tweets_df.drop(
     ['date', 'reply_count', 'retweet_count', 'like_count',

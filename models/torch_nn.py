@@ -51,14 +51,11 @@ def prepare_data(dataframe: pd.DataFrame):
     vocab_size = len(dataframe['ngram'].unique())
     # find the max length of the lists in the count column
     max_len = dataframe['count'].map(len).max()
-
     # pad the lists with 0 to make them all have the same length
     dataframe['count'] = dataframe['count'].apply(
         lambda x: x + [0] * (max_len - len(x)))
-
     # convert the lists of counts into a numpy array
     count_np = np.array(dataframe['count'].tolist(), dtype=np.float32)
-
     # convert the numpy array into a PyTorch tensor
     bow = torch.tensor(count_np)
     hour = torch.tensor(dataframe['hour'].values, dtype=torch.float32)
@@ -84,34 +81,31 @@ def train(
         dataframe: pd.DataFrame, epochs, learning_rate, hidden_dim,
         embedding_dim):
     """
-
-    :param dataframe:
+    Trains a text classifier on the given dataframe using the specified
+     parameters.
+    :param dataframe: The input data as a pandas DataFrame
     :type dataframe: pd.DataFrame
-    :param epochs:
-    :type epochs:
-    :param learning_rate:
-    :type learning_rate:
-    :param hidden_dim:
-    :type hidden_dim:
-    :param embedding_dim:
-    :type embedding_dim:
-    :return:
-    :rtype:
+    :param epochs: The number of training epochs
+    :type epochs: int
+    :param learning_rate: The learning rate for the optimizer
+    :type learning_rate: float
+    :param hidden_dim: The size of the hidden dimension for the model
+    :type hidden_dim: int
+    :param embedding_dim: The size of the embedding dimension for the
+     model
+    :type embedding_dim: int
+    :return: None
     """
     bow, hour, target, vocab_size = prepare_data(dataframe)
     model = TextClassifier(vocab_size, embedding_dim, hidden_dim)
     criterion = nn.BCEWithLogitsLoss()
     optimizer = optim.SGD(model.parameters(), lr=learning_rate)
     for epoch in range(epochs):
-        # Zero the gradients
         optimizer.zero_grad()
-        # Forward pass
         output = model(bow)
         loss = criterion(output.view(-1), target)
-        # Backward pass
         loss.backward()
         optimizer.step()
-        # Print the loss
         if (epoch + 1) % 10 == 0:
             print(f'Epoch [{epoch + 1}/{epochs}], Loss: {loss.item()}')
 

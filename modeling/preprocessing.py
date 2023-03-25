@@ -13,6 +13,7 @@ from matplotlib import pyplot as plt
 from nltk import WhitespaceTokenizer, RegexpTokenizer, WordNetLemmatizer, \
     TweetTokenizer
 from nltk.corpus import stopwords
+from numpy import float16
 from sklearn.neighbors import LocalOutlierFactor
 from textblob import TextBlob
 
@@ -248,7 +249,7 @@ def remove_punc(message):
         [char for char in message if char not in string.punctuation])
 
 
-def jaccard_similarity(query: list[str], document: list[str]) -> float:
+def jaccard_similarity(query: list[str], document: list[str]) -> float16:
     """
     Calculates the Jaccard similarity between two sets of strings
     :param query: A list of strings representing a set of items
@@ -257,14 +258,14 @@ def jaccard_similarity(query: list[str], document: list[str]) -> float:
      items
     :type document: list[str]
     :return: The Jaccard similarity score between the two sets of items
-    :rtype: float
+    :rtype: float16
     """
     intersection: set[str] = set(query).intersection(set(document))
     union: set[str] = set(query).union(set(document))
-    return len(intersection) / len(union)
+    return float16(len(intersection) / len(union))
 
 
-def get_scores(group: list[str], tweets: list[list[str]]) -> list[float]:
+def get_scores(group: list[str], tweets: list[list[str]]) -> list[float16]:
     """
     Calculates the Jaccard similarity scores between a group of
      keywords and a list of tweets.
@@ -274,10 +275,10 @@ def get_scores(group: list[str], tweets: list[list[str]]) -> list[float]:
     :type tweets: list[list[str]]
     :return: A list of Jaccard similarity scores between the group and
      each tweet
-    :rtype: list[float]
+    :rtype: list[float16]
     """
-    scores: list[float] = []
+    scores: list[float16] = []
     for tweet in tweets:
-        score: float = jaccard_similarity(group, tweet)
+        score: float16 = jaccard_similarity(group, tweet)
         scores.append(score)
     return scores

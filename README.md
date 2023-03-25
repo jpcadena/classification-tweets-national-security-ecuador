@@ -69,9 +69,18 @@ This project is in development with an estimated presentation at March.
 ## Built with
 
 * [![Python][Python.org]][Python-url]
+* [![Pandas][pandas]][pandas-url]
+* [![numpy][numpy]][numpy-url]
+* [![scikit-learn][scikit-learn]][scikit-learn-url]
+* [![spacy][spacy]][spacy-url]
+* [![tensorflow][tensorflow]][tensorflow-url]
+* [![keras][keras]][keras-url]
+* [![Pylint][pylint]][pylint-url]
+* [![Jupyter-Notebooks][Jupyter-Notebooks]][Jupyter-Notebooks-url]
+* [![Pycharm][Pycharm]][Pycharm-url]
+* [![Markdown][Markdown]][Markdown-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- GETTING STARTED -->
@@ -132,6 +141,8 @@ This project is in development with an estimated presentation at March.
 
 ## Contributing
 
+[![GitHub][GitHub]][github-url]
+
 If you have a suggestion that would make this better, please fork the repo and
 create a pull request.
 
@@ -172,18 +183,20 @@ Distributed under the MIT License.
 
 ## Contact
 
-LinkedIn: [Juan Pablo Cadena Aguilar][linkedin-url]
-
-E-mail: [Juan Pablo Cadena Aguilar](mailto:jpcadena@espol.edu.ec?subject=[GitHub]classification-tweets-national-security-ecuador)
+- [![LinkedIn][LinkedIn]][linkedin-url]
+- [![Outlook][Outlook]](mailto:jpcadena@espol.edu.ec?subject=[GitHub]tweets-classification-backend)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
+[LinkedIn]: https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white
+
 [linkedin-url]: https://linkedin.com/in/juanpablocadenaaguilar
+
+[Outlook]: https://img.shields.io/badge/Microsoft_Outlook-0078D4?style=for-the-badge&logo=microsoft-outlook&logoColor=white
 
 [project-screenshot]: assets/static/images/project.png
 
@@ -192,3 +205,49 @@ E-mail: [Juan Pablo Cadena Aguilar](mailto:jpcadena@espol.edu.ec?subject=[GitHub
 [Python-url]: https://www.python.org/
 
 [Python-docs-url]: https://docs.python.org/3.10/
+
+[Pylint]: https://img.shields.io/badge/linting-pylint-yellowgreen
+
+[Pandas]: https://img.shields.io/badge/pandas-%23150458.svg?style=for-the-badge&logo=pandas&logoColor=white
+
+[NumPy]: https://img.shields.io/badge/numpy-%23013243.svg?style=for-the-badge&logo=numpy&logoColor=white
+
+[Scikit-Learn]: https://img.shields.io/badge/scikit--learn-%23F7931E.svg?style=for-the-badge&logo=scikit-learn&logoColor=white
+
+[PyCharm]: https://img.shields.io/badge/PyCharm-21D789?style=for-the-badge&logo=pycharm&logoColor=white
+
+[Markdown]: https://img.shields.io/badge/Markdown-000000?style=for-the-badge&logo=markdown&logoColor=white
+
+[Spacy]: https://img.shields.io/badge/Spacy-09A3D5?style=for-the-badge&logo=spacy&logoColor=white
+
+[TensorFlow]: https://img.shields.io/badge/TensorFlow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white
+
+[Keras]: https://img.shields.io/badge/Keras-D00000?style=for-the-badge&logo=keras&logoColor=white
+
+[Jupyter-Notebooks]: https://img.shields.io/badge/Jupyter_Notebooks-F37626?style=for-the-badge&logo=jupyter&logoColor=white
+
+
+[pylint-url]: https://www.pylint.org/
+
+[pandas-url]: https://pandas.pydata.org/docs/
+
+[numpy-url]: https://numpy.org/
+
+[scikit-learn-url]: https://scikit-learn.org/stable/
+
+[Pycharm-url]: https://www.jetbrains.com/pycharm/
+
+[Markdown-url]: https://daringfireball.net/projects/markdown/
+
+[spacy-url]: https://spacy.io/
+
+[tensorflow-url]: https://www.tensorflow.org/
+
+[keras-url]: https://keras.io/
+
+[Jupyter-Notebooks-url]: https://jupyter.org/
+
+
+[GitHub]: https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white
+
+[GitHub-url]: https://github.com/jpcadena/tweets-classification-backend

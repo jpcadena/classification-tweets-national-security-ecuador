@@ -457,3 +457,5 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
+!/logs/
+!/logs/log-12-Mar-2023-19-30-28.log

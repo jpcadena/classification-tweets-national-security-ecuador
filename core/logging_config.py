@@ -5,6 +5,8 @@ import logging
 import os
 from datetime import datetime
 
+from core.config import PROJECT_NAME
+
 
 def _setup_console_handler(logger: logging.Logger, log_level: int) -> None:
     """
@@ -33,17 +35,14 @@ def _setup_file_handler(logger: logging.Logger, log_level: int) -> None:
     """
     formatter: logging.Formatter = logging.Formatter(
         '[%(name)s][%(asctime)s][%(levelname)s][%(module)s][%(funcName)s][%('
-        'lineno)d]: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
-
+        'lineno)d]: %(message)s', datefmt="%Y-%m-%d %H:%M:%S")
     current_file_directory: str = os.path.dirname(os.path.abspath(__file__))
     project_root: str = current_file_directory
-    while os.path.basename(project_root) != \
-            'classification-tweets-national-security-ecuador':
+    while os.path.basename(project_root) != PROJECT_NAME:
         project_root = os.path.dirname(project_root)
-    current_date: str = datetime.today().strftime('%d-%b-%Y-%H-%M-%S')
-    log_filename: str = f'log-{current_date}.log'
-    filename_path: str = f'{project_root}/logs/{log_filename}'
-
+    current_date: str = datetime.today().strftime("%d-%b-%Y-%H-%M-%S")
+    log_filename: str = f"log-{current_date}.log"
+    filename_path: str = f"{project_root}/logs/{log_filename}"
     file_handler: logging.FileHandler = logging.FileHandler(filename_path)
     file_handler.setLevel(log_level)
     file_handler.setFormatter(formatter)
@@ -51,8 +50,7 @@ def _setup_file_handler(logger: logging.Logger, log_level: int) -> None:
     file_handler.flush()
 
 
-def setup_logging(
-        log_level: int = logging.DEBUG) -> None:
+def setup_logging(log_level: int = logging.DEBUG) -> None:
     """
     Setup logging
     :param log_level: Level of logging

@@ -19,8 +19,10 @@ from modeling.evaluation import evaluate_model
 from modeling.modeling import predict_model
 
 
-def iterate_models(bow: csr_matrix, dataframe: pd.DataFrame,
-                   target_column: str = 'insecurity'):
+def iterate_models(
+        bow: csr_matrix, dataframe: pd.DataFrame,
+        target_column: str = "insecurity"
+) -> None:
     """
     Iterates through a list of machine learning models and evaluates
      their performance on the input data
@@ -38,10 +40,10 @@ def iterate_models(bow: csr_matrix, dataframe: pd.DataFrame,
                     MultinomialNB(), DecisionTreeClassifier(),
                     KNeighborsClassifier(),
                     AdaBoostClassifier(),
-                    XGBClassifier(tree_method='gpu_hist', gpu_id=0),
-                    CatBoostClassifier(task_type="GPU", devices='0'),
+                    XGBClassifier(tree_method="gpu_hist", gpu_id=0),
+                    CatBoostClassifier(task_type="GPU", devices="0"),
                     LGBMClassifier(
-                        device='gpu', gpu_platform_id=0, gpu_device_id=0)]
+                        device="gpu", gpu_platform_id=0, gpu_device_id=0)]
     model_names: list[str] = []
     boost_models: list[bool] = []
     for model in models:
@@ -53,9 +55,9 @@ def iterate_models(bow: csr_matrix, dataframe: pd.DataFrame,
             model_names.append(type(model).__name__)
             boost_models.append(False)
     for model, model_name, boost in zip(models, model_names, boost_models):
-        print('\n\n', model_name)
+        print("\n\n", model_name)
         y_pred, y_test = predict_model(
             bow, dataframe, model, target_column, boost)
         conf_matrix: np.ndarray = evaluate_model(y_pred, y_test)
         plot_confusion_matrix(
-            conf_matrix, ['Insecurity', 'Not insecurity'], model_name)
+            conf_matrix, ["Insecurity", "Not insecurity"], model_name)

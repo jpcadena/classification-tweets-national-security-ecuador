@@ -20,7 +20,8 @@
 <h3 align="center">classification-tweets-national-security-ecuador</h3>
 
   <p align="center">
-    Description for Tweets Classification about national security at Ecuador.
+    Machine Learning project based on Natural Language Processing for 
+Tweets Classification about national security at Ecuador.
     <br />
     <a href="https://github.com/jpcadena/classification-tweets-national-security-ecuador"><strong>Explore the docs »</strong></a>
     <br />
@@ -61,7 +62,7 @@
 
 ![Project][project-screenshot]
 
-This project is in development with an estimated presentation at March.
+This project is in development.
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -226,7 +227,6 @@ Distributed under the MIT License.
 
 [Jupyter-Notebooks]: https://img.shields.io/badge/Jupyter_Notebooks-F37626?style=for-the-badge&logo=jupyter&logoColor=white
 
-
 [pylint-url]: https://www.pylint.org/
 
 [pandas-url]: https://pandas.pydata.org/docs/
@@ -247,7 +247,6 @@ Distributed under the MIT License.
 
 [Jupyter-Notebooks-url]: https://jupyter.org/
 
-
 [GitHub]: https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white
 
-[GitHub-url]: https://github.com/jpcadena/tweets-classification-backend
+[gitHub-url]: https://github.com/jpcadena/tweets-classification-backend

@@ -2,6 +2,7 @@
 Persistence script
 """
 import json
+import logging
 from enum import Enum
 from typing import Union
 
@@ -10,14 +11,17 @@ from pandas.io.parsers import TextFileReader
 
 from core.config import ENCODING, CHUNK_SIZE
 
+logger: logging.Logger = logging.getLogger(__name__)
+
 
 class DataType(Enum):
     """
     Data Type class based on Enum
     """
-    RAW: str = 'data/raw/'
-    PROCESSED: str = 'data/processed/'
-    REFERENCES: str = 'references/'
+    RAW: str = "data/raw/"
+    PROCESSED: str = "data/processed/"
+    REFERENCES: str = "references/"
+    FIGURES: str = "reports/figures/"
 
 
 class PersistenceManager:
@@ -29,7 +33,8 @@ class PersistenceManager:
     def save_to_csv(
             data: Union[list[dict], pd.DataFrame],
             data_type: DataType = DataType.PROCESSED,
-            filename: str = 'data.csv') -> bool:
+            filename: str = "data.csv"
+    ) -> bool:
         """
         Save list of dictionaries as csv file
         :param data: list of tweets as dictionaries
@@ -49,18 +54,15 @@ class PersistenceManager:
             if not data:
                 return False
             dataframe = pd.DataFrame(data)
-        dataframe.to_csv(f'{str(data_type.value)}{filename}', index=False,
+        dataframe.to_csv(f"{str(data_type.value)}{filename}", index=False,
                          encoding=ENCODING)
         return True
 
     @staticmethod
     def load_from_csv(
-            filename: str = 'raw_tweets.csv',
-            data_type: DataType = DataType.RAW,
-            chunk_size: int = CHUNK_SIZE,
-            dtypes: dict = None,
-            parse_dates: list[str] = None,
-            converters: dict = None
+            filename: str = "raw_tweets.csv",
+            data_type: DataType = DataType.RAW, chunk_size: int = CHUNK_SIZE,
+            dtypes: dict = None, parse_dates: list[str] = None
     ) -> pd.DataFrame:
         """
         Load dataframe from CSV using chunk scheme
@@ -75,25 +77,20 @@ class PersistenceManager:
         :type dtypes: dict
         :param parse_dates: List of date columns to parse
         :type parse_dates: list[str]
-        :param converters: Dictionary of functions to convert
-        :type converters: dict
         :return: dataframe retrieved from CSV after optimization with chunks
         :rtype: pd.DataFrame
         """
-        filepath: str = f'{data_type.value}{filename}'
+        filepath: str = f"{data_type.value}{filename}"
         text_file_reader: TextFileReader = pd.read_csv(
             filepath, header=0, chunksize=chunk_size, encoding=ENCODING,
-            dtype=dtypes,
-            parse_dates=parse_dates,
-            converters=converters
-        )
+            dtype=dtypes, parse_dates=parse_dates)
         dataframe: pd.DataFrame = pd.concat(
             text_file_reader, ignore_index=True)
         return dataframe
 
     @staticmethod
     def save_to_pickle(
-            dataframe: pd.DataFrame, filename: str = 'optimized_df.pkl',
+            dataframe: pd.DataFrame, filename: str = "optimized_df.pkl",
             data_type: DataType = DataType.PROCESSED
     ) -> None:
         """
@@ -107,13 +104,13 @@ class PersistenceManager:
         :return: None
         :rtype: NoneType
         """
-        filepath: str = f'{data_type.value}{filename}'
+        filepath: str = f"{data_type.value}{filename}"
         dataframe.to_pickle(filepath)
-        # logger.info('Dataframe saved as pickle: %s', filepath)
+        logger.info("Dataframe saved as pickle: %s", filepath)
 
     @staticmethod
     def load_from_pickle(
-            filename: str = 'optimized_df.pkl',
+            filename: str = "optimized_df.pkl",
             data_type: DataType = DataType.PROCESSED
     ) -> pd.DataFrame:
         """
@@ -126,15 +123,16 @@ class PersistenceManager:
         :return: dataframe read from pickle
         :rtype: pd.DataFrame
         """
-        filepath: str = f'{data_type.value}{filename}'
+        filepath: str = f"{data_type.value}{filename}"
         dataframe: pd.DataFrame = pd.read_pickle(filepath)
-        # logger.info('Dataframe loaded from pickle: %s', filepath)
+        logger.info("Dataframe loaded from pickle: %s", filepath)
         return dataframe
 
     @staticmethod
     def read_from_json(
-            filename: str = 'related_words_users.json',
-            data_type: DataType = DataType.REFERENCES) -> dict:
+            filename: str = "related_words_users.json",
+            data_type: DataType = DataType.REFERENCES
+    ) -> dict:
         """
         Read dataframe from JSON file
         :param filename: Name of the file to read
@@ -145,7 +143,7 @@ class PersistenceManager:
         :return: Data read from file
         :rtype: dict[str, list[str]]
         """
-        filepath: str = f'{data_type.value}{filename}'
+        filepath: str = f"{data_type.value}{filename}"
         with open(filepath, encoding=ENCODING) as file:
             data: dict[str, list[str]] = json.load(file)
         return data

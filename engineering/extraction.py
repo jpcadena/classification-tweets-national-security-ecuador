@@ -8,8 +8,9 @@ from schemas.filter import BetterFilter
 from schemas.specification import SenderSpecification, TextSpecification
 
 
-def collect_tweets(json_file: dict[str, list[str]]
-                   ) -> tuple[list[dict], list[dict]]:
+def collect_tweets(
+        json_file: dict[str, list[str]]
+) -> tuple[list[dict], list[dict]]:
     """
     Collect tweets from multiple users and topics
     :param json_file: The json file containing the users and topics
@@ -18,8 +19,8 @@ def collect_tweets(json_file: dict[str, list[str]]
     :rtype: tuple[list[dict], list[dict]]
     """
     print("collect_tweets")
-    insecurity_words: list[str] = json_file.get('words')
-    users: list[str] = json_file.get('users')
+    insecurity_words: list[str] = json_file.get("words")
+    users: list[str] = json_file.get("users")
     better_filter: BetterFilter = BetterFilter()
     tweets_from_users: list[dict] = collect_tweets_from_users(
         users, better_filter)
@@ -32,7 +33,8 @@ def collect_tweets(json_file: dict[str, list[str]]
 
 
 def collect_tweets_from_users(
-        users: list[str], better_filter: BetterFilter) -> list[dict]:
+        users: list[str], better_filter: BetterFilter
+) -> list[dict]:
     """
     Collect tweets from users list
     :param users: The list of users
@@ -66,7 +68,7 @@ def collect_tweets_containing_words(
     print("collect_tweets_containing_words")
     tweets_collected: list[dict] = []
     for word in insecurity_words:
-        if ' ' in word:
+        if "" "" in word:
             continue
         text_spec: TextSpecification = TextSpecification(word)
         tweets_collected.extend(better_filter.filter(
@@ -84,7 +86,7 @@ def collect_additional_tweets(better_filter: BetterFilter) -> list[dict]:
     """
     print("collect_additional_tweets")
     additional_tweets: list[dict] = []
-    additional_words: list[str] = ['turismo', 'gastronomia', 'futbol']
+    additional_words: list[str] = ["turismo", "gastronomia", "futbol"]
     for add_word in additional_words:
         new_spec: TextSpecification = TextSpecification(add_word)
         additional_tweets.extend(better_filter.filter(
@@ -101,8 +103,8 @@ def get_stop_words(stopwords_file: dict[str, list[str]]) -> list[str]:
     :return: A list of stop words
     :rtype: list[str]
     """
-    exclude_words: list[str] = stopwords_file.get('spanish')
-    stop_words: list[str] = nltk.corpus.stopwords.words('spanish')
+    exclude_words: list[str] = stopwords_file.get("spanish")
+    stop_words: list[str] = nltk.corpus.stopwords.words("spanish")
     stop_words.extend(exclude_words)
     stop_words = list(set(stop_words))
     return stop_words

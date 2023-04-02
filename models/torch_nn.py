@@ -41,11 +41,11 @@ class TextClassifier(nn.Module):
 
 def prepare_data(dataframe: pd.DataFrame):
     """
-
-    :param dataframe:
+    Prepare the data
+    :param dataframe: The dataframe to prepare
     :type dataframe: pd.DataFrame
-    :return:
-    :rtype:
+    :return: The variables of interest
+    :rtype: tuple
     """
     dataframe['ngram'] = dataframe['ngram'].apply(','.join)
     vocab_size = len(dataframe['ngram'].unique())
@@ -79,7 +79,8 @@ def prepare_data(dataframe: pd.DataFrame):
 
 def train(
         dataframe: pd.DataFrame, epochs, learning_rate, hidden_dim,
-        embedding_dim):
+        embedding_dim
+) -> None:
     """
     Trains a text classifier on the given dataframe using the specified
      parameters.

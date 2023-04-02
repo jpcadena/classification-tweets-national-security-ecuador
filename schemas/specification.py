@@ -11,7 +11,7 @@ class BaseSpecification(ABC):
     """
 
     @abstractmethod
-    def __init__(self, spec: str, lang: str = 'es') -> None:
+    def __init__(self, spec: str, lang: str = "es") -> None:
         """
         Abstract constructor for Base object
         :param spec: Specification to be created
@@ -36,9 +36,9 @@ class Specification(BaseSpecification):
     Specification class
     """
 
-    def __init__(self, spec: str, lang: str = 'es') -> None:
-        self.spec: str = spec + ' lang:' + lang
-        self.lang: str = 'lang:' + lang
+    def __init__(self, spec: str, lang: str = "es") -> None:
+        self.spec: str = spec + " lang:" + lang
+        self.lang: str = "lang:" + lang
 
     def __or__(self, *args: tuple):
         """
@@ -56,8 +56,8 @@ class OrSpecification(Specification):
     OrSpecification class based on Specification
     """
 
-    def __init__(self, *args: tuple, lang: str = 'es') -> None:
-        self.args: str = ' OR '.join(map(str, list(args)))
+    def __init__(self, *args, lang: str = "es") -> None:
+        self.args: str = " OR ".join(map(str, list(args)))
         super().__init__(self.args, lang)
 
 
@@ -66,8 +66,8 @@ class TextSpecification(Specification):
     Text Specification class based on Specification
     """
 
-    def __init__(self, spec: str, lang: str = 'es') -> None:
-        self.text: str = spec + ' #ecuador'
+    def __init__(self, spec: str, lang: str = "es") -> None:
+        self.text: str = spec + ""  # ecuador"
         super().__init__(self.text, lang)
 
 
@@ -76,8 +76,8 @@ class SenderSpecification(Specification):
     Sender Specification class based on Specification
     """
 
-    def __init__(self, spec: str, lang: str = 'es') -> None:
-        self.sender: str = 'from:' + spec
+    def __init__(self, spec: str, lang: str = "es") -> None:
+        self.sender: str = "from:" + spec
         super().__init__(self.sender, lang)
 
 
@@ -86,8 +86,8 @@ class ReceiverSpecification(Specification):
     Receiver Specification class based on Specification
     """
 
-    def __init__(self, spec: str, lang: str = 'es') -> None:
-        self.receiver: str = 'to:' + spec
+    def __init__(self, spec: str, lang: str = "es") -> None:
+        self.receiver: str = "to:" + spec
         super().__init__(self.receiver, lang)
 
 
@@ -96,8 +96,8 @@ class IncludeUserSpecification(Specification):
     Include User Specification class based on Specification
     """
 
-    def __init__(self, spec: str, lang: str = 'es') -> None:
-        self.user: str = '@' + spec
+    def __init__(self, spec: str, lang: str = "es") -> None:
+        self.user: str = " @ " + spec
         super().__init__(self.user, lang)
 
 
@@ -106,8 +106,8 @@ class HashtagSpecification(Specification):
     Hashtag Specification class based on Specification
     """
 
-    def __init__(self, spec: str, lang: str = 'es') -> None:
-        self.hashtag: str = '#' + spec + ' #ecuador'
+    def __init__(self, spec: str, lang: str = "es") -> None:
+        self.hashtag: str = "#" + spec + " #ecuador"
         super().__init__(self.hashtag, lang)
 
 
@@ -116,9 +116,9 @@ class MultipleHashtagsSpecification(Specification):
     Multiple Hashtags Specification class based on Specification
     """
 
-    def __init__(self, *args: tuple, lang: str = 'es') -> None:
-        self.multiple_hashtags: str = ' OR '.join(
-            map(str, ['#' + arg for arg in list(args)]))
+    def __init__(self, *args, lang: str = "es") -> None:
+        self.multiple_hashtags: str = " OR ".join(
+            map(str, ["#" + arg for arg in list(args)]))
         super().__init__(self.multiple_hashtags, lang)
 
 
@@ -128,14 +128,14 @@ class DateSpecification(Specification):
     """
 
     def __init__(
-            self, spec: str, lang: str = 'es', **kwargs: dict[str, datetime]
+            self, spec: str, lang: str = "es", **kwargs
     ) -> None:
         text: str = spec
-        if 'since' in kwargs:
-            self.since: datetime = kwargs['since']
-            text = text + 'since:' + self.since.strftime('YYYY-MM-DD')
-        if 'until' in kwargs:
-            self.until: datetime = kwargs['until']
-            text = text + 'until:' + self.until.strftime('YYYY-MM-DD')
+        if "since" in kwargs:
+            self.since: datetime = kwargs["since"]
+            text = text + "since:" + self.since.strftime("YYYY-MM-DD")
+        if "until" in kwargs:
+            self.until: datetime = kwargs["until"]
+            text = text + "until:" + self.until.strftime("YYYY-MM-DD")
         self.text: str = text
         super().__init__(self.text, lang)

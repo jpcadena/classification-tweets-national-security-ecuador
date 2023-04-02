@@ -34,27 +34,27 @@ def str_to_datetime_values(data: dict) -> dict:
     :rtype: dict
     """
     try:
-        tweet_date: str = data['date']
-        data.update({'date': datetime.strptime(
+        tweet_date: str = data["date"]
+        data.update({"date": datetime.strptime(
             tweet_date, "%Y-%m-%d %H:%M:%S")})
     except TypeError as t_err:
         print(t_err, "date field does not exist.")
     try:
-        user_created: str = data['user']['created']
-        data['user']['created'] = datetime.strptime(
+        user_created: str = data["user"]["created"]
+        data["user"]["created"] = datetime.strptime(
             user_created, "%Y-%m-%d %H:%M:%S")
     except TypeError as t_err:
         print(t_err, "user created field does not exist.")
     try:
-        quoted_tweet_date: str = data['quotedTweet']['date']
-        data['quotedTweet']['date'] = datetime.strptime(
+        quoted_tweet_date: str = data["quotedTweet"]["date"]
+        data["quotedTweet"]["date"] = datetime.strptime(
             quoted_tweet_date, "%Y-%m-%d %H:%M:%S")
     except TypeError as t_err:
         print(t_err, "quotedTweet date field does not exist.")
     try:
-        quoted_tweet_user_creation_date: str = data['quotedTweet'][
-            'user']['created']
-        data['quotedTweet']['user']['created'] = datetime.strptime(
+        quoted_tweet_user_creation_date: str = data["quotedTweet"][
+            "user"]["created"]
+        data["quotedTweet"]["user"]["created"] = datetime.strptime(
             quoted_tweet_user_creation_date, "%Y-%m-%d %H:%M:%S")
     except TypeError as t_err:
         print(t_err, "quotedTweet user created field does not exist.")
@@ -69,8 +69,8 @@ def camel_to_snake(name: str) -> str:
     :return: name converted into snake_case
     :rtype: str
     """
-    name: str = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
-    return re.sub('([a-z0-9])([A-Z])', r'\1_\2', name).lower()
+    name: str = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", name)
+    return re.sub("([a-z0-9])([A-Z])", r"\1_\2", name).lower()
 
 
 def nested_camel(data) -> Union[list, dict]:
@@ -88,8 +88,9 @@ def nested_camel(data) -> Union[list, dict]:
         b, (dict, list)) else b for a, b in data.items()}
 
 
-def flatten(raw_tweet: dict, column_name: str, structure: list[str]
-            ) -> pd.Series:
+def flatten(
+        raw_tweet: dict, column_name: str, structure: list[str]
+) -> pd.Series:
     """
     Flat method to nested dictionaries as dataframe column
     :param raw_tweet: Tweet data
@@ -102,9 +103,9 @@ def flatten(raw_tweet: dict, column_name: str, structure: list[str]
     :rtype: pd.Series
     """
     data: dict = {}
-    mod_keys = [column_name + '_' + sub for sub in structure]
+    mod_keys = [column_name + "_" + sub for sub in structure]
     if not raw_tweet:
-        data = dict.fromkeys(mod_keys, '')
+        data = dict.fromkeys(mod_keys, "")
     else:
         for key, value in raw_tweet.items():
             if isinstance(value, list):
@@ -112,14 +113,15 @@ def flatten(raw_tweet: dict, column_name: str, structure: list[str]
                     for k_s, v_s in value[0].items():
                         data[f"{column_name}_{key}_{k_s}"] = v_s
                 else:
-                    data[f'{column_name}_{key}'] = value
+                    data[f"{column_name}_{key}"] = value
             else:
-                data[f'{column_name}_{key}'] = value
+                data[f"{column_name}_{key}"] = value
     return pd.Series(data)
 
 
 def get_nested_dict_structure(
-        dataframe: pd.DataFrame, column: str) -> list[str]:
+        dataframe: pd.DataFrame, column: str
+) -> list[str]:
     """
     Get nested structure from dictionary in Tweet dictionary
     :param dataframe: Tweet dataframe to search for nested dictionaries
@@ -137,8 +139,10 @@ def get_nested_dict_structure(
     return structure
 
 
-def combine_flattened(dataframe: pd.DataFrame, column: str, func: callable,
-                      structure: list[str]) -> pd.DataFrame:
+def combine_flattened(
+        dataframe: pd.DataFrame, column: str, func: callable,
+        structure: list[str]
+) -> pd.DataFrame:
     """
     Join Tweets dataframe with flatten dictionary as new Series columns
     :param dataframe: Original Tweets dataframe

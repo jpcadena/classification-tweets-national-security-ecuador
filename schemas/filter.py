@@ -50,7 +50,7 @@ class BetterFilter(Filter):
         raw_tweets: list[dict] = []
         query: str = spec.spec
         if exclude:
-            query = query + ' -' + exclude
+            query = query + " -" + exclude
 
         # tweet_test: sn_twitter.TwitterTweetScraper = \
         #     sn_twitter.TwitterTweetScraper(

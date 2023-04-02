@@ -10,7 +10,8 @@ from modeling.train import training
 
 def predict_model(
         bow: csr_matrix, dataframe: pd.DataFrame, ml_model,
-        target_column: str = 'insecurity', boost: bool = False) -> tuple:
+        target_column: str = "insecurity", boost: bool = False
+) -> tuple:
     """
     Predicts the target variable values using the provided model and
      returns the predicted and actual values.
@@ -33,10 +34,10 @@ def predict_model(
     """
     x_train, x_test, y_train, y_test = training(bow, dataframe, target_column)
     if boost:
-        x_train = x_train.astype('float32')
-        x_test = x_test.astype('float32')
-        y_train = y_train.astype('float32')
-        y_test = y_test.astype('float32')
+        x_train = x_train.astype("float32")
+        x_test = x_test.astype("float32")
+        y_train = y_train.astype("float32")
+        y_test = y_test.astype("float32")
     ml_model.fit(x_train, y_train)
     y_pred: np.ndarray = ml_model.predict(x_test)
     return y_pred, y_test

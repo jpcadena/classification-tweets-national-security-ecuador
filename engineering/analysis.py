@@ -10,6 +10,8 @@ from sklearn.decomposition import TruncatedSVD, LatentDirichletAllocation
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 from sklearn.metrics import silhouette_score
 
+from core.config import NUMERICS
+
 
 def analyze_dataframe(dataframe: pd.DataFrame) -> None:
     """
@@ -22,14 +24,10 @@ def analyze_dataframe(dataframe: pd.DataFrame) -> None:
     print(dataframe.head())
     print(dataframe.shape)
     print(dataframe.dtypes)
-    print(dataframe.info(memory_usage='deep'))
+    print(dataframe.info(memory_usage="deep"))
     print(dataframe.memory_usage(deep=True))
-    print(dataframe.describe(include='all', datetime_is_numeric=True))
-    non_numeric_df = dataframe.select_dtypes(exclude=[
-        'uint8', 'uint16', 'uint32', 'uint64',
-        'int8', 'int16', 'int32',
-        'int64',
-        'float16', 'float32', 'float64'])
+    print(dataframe.describe(include="all", datetime_is_numeric=True))
+    non_numeric_df = dataframe.select_dtypes(exclude=NUMERICS)
     for column in non_numeric_df.columns:
         print(non_numeric_df[column].value_counts())
         print(non_numeric_df[column].unique())
@@ -58,8 +56,8 @@ def latent_semantic_analysis(
     svd.fit(weighted_tfidf_matrix)
     var: np.ndarray = svd.explained_variance_ratio_
     plt.plot(var)
-    plt.xlabel('Number of components')
-    plt.ylabel('Explained variance ratio')
+    plt.xlabel("Number of components")
+    plt.ylabel("Explained variance ratio")
     plt.show()
     cumulative_explained_variance_ratio = np.cumsum(var)
     n_components = np.argmax(cumulative_explained_variance_ratio >= 0.9) + 1
@@ -116,7 +114,8 @@ def silhouette_scores(matrix: np.ndarray, n_clusters_range: range) -> None:
 
 
 def kmeans_clustering(
-        x_transformed: np.ndarray, n_clusters: int) -> np.ndarray:
+        x_transformed: np.ndarray, n_clusters: int
+) -> np.ndarray:
     """
     Applies K-means clustering to the transformed data and returns the
      predicted cluster labels

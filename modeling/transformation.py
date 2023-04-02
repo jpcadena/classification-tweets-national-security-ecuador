@@ -19,13 +19,14 @@ def normalization(tweet_list: list[str]) -> list[str]:
     lem: WordNetLemmatizer = WordNetLemmatizer()
     normalized_tweet: list[str] = []
     for word in tweet_list:
-        normalized_text = lem.lemmatize(word, 'v')
+        normalized_text = lem.lemmatize(word, "v")
         normalized_tweet.append(normalized_text)
     return normalized_tweet
 
 
 def remove_stopwords_and_tokenize(
-        text: str, stop_words: list[str]) -> list[str]:
+        text: str, stop_words: list[str]
+) -> list[str]:
     """
     Removes stopwords from a string of text and tokenizes it
     :param text: The text to process

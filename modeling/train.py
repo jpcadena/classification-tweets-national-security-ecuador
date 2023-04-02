@@ -10,7 +10,7 @@ from sklearn.model_selection import train_test_split
 
 def training(
         bow: csr_matrix, dataframe: pd.DataFrame,
-        target_column: str = 'insecurity'
+        target_column: str = "insecurity"
 ) -> tuple[csr_matrix, csr_matrix, np.ndarray, np.ndarray]:
     """
     Split the data into training and testing sets for a machine

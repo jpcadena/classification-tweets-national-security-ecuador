@@ -23,13 +23,13 @@ from engineering.persistence_manager import DataType
 spacy.prefer_gpu()
 STOPWORDS_PATTERN: str = r"[^\W\d]*$"
 nlp = es_core_news_sm.load()
-tokenizer = RegexpTokenizer(r"\w +")
-lemmatizer = WordNetLemmatizer()
-stop = set(stopwords.words("spanish"))
+tokenizer: RegexpTokenizer = RegexpTokenizer(r"\w +")
+word_net_lemmatizer: WordNetLemmatizer = WordNetLemmatizer()
+stop_words = set(stopwords.words("spanish"))
 punctuation = list(
     string.punctuation)  # already taken care of with the cleaning function.
-stop.update(punctuation)
-w_tokenizer = WhitespaceTokenizer()
+stop_words.update(punctuation)
+whitespace_tokenizer: WhitespaceTokenizer = WhitespaceTokenizer()
 
 # TODO: add anonymization functions for user_id, tweet_id, etc.,
 #  add more cleaning functions.
@@ -160,9 +160,9 @@ def furnished(text: str) -> str:
     """
     final_text: list[str] = []
     word: str = ""
-    for i in w_tokenizer.tokenize(text):
-        if i.lower() not in stop:
-            word = lemmatizer.lemmatize(i)
+    for i in whitespace_tokenizer.tokenize(text):
+        if i.lower() not in stop_words:
+            word = word_net_lemmatizer.lemmatize(i)
         final_text.append(word.lower())
     return " ".join(final_text)
 

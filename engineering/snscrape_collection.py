@@ -3,10 +3,12 @@ Data collection process
 """
 import re
 from datetime import date, datetime
-from typing import Union
+from typing import Union, Optional
 
 import pandas as pd
 import snscrape.modules.twitter as sn_twitter
+
+from core.config import DATE_FORMAT
 
 
 # TODO: define operations if data will be required to be written to disk.
@@ -21,8 +23,23 @@ def decode_tweet_to_json(obj: sn_twitter.Tweet) -> str:
     :return: json string with tweet data
     :rtype: str
     """
-    return obj.strftime("%Y-%m-%d %H:%M:%S") if \
+    return obj.strftime(DATE_FORMAT) if \
         isinstance(obj, (date, datetime)) else obj.__dict__
+
+
+def parse_date(date_str: str) -> Optional[datetime]:
+    """
+    Parse date helper function
+    :param date_str: The date as string
+    :type date_str:str
+    :return: The date as a datetime object
+    :rtype: datetime
+    """
+    try:
+        return datetime.strptime(date_str, DATE_FORMAT)
+    except ValueError:
+        print(f"Error parsing date: {date_str}")
+        return None
 
 
 def str_to_datetime_values(data: dict) -> dict:
@@ -33,31 +50,11 @@ def str_to_datetime_values(data: dict) -> dict:
     :return: Tweet with datetime data type
     :rtype: dict
     """
-    try:
-        tweet_date: str = data["date"]
-        data.update({"date": datetime.strptime(
-            tweet_date, "%Y-%m-%d %H:%M:%S")})
-    except TypeError as t_err:
-        print(t_err, "date field does not exist.")
-    try:
-        user_created: str = data["user"]["created"]
-        data["user"]["created"] = datetime.strptime(
-            user_created, "%Y-%m-%d %H:%M:%S")
-    except TypeError as t_err:
-        print(t_err, "user created field does not exist.")
-    try:
-        quoted_tweet_date: str = data["quotedTweet"]["date"]
-        data["quotedTweet"]["date"] = datetime.strptime(
-            quoted_tweet_date, "%Y-%m-%d %H:%M:%S")
-    except TypeError as t_err:
-        print(t_err, "quotedTweet date field does not exist.")
-    try:
-        quoted_tweet_user_creation_date: str = data["quotedTweet"][
-            "user"]["created"]
-        data["quotedTweet"]["user"]["created"] = datetime.strptime(
-            quoted_tweet_user_creation_date, "%Y-%m-%d %H:%M:%S")
-    except TypeError as t_err:
-        print(t_err, "quotedTweet user created field does not exist.")
+    data["date"] = parse_date(data.get("date"))
+    data["user"]["created"] = parse_date(data["user"].get("created"))
+    data["quotedTweet"]["date"] = parse_date(data["quotedTweet"].get("date"))
+    data["quotedTweet"]["user"]["created"] = parse_date(
+        data["quotedTweet"]["user"].get("created"))
     return data
 
 
@@ -73,11 +70,11 @@ def camel_to_snake(name: str) -> str:
     return re.sub("([a-z0-9])([A-Z])", r"\1_\2", name).lower()
 
 
-def nested_camel(data) -> Union[list, dict]:
+def nested_camel(data: Union[list, dict]) -> Union[list, dict]:
     """
     Apply camel_to_snake method to full dictionary
     :param data: data from Tweet
-    :type data:
+    :type data: Union[list, dict]
     :return: tweet with full snake_case
     :rtype: list or dict
     """

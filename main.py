@@ -30,9 +30,7 @@ plt.rcParams.update({"figure.max_open_warning": 0})
 
 json_file: dict[str, list[str]] = PersistenceManager.read_from_json()
 tweets_collected, additional_tweets = collect_tweets(json_file)
-
 raw_tweets_df: pd.DataFrame = pd.DataFrame(tweets_collected)
-
 raw_saved: bool = PersistenceManager.save_to_csv(
     raw_tweets_df, DataType.RAW, "raw_tweets.csv")
 if raw_saved:
@@ -43,7 +41,7 @@ if raw_saved:
 clean_tweets: list[dict] = []
 for element in tweets_collected:
     element: dict = str_to_datetime_values(element)
-    element: dict = nested_camel(element)
+    element = nested_camel(element)
     clean_tweets.append(element)
 
 tweets_df: pd.DataFrame = pd.DataFrame(clean_tweets)

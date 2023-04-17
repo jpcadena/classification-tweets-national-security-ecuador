@@ -40,26 +40,26 @@ def plot_count(
     plt.figure(figsize=FIG_SIZE)
     plt.suptitle("Count-plot for Discrete variables")
     plot_iterator: int = 1
-    for i in variables:
+    for column in variables:
         plt.subplot(1, 3, plot_iterator)
-        sns.countplot(x=dataframe[i], hue=dataframe[hue], palette=PALETTE)
-        label = re.sub(pattern=RE_PATTERN, repl=RE_REPL, string=i)
+        sns.countplot(x=dataframe[column], hue=dataframe[hue], palette=PALETTE)
+        label: str = re.sub(pattern=RE_PATTERN, repl=RE_REPL, string=column)
         plt.xlabel(label, fontsize=15)
         plt.ylabel("Count", fontsize=15)
         plot_iterator += 1
-        plt.savefig(f"{data_type.value}discrete_{i}.png")
+        plt.savefig(f"{data_type.value}discrete_{column}.png")
         plt.show()
 
 
 def plot_distribution(
-        df_column: pd.Series, color: str,
+        series: pd.Series, color: str,
         data_type: DataType = DataType.FIGURES
 ) -> None:
     """
     This method plots the distribution of the given quantitative
      continuous variable
-    :param df_column: Single column
-    :type df_column: pd.Series
+    :param series: Single column
+    :type series: pd.Series
     :param color: color for the distribution
     :type color: str
     :param data_type: folder where data will be saved. Defaults to FIGURES
@@ -68,12 +68,12 @@ def plot_distribution(
     :rtype: NoneType
     """
     label: str = re.sub(
-        pattern=RE_PATTERN, repl=RE_REPL, string=str(df_column.name))
-    sns.displot(x=df_column, kde=True, color=color, height=8, aspect=1.875)
+        pattern=RE_PATTERN, repl=RE_REPL, string=str(series.name))
+    sns.displot(x=series, kde=True, color=color, height=8, aspect=1.875)
     plt.title(f"Distribution Plot for {label}")
     plt.xlabel(label, fontsize=FONT_SIZE)
     plt.ylabel("Frequency", fontsize=FONT_SIZE)
-    plt.savefig(f"{data_type.value}{str(df_column.name)}.png")
+    plt.savefig(f"{data_type.value}{str(series.name)}.png")
     plt.show()
 
 
@@ -174,18 +174,18 @@ def elbow_method(
     :return: None
     :rtype: NoneType
     """
-    wcss: list[float] = []
+    within_cluster_sum_square: list[float] = []
     for i in n_clusters_range:
-        kmeans = KMeans(n_clusters=i, n_init=10)
+        kmeans: KMeans = KMeans(n_clusters=i, n_init=10)
         kmeans.fit(matrix)
-        wcss.append(kmeans.inertia_)
-    plt.plot(n_clusters_range, wcss)
+        within_cluster_sum_square.append(kmeans.inertia_)
+    plt.plot(n_clusters_range, within_cluster_sum_square)
     plt.title("Elbow Method")
     plt.xlabel("Number of clusters")
     plt.ylabel("Within-cluster sum of squares (WCSS)")
     plt.savefig(f"{data_type.value}elbow.png")
     plt.show()
-    print(wcss)
+    print(within_cluster_sum_square)
 
 
 def visualize_clusters(
@@ -230,8 +230,8 @@ def visualize_clusters(
 
 def plot_confusion_matrix(
         conf_matrix: np.ndarray, classes: list[str], name: str,
-        normalize: bool = False, title: str = "Confusion matrix",
-        data_type: DataType = DataType.FIGURES) -> None:
+        normalize: bool = False, data_type: DataType = DataType.FIGURES
+) -> None:
     """
     This function plots the Confusion Matrix of the test and pred arrays
     :param conf_matrix:
@@ -243,8 +243,6 @@ def plot_confusion_matrix(
     :param normalize: Whether to normalize the confusion matrix or not.
      The default is False
     :type normalize: bool
-    :param title: title for Confusion Matrix plot
-    :type title: str
     :param data_type: folder where data will be saved. Defaults to FIGURES
     :type data_type: DataType
     :return: None
@@ -261,13 +259,13 @@ def plot_confusion_matrix(
     plt.rcParams.update({"font.size": 16})
     plt.imshow(conf_matrix, interpolation="nearest", cmap=cm.get_cmap(
         "viridis", 8))
-    plt.title(title)
+    plt.title("Confusion matrix")
     plt.colorbar()
     tick_marks = np.arange(len(classes))
     plt.xticks(tick_marks, classes, rotation=45, color="blue")
     plt.yticks(tick_marks, classes, color="blue")
-    fmt = ".2f" if normalize else "d"
-    thresh = conf_matrix.max(initial=0) / 2.
+    fmt: str = ".2f" if normalize else "d"
+    thresh: float = conf_matrix.max(initial=0) / 2.
     for i, j in itertools.product(range(conf_matrix.shape[0]),
                                   range(conf_matrix.shape[1])):
         plt.text(j, i, format(conf_matrix[i, j], fmt),

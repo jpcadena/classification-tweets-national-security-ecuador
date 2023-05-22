@@ -52,8 +52,7 @@ def plot_count(
 
 
 def plot_distribution(
-        series: pd.Series, color: str,
-        data_type: DataType = DataType.FIGURES
+        series: pd.Series, color: str, data_type: DataType = DataType.FIGURES
 ) -> None:
     """
     This method plots the distribution of the given quantitative
@@ -78,8 +77,10 @@ def plot_distribution(
 
 
 def boxplot_dist(
-        dataframe: pd.DataFrame, first_variable: str, second_variable: str,
-        data_type: DataType = DataType.FIGURES
+        dataframe: pd.DataFrame,
+        first_variable: str,
+        second_variable: str,
+        data_type: DataType = DataType.FIGURES,
 ) -> None:
     """
     This method plots the distribution of the first variable data
@@ -100,8 +101,8 @@ def boxplot_dist(
         pattern=RE_PATTERN, repl=RE_REPL, string=first_variable)
     y_label: str = re.sub(
         pattern=RE_PATTERN, repl=RE_REPL, string=second_variable)
-    sns.boxplot(x=first_variable, y=second_variable, data=dataframe,
-                palette=PALETTE)
+    sns.boxplot(
+        x=first_variable, y=second_variable, data=dataframe, palette=PALETTE)
     plt.title(x_label + " in regards to " + y_label, fontsize=FONT_SIZE)
     plt.xlabel(x_label, fontsize=FONT_SIZE)
     plt.ylabel(y_label, fontsize=FONT_SIZE)
@@ -111,8 +112,11 @@ def boxplot_dist(
 
 
 def plot_scatter(
-        dataframe: pd.DataFrame, x_array: str, y_array: str, hue: str,
-        data_type: DataType = DataType.FIGURES
+        dataframe: pd.DataFrame,
+        x_array: str,
+        y_array: str,
+        hue: str,
+        data_type: DataType = DataType.FIGURES,
 ) -> None:
     """
     This method plots the relationship between x and y for hue subset
@@ -130,8 +134,8 @@ def plot_scatter(
     :rtype: NoneType
     """
     plt.figure(figsize=FIG_SIZE)
-    sns.scatterplot(x=x_array, data=dataframe, y=y_array, hue=hue,
-                    palette=PALETTE)
+    sns.scatterplot(
+        x=x_array, data=dataframe, y=y_array, hue=hue, palette=PALETTE)
     label: str = re.sub(pattern=RE_PATTERN, repl=RE_REPL, string=y_array)
     plt.title(f"{x_array} Wise {label} Distribution")
     print(dataframe[[x_array, y_array]].corr())
@@ -229,8 +233,11 @@ def visualize_clusters(
 
 
 def plot_confusion_matrix(
-        conf_matrix: np.ndarray, classes: list[str], name: str,
-        normalize: bool = False, data_type: DataType = DataType.FIGURES
+        conf_matrix: np.ndarray,
+        classes: list[str],
+        name: str,
+        normalize: bool = False,
+        data_type: DataType = DataType.FIGURES,
 ) -> None:
     """
     This function plots the Confusion Matrix of the test and pred arrays
@@ -249,28 +256,35 @@ def plot_confusion_matrix(
     :rtype: NoneType
     """
     if normalize:
-        conf_matrix = conf_matrix.astype("float") / conf_matrix.sum(
-            axis=1)[:, np.newaxis]
+        conf_matrix = (
+                conf_matrix.astype("float") / conf_matrix.sum(axis=1)[:,
+                                              np.newaxis]
+        )
         print("Normalized confusion matrix")
     else:
         print("Confusion matrix, without normalization")
     print(conf_matrix)
     plt.figure(figsize=FIG_SIZE)
     plt.rcParams.update({"font.size": 16})
-    plt.imshow(conf_matrix, interpolation="nearest", cmap=cm.get_cmap(
-        "viridis", 8))
+    plt.imshow(
+        conf_matrix, interpolation="nearest", cmap=cm.get_cmap("viridis", 8))
     plt.title("Confusion matrix")
     plt.colorbar()
     tick_marks = np.arange(len(classes))
     plt.xticks(tick_marks, classes, rotation=45, color="blue")
     plt.yticks(tick_marks, classes, color="blue")
     fmt: str = ".2f" if normalize else "d"
-    thresh: float = conf_matrix.max(initial=0) / 2.
-    for i, j in itertools.product(range(conf_matrix.shape[0]),
-                                  range(conf_matrix.shape[1])):
-        plt.text(j, i, format(conf_matrix[i, j], fmt),
-                 horizontalalignment="center",
-                 color="red" if conf_matrix[i, j] > thresh else "black")
+    thresh: float = conf_matrix.max(initial=0) / 2.0
+    for i, j in itertools.product(
+            range(conf_matrix.shape[0]), range(conf_matrix.shape[1])
+    ):
+        plt.text(
+            j,
+            i,
+            format(conf_matrix[i, j], fmt),
+            horizontalalignment="center",
+            color="red" if conf_matrix[i, j] > thresh else "black",
+        )
     plt.tight_layout()
     plt.ylabel("True label")
     plt.xlabel("Predicted label")

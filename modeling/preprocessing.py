@@ -27,7 +27,8 @@ tokenizer: RegexpTokenizer = RegexpTokenizer(r"\w +")
 word_net_lemmatizer: WordNetLemmatizer = WordNetLemmatizer()
 stop_words = set(stopwords.words("spanish"))
 punctuation = list(
-    string.punctuation)  # already taken care of with the cleaning function.
+    string.punctuation
+)  # already taken care of with the cleaning function.
 stop_words.update(punctuation)
 whitespace_tokenizer: WhitespaceTokenizer = WhitespaceTokenizer()
 
@@ -45,11 +46,13 @@ def tokenize(tweet: str) -> str:
     :return: The tokenized tweet text as a string
     :rtype: str
     """
-    tweet_tokenizer.tokenize(tweet)
+    tokenized_tweet: list[str] = tweet_tokenizer.tokenize(tweet)
+    return ", ".join(tokenized_tweet)
 
 
-def lof_observation(dataframe: pd.DataFrame,
-                    data_type: DataType = DataType.FIGURES) -> pd.DataFrame:
+def lof_observation(
+        dataframe: pd.DataFrame, data_type: DataType = DataType.FIGURES
+) -> pd.DataFrame:
     """
     This function identifies outliers with LOF method
     :param dataframe: Dataframe containing data
@@ -67,16 +70,19 @@ def lof_observation(dataframe: pd.DataFrame,
     df_scores = clf.negative_outlier_factor_
     scores_df: pd.DataFrame = pd.DataFrame(np.sort(df_scores))
     scores_df.plot(
-        stacked=True, xlim=[0, 20], color="r",
+        stacked=True,
+        xlim=[0, 20],
+        color="r",
         title="Visualization of outliers according to the LOF method",
-        style=".-")
+        style=".-",
+    )
     plt.savefig(f"{data_type.value}outliers.png")
     plt.show()
     th_val = np.sort(df_scores)[2]
     outliers: bool = df_scores > th_val
-    dataframe: pd.DataFrame = dataframe.drop(df_outlier[~outliers].index)
-    print(dataframe.shape)
-    return dataframe
+    cleaned_df: pd.DataFrame = dataframe.drop(df_outlier[~outliers].index)
+    print(cleaned_df.shape)
+    return cleaned_df
 
 
 def clear_outliers(dataframe: pd.DataFrame, column: str) -> pd.DataFrame:
@@ -122,11 +128,14 @@ def clean_stopwords(tweet: str) -> list[str]:
     :rtype: list[str]
     """
     tweet_list: list[str] = [ele for ele in tweet.split() if ele != "user"]
-    clean_tokens: list[str] = [t for t in tweet_list if re.match(
-        STOPWORDS_PATTERN, t)]
+    clean_tokens: list[str] = [t for t in tweet_list if
+                               re.match(STOPWORDS_PATTERN, t)]
     clean_s: str = "" "".join(clean_tokens)
-    clean_mess: list[str] = [word for word in clean_s.split() if word.lower()
-                             not in stopwords.words("spanish")]
+    clean_mess: list[str] = [
+        word
+        for word in clean_s.split()
+        if word.lower() not in stopwords.words("spanish")
+    ]
     return clean_mess
 
 
@@ -176,18 +185,18 @@ def twitter_text_cleaning(text: str):
     :rtype: str
     """
     text = text.lower()
-    text = re.sub(r'@[A-Za-z0-9]+', '', text)
-    text = re.sub(r'@[A-Za-zA-Z0-9]+', '', text)
-    text = re.sub(r'@[A-Za-z0-9_]+', '', text)
-    text = re.sub(r'@[A-Za-z]+', '', text)
-    text = re.sub(r'@[-)]+', '', text)
-    text = re.sub(r'#', '', text)
+    text = re.sub(r"@[A-Za-z0-9]+", "", text)
+    text = re.sub(r"@[A-Za-zA-Z0-9]+", "", text)
+    text = re.sub(r"@[A-Za-z0-9_]+", "", text)
+    text = re.sub(r"@[A-Za-z]+", "", text)
+    text = re.sub(r"@[-)]+", "", text)
+    text = re.sub(r"#", "", text)
     text = re.sub(r"http\S+", "", text)
-    text = re.sub(r'https?\/\/\S+', '', text)
-    text = re.sub(r'http?\/\/\S+', '', text)
-    text = re.sub(r'https?\/\/.*[\r\n]*', '', text)
-    text = re.sub(r'^https?\/\/.*[\r\n]*', '', text)
-    text = re.sub(r'^https?:\/\/.*[\r\n]*', '', text)
+    text = re.sub(r"https?\/\/\S+", "", text)
+    text = re.sub(r"http?\/\/\S+", "", text)
+    text = re.sub(r"https?\/\/.*[\r\n]*", "", text)
+    text = re.sub(r"^https?\/\/.*[\r\n]*", "", text)
+    text = re.sub(r"^https?:\/\/.*[\r\n]*", "", text)
     return text
 
 
@@ -200,18 +209,21 @@ def remove_emoji(text: str) -> str:
     :rtype: str
     """
     emoji_pattern: Pattern[str] = re.compile(
-        "["u"\U0001f600-\U0001f64f"  # emoticons
-        u"\U0001f300-\U0001f5ff"  # symbols & pictographs
-        u"\U0001f680-\U0001f6ff"  # transport & map symbols
-        u"\U0001f1e0-\U0001f1ff"  # flags (iOS)
-        u"\U0001f900-\U0001f9ff"  # Unicode 9.0 emojis
-        u"\U0001f980-\U0001f9ff"  # Unicode 10.0 emojis
-        u"\U0001fa80-\U0001faff"  # Unicode 11.0 emojis
-        u"\U0001fbc0-\U0001fbc9"  # Unicode 12.0 emojis
-        u"\U0001fcc0-\U0001fcc9"  # Unicode 13.0 emojis
-        u"\U0001fcd0-\U0001fcd9"  # Unicode 14.0 emojis
-        u"\U0001fdd0-\U0001fdd9"  # Unicode 15.0 emojis
-        "]+", flags=re.UNICODE)
+        "["
+        "\U0001f600-\U0001f64f"  # emoticons
+        "\U0001f300-\U0001f5ff"  # symbols & pictographs
+        "\U0001f680-\U0001f6ff"  # transport & map symbols
+        "\U0001f1e0-\U0001f1ff"  # flags (iOS)
+        "\U0001f900-\U0001f9ff"  # Unicode 9.0 emojis
+        "\U0001f980-\U0001f9ff"  # Unicode 10.0 emojis
+        "\U0001fa80-\U0001faff"  # Unicode 11.0 emojis
+        "\U0001fbc0-\U0001fbc9"  # Unicode 12.0 emojis
+        "\U0001fcc0-\U0001fcc9"  # Unicode 13.0 emojis
+        "\U0001fcd0-\U0001fcd9"  # Unicode 14.0 emojis
+        "\U0001fdd0-\U0001fdd9"  # Unicode 15.0 emojis
+        "]+",
+        flags=re.UNICODE,
+    )
     return emoji_pattern.sub("", text)
 
 
@@ -223,8 +235,8 @@ def remove_punc(message):
     :return: Message without punctuations
     :rtype: str
     """
-    return "".join(
-        [char for char in message if char not in string.punctuation])
+    return "".join([char for char in message if char not in
+                    string.punctuation])
 
 
 def jaccard_similarity(query: list[str], document: list[str]) -> float16:

@@ -9,8 +9,11 @@ from modeling.train import training
 
 
 def predict_model(
-        bow: csr_matrix, dataframe: pd.DataFrame, ml_model,
-        target_column: str = "insecurity", boost: bool = False
+    bow: csr_matrix,
+    dataframe: pd.DataFrame,
+    ml_model,
+    target_column: str = "insecurity",
+    boost: bool = False,
 ) -> tuple:
     """
     Predicts the target variable values using the provided model and

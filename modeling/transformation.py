@@ -36,8 +36,8 @@ def remove_stopwords_and_tokenize(
     :return: A list of tokens without stopwords
     :rtype: list[str]
     """
-    return [w for w in simple_preprocess(text) if
-            w not in stop_words and len(w) >= 3]
+    return [w for w in simple_preprocess(text) if w not in stop_words and
+            len(w) >= 3]
 
 
 def get_ngram_counts(tweet: str, stop_words: list[str]) -> dict[str, int]:
@@ -51,8 +51,10 @@ def get_ngram_counts(tweet: str, stop_words: list[str]) -> dict[str, int]:
     :rtype: dict[str, int]
     """
     # Tokenize the tweet and remove stop words
-    tokens = [w for w in simple_preprocess(tweet) if
-              w not in stop_words and len(w) >= 3]
+    tokens = [
+        w for w in simple_preprocess(tweet) if w not in stop_words and
+                                               len(w) >= 3
+    ]
 
     # Check if the tweet contains at least one non-stop word
     if not tokens:

@@ -36,19 +36,23 @@ def iterate_models(
     :return: None
     :rtype: NoneType
     """
-    models: list = [LogisticRegression(), SVC(), RandomForestClassifier(),
-                    MultinomialNB(), DecisionTreeClassifier(),
-                    KNeighborsClassifier(),
-                    AdaBoostClassifier(),
-                    XGBClassifier(tree_method="gpu_hist", gpu_id=0),
-                    CatBoostClassifier(task_type="GPU", devices="0"),
-                    LGBMClassifier(
-                        device="gpu", gpu_platform_id=0, gpu_device_id=0)]
+    models: list = [
+        LogisticRegression(),
+        SVC(),
+        RandomForestClassifier(),
+        MultinomialNB(),
+        DecisionTreeClassifier(),
+        KNeighborsClassifier(),
+        AdaBoostClassifier(),
+        XGBClassifier(tree_method="gpu_hist", gpu_id=0),
+        CatBoostClassifier(task_type="GPU", devices="0"),
+        LGBMClassifier(device="gpu", gpu_platform_id=0, gpu_device_id=0),
+    ]
     model_names: list[str] = []
     boost_models: list[bool] = []
     for model in models:
-        if isinstance(
-                model, (XGBClassifier, CatBoostClassifier, LGBMClassifier)):
+        if isinstance(model,
+                      (XGBClassifier, CatBoostClassifier, LGBMClassifier)):
             model_names.append(model.__class__.__name__)
             boost_models.append(True)
         else:
@@ -56,8 +60,8 @@ def iterate_models(
             boost_models.append(False)
     for model, model_name, boost in zip(models, model_names, boost_models):
         print("\n\n", model_name)
-        y_pred, y_test = predict_model(
-            bow, dataframe, model, target_column, boost)
+        y_pred, y_test = predict_model(bow, dataframe, model, target_column,
+                                       boost)
         conf_matrix: np.ndarray = evaluate_model(y_pred, y_test)
         plot_confusion_matrix(
             conf_matrix, ["Insecurity", "Not insecurity"], model_name)

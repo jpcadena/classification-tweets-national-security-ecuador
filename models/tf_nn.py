@@ -20,7 +20,8 @@ tf.config.threading.set_inter_op_parallelism_threads(8)
 session = tf.compat.v1.Session()
 K.set_session(session)
 tf.config.experimental.set_visible_devices(
-    [tf.config.experimental.list_physical_devices("GPU")[0]], "GPU")
+    [tf.config.experimental.list_physical_devices("GPU")[0]], "GPU"
+)
 
 
 def reshape_array(matrix: csr_matrix) -> np.ndarray:
@@ -37,7 +38,7 @@ def reshape_array(matrix: csr_matrix) -> np.ndarray:
 
 
 def train_nn(
-        bow: csr_matrix, dataframe: pd.DataFrame, target_column: str
+    bow: csr_matrix, dataframe: pd.DataFrame, target_column: str
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
     """
     Train a neural network ml_model using the Bag of Words matrix and a
@@ -54,14 +55,13 @@ def train_nn(
     """
     dataframe = dataframe.drop(["ngram", "count"], axis=1)
     x_train, x_test, y_train, y_test = training(bow, dataframe, target_column)
-    x_train: np.ndarray = reshape_array(x_train)
-    x_test: np.ndarray = reshape_array(x_test)
+    x_train = reshape_array(x_train)
+    x_test = reshape_array(x_test)
     return x_train, x_test, y_train, y_test
 
 
 def predict_nn(
-        bow: csr_matrix, dataframe: pd.DataFrame, target_column: str,
-        layer: str
+    bow: csr_matrix, dataframe: pd.DataFrame, target_column: str, layer: str
 ) -> tuple[np.ndarray, np.ndarray]:
     """
     Predict the output for the neural network using the Bag of Words
@@ -81,15 +81,16 @@ def predict_nn(
     x_train, x_test, y_train, y_test = train_nn(bow, dataframe, target_column)
     if layer == "LSTM":
         sequential.add(
-            LSTM(100, input_shape=(1, x_train.shape[2]),
-                 return_sequences=False))
+            LSTM(100, input_shape=(1, x_train.shape[2]), return_sequences=False)
+        )
     elif layer == "GRU":
         sequential.add(
-            GRU(100, input_shape=(1, x_train.shape[2]),
-                return_sequences=False))
+            GRU(100, input_shape=(1, x_train.shape[2]), return_sequences=False)
+        )
     sequential.add(Dense(1, activation="sigmoid"))
-    sequential.compile(loss="binary_crossentropy", optimizer="adam",
-                       metrics=["accuracy"])
+    sequential.compile(
+        loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"]
+    )
     sequential.fit(x_train, y_train, batch_size=32, epochs=10, verbose=1)
     y_pred: np.ndarray = sequential.predict(x_test)
     y_pred = (y_pred > 0.5).astype(int).flatten()
@@ -97,8 +98,7 @@ def predict_nn(
 
 
 def model_nn(
-        bow: csr_matrix, dataframe: pd.DataFrame, target_column: str,
-        layer: str
+    bow: csr_matrix, dataframe: pd.DataFrame, target_column: str, layer: str
 ) -> None:
     """
     Model Neural Network

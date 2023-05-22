@@ -3,7 +3,7 @@ Data collection process
 """
 import re
 from datetime import date, datetime
-from typing import Union, Optional
+from typing import Union, Optional, Callable, Any
 
 import pandas as pd
 import snscrape.modules.twitter as sn_twitter
@@ -23,8 +23,10 @@ def decode_tweet_to_json(obj: sn_twitter.Tweet) -> str:
     :return: json string with tweet data
     :rtype: str
     """
-    return obj.strftime(DATE_FORMAT) if \
-        isinstance(obj, (date, datetime)) else obj.__dict__
+    return (
+        obj.strftime(DATE_FORMAT) if isinstance(obj, (date, datetime)) else
+        obj.__dict__
+    )
 
 
 def parse_date(date_str: str) -> Optional[datetime]:
@@ -54,7 +56,8 @@ def str_to_datetime_values(data: dict) -> dict:
     data["user"]["created"] = parse_date(data["user"].get("created"))
     data["quotedTweet"]["date"] = parse_date(data["quotedTweet"].get("date"))
     data["quotedTweet"]["user"]["created"] = parse_date(
-        data["quotedTweet"]["user"].get("created"))
+        data["quotedTweet"]["user"].get("created")
+    )
     return data
 
 
@@ -66,8 +69,8 @@ def camel_to_snake(name: str) -> str:
     :return: name converted into snake_case
     :rtype: str
     """
-    name: str = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", name)
-    return re.sub("([a-z0-9])([A-Z])", r"\1_\2", name).lower()
+    edited_name: str = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", name)
+    return re.sub("([a-z0-9])([A-Z])", r"\1_\2", edited_name).lower()
 
 
 def nested_camel(data: Union[list, dict]) -> Union[list, dict]:
@@ -79,10 +82,12 @@ def nested_camel(data: Union[list, dict]) -> Union[list, dict]:
     :rtype: list or dict
     """
     if isinstance(data, list):
-        return [nested_camel(i) if isinstance(i, (dict, list))
-                else i for i in data]
-    return {camel_to_snake(a): nested_camel(b) if isinstance(
-        b, (dict, list)) else b for a, b in data.items()}
+        return [nested_camel(i) if isinstance(i, (dict, list)) else i for i
+                in data]
+    return {
+        camel_to_snake(a): nested_camel(b) if isinstance(b, (dict, list)) else
+        b for a, b in data.items()
+    }
 
 
 def flatten(
@@ -128,16 +133,17 @@ def get_nested_dict_structure(
     :return: list of keys from nested dictionary
     :rtype: list[str]
     """
-    column_list: list[dict] = list(dataframe[dataframe[column].notnull()][
-                                       column].to_list())
+    column_list: list[dict] = list(
+        dataframe[dataframe[column].notnull()][column].to_list()
+    )
     structure: list[str] = []
     if column_list:
-        structure: list[str] = list(column_list[0].keys())
+        structure = list(column_list[0].keys())
     return structure
 
 
 def combine_flattened(
-        dataframe: pd.DataFrame, column: str, func: callable,
+        dataframe: pd.DataFrame, column: str, func: Callable[..., Any],
         structure: list[str]
 ) -> pd.DataFrame:
     """
@@ -147,12 +153,13 @@ def combine_flattened(
     :param column: Column name to apply func
     :type column: str
     :param func: function to use in apply pandas method
-    :type func: callable
+    :type func: Callable[..., Any]
     :param structure: structure of keys from nested dictionary
     :type structure: list[str]
     :return: Merged dataframe with new flatten columns
     :rtype: pd.DataFrame
     """
-    merged_dataframe: pd.DataFrame = dataframe.join(dataframe[column].apply(
-        func, args=(column, structure))).drop([column], axis=1)
+    merged_dataframe: pd.DataFrame = dataframe.join(
+        dataframe[column].apply(func, args=(column, structure))
+    ).drop([column], axis=1)
     return merged_dataframe

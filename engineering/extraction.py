@@ -25,7 +25,8 @@ def collect_tweets(
     tweets_from_users: list[dict] = collect_tweets_from_users(
         users, better_filter)
     tweets_collected: list[dict] = collect_tweets_containing_words(
-        insecurity_words, better_filter)
+        insecurity_words, better_filter
+    )
     additional_tweets: list[dict] = collect_additional_tweets(better_filter)
     tweets_collected.extend(tweets_from_users)
     tweets_collected.extend(additional_tweets)
@@ -48,8 +49,10 @@ def collect_tweets_from_users(
     tweets_from_users: list[dict] = []
     for user in users:
         sender_spec: SenderSpecification = SenderSpecification(user)
-        tweets_from_users.extend(better_filter.filter(
-            sender_spec, limit=150, func=decode_tweet_to_json))
+        tweets_from_users.extend(
+            better_filter.filter(
+                sender_spec, limit=150, func=decode_tweet_to_json)
+        )
     return tweets_from_users
 
 
@@ -71,8 +74,10 @@ def collect_tweets_containing_words(
         if "" "" in word:
             continue
         text_spec: TextSpecification = TextSpecification(word)
-        tweets_collected.extend(better_filter.filter(
-            text_spec, limit=350, func=decode_tweet_to_json))
+        tweets_collected.extend(
+            better_filter.filter(
+                text_spec, limit=350, func=decode_tweet_to_json)
+        )
     return tweets_collected
 
 
@@ -89,8 +94,10 @@ def collect_additional_tweets(better_filter: BetterFilter) -> list[dict]:
     additional_words: list[str] = ["turismo", "gastronomia", "futbol"]
     for add_word in additional_words:
         new_spec: TextSpecification = TextSpecification(add_word)
-        additional_tweets.extend(better_filter.filter(
-            new_spec, limit=1500, func=decode_tweet_to_json))
+        additional_tweets.extend(
+            better_filter.filter(
+                new_spec, limit=1500, func=decode_tweet_to_json)
+        )
     return additional_tweets
 
 

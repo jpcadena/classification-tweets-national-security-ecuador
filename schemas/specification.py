@@ -118,7 +118,8 @@ class MultipleHashtagsSpecification(Specification):
 
     def __init__(self, *args, lang: str = "es") -> None:
         self.multiple_hashtags: str = " OR ".join(
-            map(str, ["#" + arg for arg in list(args)]))
+            map(str, ["#" + arg for arg in list(args)])
+        )
         super().__init__(self.multiple_hashtags, lang)
 
 
@@ -127,9 +128,7 @@ class DateSpecification(Specification):
     Date Specification class based on Specification
     """
 
-    def __init__(
-            self, spec: str, lang: str = "es", **kwargs
-    ) -> None:
+    def __init__(self, spec: str, lang: str = "es", **kwargs) -> None:
         text: str = spec
         if "since" in kwargs:
             self.since: datetime = kwargs["since"]

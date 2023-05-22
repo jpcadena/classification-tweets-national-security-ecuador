@@ -24,7 +24,7 @@ def analyze_dataframe(dataframe: pd.DataFrame) -> None:
     print(dataframe.head())
     print(dataframe.shape)
     print(dataframe.dtypes)
-    print(dataframe.info(memory_usage="deep"))
+    dataframe.info(memory_usage="deep")
     print(dataframe.memory_usage(deep=True))
     print(dataframe.describe(include="all", datetime_is_numeric=True))
     non_numeric_df = dataframe.select_dtypes(exclude=NUMERICS)
@@ -84,13 +84,16 @@ def latent_dirichlet_allocation(
     :rtype: np.ndarray
     """
     token_counts_matrix: CountVectorizer = CountVectorizer(
-        stop_words=stop_words, max_df=0.95, min_df=2)
+        stop_words=stop_words, max_df=0.95, min_df=2
+    )
     doc_term_matrix: csr_matrix = token_counts_matrix.fit_transform(
         dataframe[column])
     lda_classifier: LatentDirichletAllocation = LatentDirichletAllocation(
-        n_components=2, random_state=0)
+        n_components=2, random_state=0
+    )
     transformed_matrix: np.ndarray = lda_classifier.fit_transform(
-        doc_term_matrix)  # x_topics
+        doc_term_matrix
+    )  # x_topics
     return transformed_matrix
 
 
@@ -109,13 +112,15 @@ def silhouette_scores(matrix: np.ndarray, n_clusters_range: range) -> None:
         kmeans: KMeans = KMeans(n_clusters=n_clusters, n_init=10)
         labels: np.ndarray = kmeans.fit_predict(matrix)
         silhouette_avg: float = silhouette_score(matrix, labels)
-        print("For n_clusters =", n_clusters,
-              "The average silhouette_score is :", silhouette_avg)
+        print(
+            "For n_clusters =",
+            n_clusters,
+            "The average silhouette_score is :",
+            silhouette_avg,
+        )
 
 
-def kmeans_clustering(
-        x_transformed: np.ndarray, n_clusters: int
-) -> np.ndarray:
+def kmeans_clustering(x_transformed: np.ndarray, n_clusters: int) -> np.ndarray:
     """
     Applies K-means clustering to the transformed data and returns the
      predicted cluster labels

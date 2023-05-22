@@ -70,15 +70,15 @@ This project is in development.
 ## Built with
 
 * [![Python][Python.org]][Python-url]
-* [![Pandas][pandas]][pandas-url]
-* [![numpy][numpy]][numpy-url]
-* [![scikit-learn][scikit-learn]][scikit-learn-url]
-* [![spacy][spacy]][spacy-url]
-* [![tensorflow][tensorflow]][tensorflow-url]
-* [![keras][keras]][keras-url]
-* [![Pylint][pylint]][pylint-url]
+* [![Pandas][Pandas]][pandas-url]
+* [![numpy][NumPy]][numpy-url]
+* [![scikit-learn][Scikit-Learn]][scikit-learn-url]
+* [![spacy][Spacy]][spacy-url]
+* [![tensorflow][TensorFlow]][tensorflow-url]
+* [![keras][Keras]][keras-url]
+* [![Pylint][Pylint]][pylint-url]
 * [![Jupyter-Notebooks][Jupyter-Notebooks]][Jupyter-Notebooks-url]
-* [![Pycharm][Pycharm]][Pycharm-url]
+* [![Pycharm][PyCharm]][Pycharm-url]
 * [![Markdown][Markdown]][Markdown-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -142,7 +142,7 @@ This project is in development.
 
 ## Contributing
 
-[![GitHub][GitHub]][github-url]
+[![GitHub][GitHub]][GitHub-Url]
 
 If you have a suggestion that would make this better, please fork the repo and
 create a pull request.
@@ -161,7 +161,7 @@ Please use **linting** to check your code quality
 following [PEP 8](https://peps.python.org/pep-0008/).\
 Check documentation
 for [Visual Studio Code](https://code.visualstudio.com/docs/python/linting#_run-linting)
-or [Jetbrains Pycharm](https://github.com/leinardi/pylint-pycharm/blob/master/README.md).\
+or [Jetbrains Pycharm](https://github.com/leinardi/pylint-pycharm/blob/master/README.md).
 
 Recommended plugin for
 autocompletion: [Tabnine](https://www.tabnine.com/install)
@@ -249,4 +249,4 @@ Distributed under the MIT License.
 
 [GitHub]: https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white
 
-[gitHub-url]: https://github.com/jpcadena/tweets-classification-backend
+[GitHub-Url]: https://github.com/jpcadena/tweets-classification-backend

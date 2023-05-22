@@ -10,18 +10,32 @@ from matplotlib import pyplot as plt
 from numpy import uint32, float16, uint8
 
 from core import logging_config
-from engineering.analysis import silhouette_scores, \
-    latent_dirichlet_allocation, kmeans_clustering
+from engineering.analysis import (
+    silhouette_scores,
+    latent_dirichlet_allocation,
+    kmeans_clustering,
+)
 from engineering.extraction import collect_tweets, get_stop_words
 from engineering.persistence_manager import PersistenceManager, DataType
-from engineering.snscrape_collection import flatten, \
-    str_to_datetime_values, nested_camel, get_nested_dict_structure, \
-    combine_flattened
+from engineering.snscrape_collection import (
+    flatten,
+    str_to_datetime_values,
+    nested_camel,
+    get_nested_dict_structure,
+    combine_flattened,
+)
 from engineering.visualization import elbow_method, visualize_clusters
-from modeling.preprocessing import twitter_text_cleaning, remove_emoji, \
-    remove_punc, get_scores
-from modeling.transformation import remove_stopwords_and_tokenize, \
-    get_ngram_counts, text_to_bow
+from modeling.preprocessing import (
+    twitter_text_cleaning,
+    remove_emoji,
+    remove_punc,
+    get_scores,
+)
+from modeling.transformation import (
+    remove_stopwords_and_tokenize,
+    get_ngram_counts,
+    text_to_bow,
+)
 from models.models import iterate_models
 
 logging_config.setup_logging()
@@ -32,7 +46,8 @@ json_file: dict[str, list[str]] = PersistenceManager.read_from_json()
 tweets_collected, additional_tweets = collect_tweets(json_file)
 raw_tweets_df: pd.DataFrame = pd.DataFrame(tweets_collected)
 raw_saved: bool = PersistenceManager.save_to_csv(
-    raw_tweets_df, DataType.RAW, "raw_tweets.csv")
+    raw_tweets_df, DataType.RAW, "raw_tweets.csv"
+)
 if raw_saved:
     print("raw tweets saved!")
 
@@ -40,7 +55,7 @@ if raw_saved:
 
 clean_tweets: list[dict] = []
 for element in tweets_collected:
-    element: dict = str_to_datetime_values(element)
+    element = str_to_datetime_values(element)
     element = nested_camel(element)
     clean_tweets.append(element)
 
@@ -49,13 +64,21 @@ user_structure: list[str] = get_nested_dict_structure(tweets_df, "user")
 quoted_tweet_structure: list[str] = get_nested_dict_structure(
     tweets_df, "quoted_tweet")
 tweets_df_w_user: pd.DataFrame = combine_flattened(
-    tweets_df, "user", flatten, user_structure)
+    tweets_df, "user", flatten, user_structure
+)
 clean_tweets_df: pd.DataFrame = combine_flattened(
-    tweets_df_w_user, "quoted_tweet", flatten, quoted_tweet_structure)
+    tweets_df_w_user, "quoted_tweet", flatten, quoted_tweet_structure
+)
 num_cols: list[str] = [
-    "reply_count", "retweet_count", "like_count", "quote_count",
+    "reply_count",
+    "retweet_count",
+    "like_count",
+    "quote_count",
     "view_count",
-    "user_followers_count", "user_friends_count", "user_favourites_count"]
+    "user_followers_count",
+    "user_friends_count",
+    "user_favourites_count",
+]
 for c in clean_tweets_df.columns:
     if c in num_cols:
         clean_tweets_df[c] = clean_tweets_df[c].fillna(uint32(0))
@@ -65,7 +88,8 @@ clean_tweets_df["user_created"] = pd.to_datetime(
     clean_tweets_df["user_created"])
 
 stopwords_file: dict[str, list[str]] = PersistenceManager.read_from_json(
-    "stop_words.json")
+    "stop_words.json"
+)
 stop_words: list[str] = get_stop_words(stopwords_file)
 
 snscrape_columns: list[str] = stopwords_file.get("tweets")
@@ -75,26 +99,29 @@ clean_tweets_df.drop(snscrape_columns, axis=1, inplace=True, errors="ignore")
 clean_tweets_df["no_emojis"] = clean_tweets_df["raw_content"].apply(
     remove_emoji)
 clean_tweets_df["cleaned_text"] = clean_tweets_df["no_emojis"].apply(
-    twitter_text_cleaning)
+    twitter_text_cleaning
+)
 clean_tweets_df["cleaned_text_wo_punctuation"] = clean_tweets_df[
-    "cleaned_text"].apply(
-    remove_punc)
+    "cleaned_text"].apply(remove_punc)
 
 clean_tweets_df["cleaned_text_wo_punctuation_and_stopwords"] = clean_tweets_df[
-    "cleaned_text_wo_punctuation"].apply(
-    lambda x: remove_stopwords_and_tokenize(x, stop_words))
+    "cleaned_text_wo_punctuation"
+].apply(lambda x: remove_stopwords_and_tokenize(x, stop_words))
 
 clean_tweets_df["preprocessed_text"] = clean_tweets_df[
-    "cleaned_text_wo_punctuation_and_stopwords"].apply(" ".join)
+    "cleaned_text_wo_punctuation_and_stopwords"
+].apply(" ".join)
 # preprocessing
 
 clean_tweets_df["word_count"] = clean_tweets_df[
-    "cleaned_text_wo_punctuation_and_stopwords"].apply(len)
+    "cleaned_text_wo_punctuation_and_stopwords"
+].apply(len)
 clean_tweets_df["word_count"] = clean_tweets_df["word_count"].astype(uint8)
 
 clean_tweets_df["vocabulary"] = clean_tweets_df[
     "cleaned_text_wo_punctuation"].apply(
-    lambda x: get_ngram_counts(x, stop_words))
+    lambda x: get_ngram_counts(x, stop_words)
+)
 
 # for idx, row in clean_tweets_df.iterrows():
 #     df_ngrams = pd.DataFrame.from_dict(
@@ -113,7 +140,8 @@ clean_tweets_df["vocabulary"] = clean_tweets_df[
 #     clean_tweets_df.at[index, "count"] = count
 
 clean_tweets_df[["ngram", "count"]] = clean_tweets_df.apply(
-    lambda row: pd.Series(list(zip(*row["vocabulary"].items()))), axis=1)
+    lambda row: pd.Series(list(zip(*row["vocabulary"].items()))), axis=1
+)
 
 clean_tweets_df = clean_tweets_df[clean_tweets_df["ngram"].notna()]
 clean_tweets_df = clean_tweets_df[clean_tweets_df["count"].notna()]
@@ -163,7 +191,8 @@ clean_tweets_df["hour"] = clean_tweets_df["time_only"].apply(lambda x: x.hour)
 
 
 x_topics: np.ndarray = latent_dirichlet_allocation(
-    clean_tweets_df, "preprocessed_text", stop_words)
+    clean_tweets_df, "preprocessed_text", stop_words
+)
 
 cluster_range = range(2, 10)
 elbow_method(x_topics, cluster_range)
@@ -173,7 +202,8 @@ cluster_index: np.ndarray = kmeans_clustering(x_topics, 2)
 visualize_clusters(x_topics, cluster_index)
 insecurity_words: list[str] = json_file.get("words")
 i_score: list[float16] = get_scores(
-    insecurity_words, clean_tweets_df["preprocessed_text"].to_list())
+    insecurity_words, clean_tweets_df["preprocessed_text"].to_list()
+)
 
 sns.displot(np.array(i_score))
 plt.show()
@@ -181,21 +211,49 @@ plt.show()
 clean_tweets_df["score"] = i_score
 clean_tweets_df["insecurity"] = np.where(
     clean_tweets_df["score"] >= np.mean(np.array(i_score)) - np.std(
-        np.array(i_score)), 1, 0)
+        np.array(i_score)),
+    1,
+    0,
+)
 clean_tweets_df["insecurity"] = clean_tweets_df["insecurity"].astype("uint8")
 clean_tweets_df.drop(
-    ["no_emojis", "cleaned_text", "cleaned_text_wo_punctuation",
-     "cleaned_text_wo_punctuation_and_stopwords", "word_count"], axis=1,
-    inplace=True)
+    [
+        "no_emojis",
+        "cleaned_text",
+        "cleaned_text_wo_punctuation",
+        "cleaned_text_wo_punctuation_and_stopwords",
+        "word_count",
+    ],
+    axis=1,
+    inplace=True,
+)
 
 tweets_df = clean_tweets_df.drop(
-    ["date", "reply_count", "retweet_count", "like_count",
-     "quote_count", "links", "media", "in_reply_to_user", "mentioned_users",
-     "view_count", "user_username", "user_created", "user_followers_count",
-     "user_friends_count", "user_favourites_count", "time_only", "vocabulary",
-     "hashtags", "source_label", "score",
-     # "location"
-     ], axis=1)
+    [
+        "date",
+        "reply_count",
+        "retweet_count",
+        "like_count",
+        "quote_count",
+        "links",
+        "media",
+        "in_reply_to_user",
+        "mentioned_users",
+        "view_count",
+        "user_username",
+        "user_created",
+        "user_followers_count",
+        "user_friends_count",
+        "user_favourites_count",
+        "time_only",
+        "vocabulary",
+        "hashtags",
+        "source_label",
+        "score",
+        # "location"
+    ],
+    axis=1,
+)
 
 # tweets_df["location"] = tweets_df["user_location"].where(
 #     tweets_df["user_location"].notna(), tweets_df["place"])
@@ -206,9 +264,8 @@ tweets_df["hour"] = tweets_df["hour"].astype(uint8)
 tweets_df["insecurity"] = tweets_df["insecurity"].astype(uint8)
 
 
-def update_target(
-        list_of_dicts: list[dict], dataframe: pd.DataFrame
-) -> pd.DataFrame:
+def update_target(list_of_dicts: list[dict],
+                  dataframe: pd.DataFrame) -> pd.DataFrame:
     """
     Updates tweet targets to 0 for any tweets in `tweets_df` that have
      a matching `id` in `additional_tweets`
@@ -234,7 +291,8 @@ updated_tweets: pd.DataFrame = update_target(additional_tweets, tweets_df)
 tweets_df = updated_tweets.copy()
 tweets_df = tweets_df.drop(["raw_content", "id"], axis=1)
 classified_tweets: bool = PersistenceManager.save_to_csv(
-    data=tweets_df, filename="tweets_to_analyze.csv")
+    data=tweets_df, filename="tweets_to_analyze.csv"
+)
 print(tweets_df["insecurity"].value_counts())
 print(tweets_df.shape)
 print("--------------------------------")

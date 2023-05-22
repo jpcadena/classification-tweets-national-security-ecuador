@@ -2,8 +2,15 @@
 Evaluation script including improvement and tests.
 """
 import numpy as np
-from sklearn.metrics import accuracy_score, precision_score, recall_score, \
-    f1_score, roc_auc_score, confusion_matrix, classification_report
+from sklearn.metrics import (
+    accuracy_score,
+    precision_score,
+    recall_score,
+    f1_score,
+    roc_auc_score,
+    confusion_matrix,
+    classification_report,
+)
 
 
 def evaluate_model(y_pred: np.ndarray, y_test: np.ndarray) -> np.ndarray:

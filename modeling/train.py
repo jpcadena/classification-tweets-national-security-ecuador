@@ -9,8 +9,7 @@ from sklearn.model_selection import train_test_split
 
 
 def training(
-        bow: csr_matrix, dataframe: pd.DataFrame,
-        target_column: str = "insecurity"
+    bow: csr_matrix, dataframe: pd.DataFrame, target_column: str = "insecurity"
 ) -> tuple[csr_matrix, csr_matrix, np.ndarray, np.ndarray]:
     """
     Split the data into training and testing sets for a machine
@@ -37,5 +36,6 @@ def training(
     x_array: csr_matrix = bow
     y_array: np.ndarray = dataframe[target_column].values
     x_train, x_test, y_train, y_test = train_test_split(
-        x_array, y_array, test_size=0.2, random_state=0)
+        x_array, y_array, test_size=0.2, random_state=0
+    )
     return x_train, x_test, y_train, y_test

@@ -47,39 +47,40 @@ def prepare_data(dataframe: pd.DataFrame):
     :return: The variables of interest
     :rtype: tuple
     """
-    dataframe['ngram'] = dataframe['ngram'].apply(','.join)
-    vocab_size = len(dataframe['ngram'].unique())
+    dataframe["ngram"] = dataframe["ngram"].apply("", "".join)
+    vocab_size = len(dataframe["ngram"].unique())
     # find the max length of the lists in the count column
-    max_len = dataframe['count'].map(len).max()
+    max_len = dataframe["count"].map(len).max()
     # pad the lists with 0 to make them all have the same length
-    dataframe['count'] = dataframe['count'].apply(
-        lambda x: x + [0] * (max_len - len(x)))
+    dataframe["count"] = dataframe["count"].apply(
+        lambda x: x + [0] * (max_len - len(x))
+    )
     # convert the lists of counts into a numpy array
-    count_np = np.array(dataframe['count'].tolist(), dtype=np.float32)
+    count_np = np.array(dataframe["count"].tolist(), dtype=np.float32)
     # convert the numpy array into a PyTorch tensor
     bow = torch.tensor(count_np)
-    hour = torch.tensor(dataframe['hour'].values, dtype=torch.float32)
-    target = torch.tensor(dataframe['insecurity'].values, dtype=torch.float32)
+    hour = torch.tensor(dataframe["hour"].values, dtype=torch.float32)
+    target = torch.tensor(dataframe["insecurity"].values, dtype=torch.float32)
     return bow, hour, target, vocab_size
 
 
-# df_exploded = tweets_df['ngram'].apply(pd.Series).merge(
+# df_exploded = tweets_df["ngram"].apply(pd.Series).merge(
 #     tweets_df, right_index=True, left_index=True).drop(
 #     ["ngram"], axis=1).melt(
-#     id_vars=['count', 'hour', 'insecurity'], value_name="ngram").drop(
+#     id_vars=["count", "hour", "insecurity"], value_name="ngram").drop(
 #     "variable", axis=1).drop_duplicates()
 
 
 # df_exploded = tweets_df.apply(lambda x_array: pd.Series(
-#     [(x_array['ngram'], x_array['count']) for i in range(len(
-#         x_array['ngram']))]), axis=1).stack().reset_index(level=1, drop=True)
-# df_exploded = df_exploded.to_frame(name='ngram_count').reset_index()
-# dataframe['ngram'] = dataframe['ngram'].apply(
-#     lambda x_array: ','.join(x_array))
+#     [(x_array["ngram"], x_array["count"]) for i in range(len(
+#         x_array["ngram"]))]), axis=1).stack().reset_index(level=1, drop=True)
+# df_exploded = df_exploded.to_frame(name="ngram_count").reset_index()
+# dataframe["ngram"] = dataframe["ngram"].apply(
+#     lambda x_array: ",".join(x_array))
+
 
 def train(
-        dataframe: pd.DataFrame, epochs, learning_rate, hidden_dim,
-        embedding_dim
+    dataframe: pd.DataFrame, epochs, learning_rate, hidden_dim, embedding_dim
 ) -> None:
     """
     Trains a text classifier on the given dataframe using the specified
@@ -108,7 +109,7 @@ def train(
         loss.backward()
         optimizer.step()
         if (epoch + 1) % 10 == 0:
-            print(f'Epoch [{epoch + 1}/{epochs}], Loss: {loss.item()}')
+            print(f"Epoch [{epoch + 1}/{epochs}], Loss: {loss.item()}")
 
 
 EPOCHS = 100

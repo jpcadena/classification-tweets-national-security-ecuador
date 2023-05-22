@@ -18,13 +18,29 @@ ENCODING: str = os.getenv("ENCODING")
 FIG_SIZE: tuple[uint8, uint8] = (15, 8)
 COLORS: list[str] = ["lightskyblue", "coral", "palegreen"]
 NUMERICS: list[str] = [
-    "uint8", "uint16", "uint32", "uint64",
-    "int8", "int16", "int32",
+    "uint8",
+    "uint16",
+    "uint32",
+    "uint64",
+    "int8",
+    "int16",
+    "int32",
     "int64",
-    "float16", "float32", "float64"]
+    "float16",
+    "float32",
+    "float64",
+]
 RANGES: list[tuple] = [
-    (0, 255), (0, 65535), (0, 4294967295), (0, 18446744073709551615),
-    (-128, 127), (-32768, 32767), (-2147483648, 2147483647),
-    (-18446744073709551616, 18446744073709551615)]
+    (0, 255),
+    (0, 65535),
+    (0, 4294967295),
+    (0, 18446744073709551615),
+    (-128, 127),
+    (-32768, 32767),
+    (-2147483648, 2147483647),
+    (-18446744073709551616, 18446744073709551615),
+]
 PROJECT_NAME: str = os.getenv("PROJECT_NAME")
 DATE_FORMAT: str = os.getenv("DATE_FORMAT")
+FILE_DATE_FORMAT: str = os.getenv("FILE_DATE_FORMAT")
+LOG_FORMAT: str = os.getenv("LOG_FORMAT")

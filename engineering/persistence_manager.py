@@ -4,7 +4,7 @@ Persistence script
 import json
 import logging
 from enum import Enum
-from typing import Union
+from typing import Union, Optional
 
 import pandas as pd
 from pandas.io.parsers import TextFileReader
@@ -18,6 +18,7 @@ class DataType(Enum):
     """
     Data Type class based on Enum
     """
+
     RAW: str = "data/raw/"
     PROCESSED: str = "data/processed/"
     REFERENCES: str = "references/"
@@ -33,7 +34,7 @@ class PersistenceManager:
     def save_to_csv(
             data: Union[list[dict], pd.DataFrame],
             data_type: DataType = DataType.PROCESSED,
-            filename: str = "data.csv"
+            filename: str = "data.csv",
     ) -> bool:
         """
         Save list of dictionaries as csv file
@@ -54,15 +55,18 @@ class PersistenceManager:
             if not data:
                 return False
             dataframe = pd.DataFrame(data)
-        dataframe.to_csv(f"{str(data_type.value)}{filename}", index=False,
-                         encoding=ENCODING)
+        dataframe.to_csv(
+            f"{str(data_type.value)}{filename}", index=False, encoding=ENCODING
+        )
         return True
 
     @staticmethod
     def load_from_csv(
             filename: str = "raw_tweets.csv",
-            data_type: DataType = DataType.RAW, chunk_size: int = CHUNK_SIZE,
-            dtypes: dict = None, parse_dates: list[str] = None
+            data_type: DataType = DataType.RAW,
+            chunk_size: int = CHUNK_SIZE,
+            dtypes: Optional[dict] = None,
+            parse_dates: Optional[list[str]] = None,
     ) -> pd.DataFrame:
         """
         Load dataframe from CSV using chunk scheme
@@ -74,24 +78,29 @@ class PersistenceManager:
         :param chunk_size: Number of chunks to split dataset
         :type chunk_size: int
         :param dtypes: Dictionary of columns and datatypes
-        :type dtypes: dict
+        :type dtypes: Optional[dict]
         :param parse_dates: List of date columns to parse
-        :type parse_dates: list[str]
+        :type parse_dates: Optional[list[str]]
         :return: dataframe retrieved from CSV after optimization with chunks
         :rtype: pd.DataFrame
         """
         filepath: str = f"{data_type.value}{filename}"
         text_file_reader: TextFileReader = pd.read_csv(
-            filepath, header=0, chunksize=chunk_size, encoding=ENCODING,
-            dtype=dtypes, parse_dates=parse_dates)
-        dataframe: pd.DataFrame = pd.concat(
-            text_file_reader, ignore_index=True)
+            filepath,
+            header=0,
+            chunksize=chunk_size,
+            encoding=ENCODING,
+            dtype=dtypes,
+            parse_dates=parse_dates,
+        )
+        dataframe: pd.DataFrame = pd.concat(text_file_reader, ignore_index=True)
         return dataframe
 
     @staticmethod
     def save_to_pickle(
-            dataframe: pd.DataFrame, filename: str = "optimized_df.pkl",
-            data_type: DataType = DataType.PROCESSED
+            dataframe: pd.DataFrame,
+            filename: str = "optimized_df.pkl",
+            data_type: DataType = DataType.PROCESSED,
     ) -> None:
         """
         Save dataframe to pickle file
@@ -131,7 +140,7 @@ class PersistenceManager:
     @staticmethod
     def read_from_json(
             filename: str = "related_words_users.json",
-            data_type: DataType = DataType.REFERENCES
+            data_type: DataType = DataType.REFERENCES,
     ) -> dict:
         """
         Read dataframe from JSON file

@@ -7,33 +7,33 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 from matplotlib import pyplot as plt
-from numpy import uint32, float16, uint8
+from numpy import float16, uint8, uint32
 
 from core import logging_config
 from engineering.analysis import (
-    silhouette_scores,
-    latent_dirichlet_allocation,
     kmeans_clustering,
+    latent_dirichlet_allocation,
+    silhouette_scores,
 )
 from engineering.extraction import collect_tweets, get_stop_words
-from engineering.persistence_manager import PersistenceManager, DataType
+from engineering.persistence_manager import DataType, PersistenceManager
 from engineering.snscrape_collection import (
-    flatten,
-    str_to_datetime_values,
-    nested_camel,
-    get_nested_dict_structure,
     combine_flattened,
+    flatten,
+    get_nested_dict_structure,
+    nested_camel,
+    str_to_datetime_values,
 )
 from engineering.visualization import elbow_method, visualize_clusters
 from modeling.preprocessing import (
-    twitter_text_cleaning,
+    get_scores,
     remove_emoji,
     remove_punc,
-    get_scores,
+    twitter_text_cleaning,
 )
 from modeling.transformation import (
-    remove_stopwords_and_tokenize,
     get_ngram_counts,
+    remove_stopwords_and_tokenize,
     text_to_bow,
 )
 from models.models import iterate_models
@@ -62,7 +62,8 @@ for element in tweets_collected:
 tweets_df: pd.DataFrame = pd.DataFrame(clean_tweets)
 user_structure: list[str] = get_nested_dict_structure(tweets_df, "user")
 quoted_tweet_structure: list[str] = get_nested_dict_structure(
-    tweets_df, "quoted_tweet")
+    tweets_df, "quoted_tweet"
+)
 tweets_df_w_user: pd.DataFrame = combine_flattened(
     tweets_df, "user", flatten, user_structure
 )
@@ -85,7 +86,8 @@ for c in clean_tweets_df.columns:
         clean_tweets_df[c] = clean_tweets_df[c].astype(uint32)
 clean_tweets_df["date"] = pd.to_datetime(clean_tweets_df["date"])
 clean_tweets_df["user_created"] = pd.to_datetime(
-    clean_tweets_df["user_created"])
+    clean_tweets_df["user_created"]
+)
 
 stopwords_file: dict[str, list[str]] = PersistenceManager.read_from_json(
     "stop_words.json"
@@ -97,12 +99,14 @@ clean_tweets_df.drop(snscrape_columns, axis=1, inplace=True, errors="ignore")
 
 # preprocessing
 clean_tweets_df["no_emojis"] = clean_tweets_df["raw_content"].apply(
-    remove_emoji)
+    remove_emoji
+)
 clean_tweets_df["cleaned_text"] = clean_tweets_df["no_emojis"].apply(
     twitter_text_cleaning
 )
 clean_tweets_df["cleaned_text_wo_punctuation"] = clean_tweets_df[
-    "cleaned_text"].apply(remove_punc)
+    "cleaned_text"
+].apply(remove_punc)
 
 clean_tweets_df["cleaned_text_wo_punctuation_and_stopwords"] = clean_tweets_df[
     "cleaned_text_wo_punctuation"
@@ -119,9 +123,8 @@ clean_tweets_df["word_count"] = clean_tweets_df[
 clean_tweets_df["word_count"] = clean_tweets_df["word_count"].astype(uint8)
 
 clean_tweets_df["vocabulary"] = clean_tweets_df[
-    "cleaned_text_wo_punctuation"].apply(
-    lambda x: get_ngram_counts(x, stop_words)
-)
+    "cleaned_text_wo_punctuation"
+].apply(lambda x: get_ngram_counts(x, stop_words))
 
 # for idx, row in clean_tweets_df.iterrows():
 #     df_ngrams = pd.DataFrame.from_dict(
@@ -210,8 +213,8 @@ plt.show()
 
 clean_tweets_df["score"] = i_score
 clean_tweets_df["insecurity"] = np.where(
-    clean_tweets_df["score"] >= np.mean(np.array(i_score)) - np.std(
-        np.array(i_score)),
+    clean_tweets_df["score"]
+    >= np.mean(np.array(i_score)) - np.std(np.array(i_score)),
     1,
     0,
 )
@@ -264,8 +267,9 @@ tweets_df["hour"] = tweets_df["hour"].astype(uint8)
 tweets_df["insecurity"] = tweets_df["insecurity"].astype(uint8)
 
 
-def update_target(list_of_dicts: list[dict],
-                  dataframe: pd.DataFrame) -> pd.DataFrame:
+def update_target(
+    list_of_dicts: list[dict], dataframe: pd.DataFrame
+) -> pd.DataFrame:
     """
     Updates tweet targets to 0 for any tweets in `tweets_df` that have
      a matching `id` in `additional_tweets`

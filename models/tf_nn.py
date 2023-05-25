@@ -5,7 +5,7 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 from keras import backend as K
-from keras.layers import Dense, LSTM, GRU
+from keras.layers import GRU, LSTM, Dense
 from keras.models import Sequential
 from scipy.sparse import csr_matrix
 

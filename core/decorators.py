@@ -5,7 +5,7 @@ This module provides decorators designed to provide additional
 import functools
 import logging
 from time import perf_counter
-from typing import Callable, Any
+from typing import Any, Callable
 
 logger: logging.Logger = logging.getLogger(__name__)
 

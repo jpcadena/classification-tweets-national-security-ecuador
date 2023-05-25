@@ -6,8 +6,8 @@ import pandas as pd
 from matplotlib import pyplot as plt
 from scipy.sparse import csr_matrix
 from sklearn.cluster import KMeans
-from sklearn.decomposition import TruncatedSVD, LatentDirichletAllocation
-from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
+from sklearn.decomposition import LatentDirichletAllocation, TruncatedSVD
+from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn.metrics import silhouette_score
 
 from core.config import NUMERICS
@@ -35,7 +35,7 @@ def analyze_dataframe(dataframe: pd.DataFrame) -> None:
 
 
 def latent_semantic_analysis(
-        dataframe: pd.DataFrame, column: str, stop_words: list[str]
+    dataframe: pd.DataFrame, column: str, stop_words: list[str]
 ) -> np.ndarray:
     """
     Perform latent semantic analysis on a given dataframe column using
@@ -68,7 +68,7 @@ def latent_semantic_analysis(
 
 
 def latent_dirichlet_allocation(
-        dataframe: pd.DataFrame, column: str, stop_words: list[str]
+    dataframe: pd.DataFrame, column: str, stop_words: list[str]
 ) -> np.ndarray:
     """
     Applies Latent Dirichlet Allocation (LDA) to the text in the
@@ -87,7 +87,8 @@ def latent_dirichlet_allocation(
         stop_words=stop_words, max_df=0.95, min_df=2
     )
     doc_term_matrix: csr_matrix = token_counts_matrix.fit_transform(
-        dataframe[column])
+        dataframe[column]
+    )
     lda_classifier: LatentDirichletAllocation = LatentDirichletAllocation(
         n_components=2, random_state=0
     )

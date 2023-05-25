@@ -6,7 +6,7 @@ import pandas as pd
 from catboost import CatBoostClassifier
 from lightgbm import LGBMClassifier
 from scipy.sparse import csr_matrix
-from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
+from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.neighbors import KNeighborsClassifier
@@ -20,8 +20,7 @@ from modeling.modeling import predict_model
 
 
 def iterate_models(
-        bow: csr_matrix, dataframe: pd.DataFrame,
-        target_column: str = "insecurity"
+    bow: csr_matrix, dataframe: pd.DataFrame, target_column: str = "insecurity"
 ) -> None:
     """
     Iterates through a list of machine learning models and evaluates
@@ -51,8 +50,9 @@ def iterate_models(
     model_names: list[str] = []
     boost_models: list[bool] = []
     for model in models:
-        if isinstance(model,
-                      (XGBClassifier, CatBoostClassifier, LGBMClassifier)):
+        if isinstance(
+            model, (XGBClassifier, CatBoostClassifier, LGBMClassifier)
+        ):
             model_names.append(model.__class__.__name__)
             boost_models.append(True)
         else:
@@ -60,8 +60,10 @@ def iterate_models(
             boost_models.append(False)
     for model, model_name, boost in zip(models, model_names, boost_models):
         print("\n\n", model_name)
-        y_pred, y_test = predict_model(bow, dataframe, model, target_column,
-                                       boost)
+        y_pred, y_test = predict_model(
+            bow, dataframe, model, target_column, boost
+        )
         conf_matrix: np.ndarray = evaluate_model(y_pred, y_test)
         plot_confusion_matrix(
-            conf_matrix, ["Insecurity", "Not insecurity"], model_name)
+            conf_matrix, ["Insecurity", "Not insecurity"], model_name
+        )

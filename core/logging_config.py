@@ -51,7 +51,7 @@ def _build_log_filename() -> str:
 
 
 def _configure_file_handler(
-        log_filename: str, log_level: int
+    log_filename: str, log_level: int
 ) -> logging.FileHandler:
     """
     Configure a file handler with the given filename and log level

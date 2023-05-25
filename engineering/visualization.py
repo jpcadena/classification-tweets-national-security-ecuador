@@ -7,10 +7,11 @@ import re
 import numpy as np
 import pandas as pd
 import seaborn as sns
-from matplotlib import pyplot as plt, cm
+from matplotlib import cm
+from matplotlib import pyplot as plt
 from sklearn.cluster import KMeans
 
-from core.config import FIG_SIZE, PALETTE, FONT_SIZE
+from core.config import FIG_SIZE, FONT_SIZE, PALETTE
 from engineering.persistence_manager import DataType
 
 RE_PATTERN: str = "([a-z])([A-Z])"
@@ -21,8 +22,10 @@ RE_REPL: str = r"\g<1> \g<2>"
 
 
 def plot_count(
-        dataframe: pd.DataFrame, variables, hue: str,
-        data_type: DataType = DataType.FIGURES
+    dataframe: pd.DataFrame,
+    variables,
+    hue: str,
+    data_type: DataType = DataType.FIGURES,
 ) -> None:
     """
     This method plots the counts of observations from the given variables
@@ -52,7 +55,7 @@ def plot_count(
 
 
 def plot_distribution(
-        series: pd.Series, color: str, data_type: DataType = DataType.FIGURES
+    series: pd.Series, color: str, data_type: DataType = DataType.FIGURES
 ) -> None:
     """
     This method plots the distribution of the given quantitative
@@ -67,7 +70,8 @@ def plot_distribution(
     :rtype: NoneType
     """
     label: str = re.sub(
-        pattern=RE_PATTERN, repl=RE_REPL, string=str(series.name))
+        pattern=RE_PATTERN, repl=RE_REPL, string=str(series.name)
+    )
     sns.displot(x=series, kde=True, color=color, height=8, aspect=1.875)
     plt.title(f"Distribution Plot for {label}")
     plt.xlabel(label, fontsize=FONT_SIZE)
@@ -77,10 +81,10 @@ def plot_distribution(
 
 
 def boxplot_dist(
-        dataframe: pd.DataFrame,
-        first_variable: str,
-        second_variable: str,
-        data_type: DataType = DataType.FIGURES,
+    dataframe: pd.DataFrame,
+    first_variable: str,
+    second_variable: str,
+    data_type: DataType = DataType.FIGURES,
 ) -> None:
     """
     This method plots the distribution of the first variable data
@@ -98,25 +102,29 @@ def boxplot_dist(
     """
     plt.figure(figsize=FIG_SIZE)
     x_label: str = re.sub(
-        pattern=RE_PATTERN, repl=RE_REPL, string=first_variable)
+        pattern=RE_PATTERN, repl=RE_REPL, string=first_variable
+    )
     y_label: str = re.sub(
-        pattern=RE_PATTERN, repl=RE_REPL, string=second_variable)
+        pattern=RE_PATTERN, repl=RE_REPL, string=second_variable
+    )
     sns.boxplot(
-        x=first_variable, y=second_variable, data=dataframe, palette=PALETTE)
+        x=first_variable, y=second_variable, data=dataframe, palette=PALETTE
+    )
     plt.title(x_label + " in regards to " + y_label, fontsize=FONT_SIZE)
     plt.xlabel(x_label, fontsize=FONT_SIZE)
     plt.ylabel(y_label, fontsize=FONT_SIZE)
     plt.savefig(
-        f"{data_type.value}discrete_{first_variable}_{second_variable}.png")
+        f"{data_type.value}discrete_{first_variable}_{second_variable}.png"
+    )
     plt.show()
 
 
 def plot_scatter(
-        dataframe: pd.DataFrame,
-        x_array: str,
-        y_array: str,
-        hue: str,
-        data_type: DataType = DataType.FIGURES,
+    dataframe: pd.DataFrame,
+    x_array: str,
+    y_array: str,
+    hue: str,
+    data_type: DataType = DataType.FIGURES,
 ) -> None:
     """
     This method plots the relationship between x and y for hue subset
@@ -135,7 +143,8 @@ def plot_scatter(
     """
     plt.figure(figsize=FIG_SIZE)
     sns.scatterplot(
-        x=x_array, data=dataframe, y=y_array, hue=hue, palette=PALETTE)
+        x=x_array, data=dataframe, y=y_array, hue=hue, palette=PALETTE
+    )
     label: str = re.sub(pattern=RE_PATTERN, repl=RE_REPL, string=y_array)
     plt.title(f"{x_array} Wise {label} Distribution")
     print(dataframe[[x_array, y_array]].corr())
@@ -144,7 +153,7 @@ def plot_scatter(
 
 
 def plot_heatmap(
-        dataframe: pd.DataFrame, data_type: DataType = DataType.FIGURES
+    dataframe: pd.DataFrame, data_type: DataType = DataType.FIGURES
 ) -> None:
     """
     Plot heatmap to analyze correlation between features
@@ -163,8 +172,9 @@ def plot_heatmap(
 
 
 def elbow_method(
-        matrix: np.ndarray, n_clusters_range: range,
-        data_type: DataType = DataType.FIGURES
+    matrix: np.ndarray,
+    n_clusters_range: range,
+    data_type: DataType = DataType.FIGURES,
 ) -> None:
     """
     Perform elbow method for KMeans clustering to determine optimal
@@ -193,8 +203,9 @@ def elbow_method(
 
 
 def visualize_clusters(
-        matrix: np.ndarray, labels: np.ndarray,
-        data_type: DataType = DataType.FIGURES
+    matrix: np.ndarray,
+    labels: np.ndarray,
+    data_type: DataType = DataType.FIGURES,
 ) -> None:
     """
     Visualize clusters and display cluster characteristics.
@@ -233,11 +244,11 @@ def visualize_clusters(
 
 
 def plot_confusion_matrix(
-        conf_matrix: np.ndarray,
-        classes: list[str],
-        name: str,
-        normalize: bool = False,
-        data_type: DataType = DataType.FIGURES,
+    conf_matrix: np.ndarray,
+    classes: list[str],
+    name: str,
+    normalize: bool = False,
+    data_type: DataType = DataType.FIGURES,
 ) -> None:
     """
     This function plots the Confusion Matrix of the test and pred arrays
@@ -257,8 +268,7 @@ def plot_confusion_matrix(
     """
     if normalize:
         conf_matrix = (
-                conf_matrix.astype("float") / conf_matrix.sum(axis=1)[:,
-                                              np.newaxis]
+            conf_matrix.astype("float") / conf_matrix.sum(axis=1)[:, np.newaxis]
         )
         print("Normalized confusion matrix")
     else:
@@ -267,7 +277,8 @@ def plot_confusion_matrix(
     plt.figure(figsize=FIG_SIZE)
     plt.rcParams.update({"font.size": 16})
     plt.imshow(
-        conf_matrix, interpolation="nearest", cmap=cm.get_cmap("viridis", 8))
+        conf_matrix, interpolation="nearest", cmap=cm.get_cmap("viridis", 8)
+    )
     plt.title("Confusion matrix")
     plt.colorbar()
     tick_marks = np.arange(len(classes))
@@ -276,7 +287,7 @@ def plot_confusion_matrix(
     fmt: str = ".2f" if normalize else "d"
     thresh: float = conf_matrix.max(initial=0) / 2.0
     for i, j in itertools.product(
-            range(conf_matrix.shape[0]), range(conf_matrix.shape[1])
+        range(conf_matrix.shape[0]), range(conf_matrix.shape[1])
     ):
         plt.text(
             j,

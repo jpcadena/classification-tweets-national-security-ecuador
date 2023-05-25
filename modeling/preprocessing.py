@@ -10,8 +10,12 @@ import numpy as np
 import pandas as pd
 import spacy
 from matplotlib import pyplot as plt
-from nltk import WhitespaceTokenizer, RegexpTokenizer, WordNetLemmatizer, \
-    TweetTokenizer
+from nltk import (
+    RegexpTokenizer,
+    TweetTokenizer,
+    WhitespaceTokenizer,
+    WordNetLemmatizer,
+)
 from nltk.corpus import stopwords
 from numpy import float16
 from sklearn.neighbors import LocalOutlierFactor
@@ -51,7 +55,7 @@ def tokenize(tweet: str) -> str:
 
 
 def lof_observation(
-        dataframe: pd.DataFrame, data_type: DataType = DataType.FIGURES
+    dataframe: pd.DataFrame, data_type: DataType = DataType.FIGURES
 ) -> pd.DataFrame:
     """
     This function identifies outliers with LOF method
@@ -65,7 +69,8 @@ def lof_observation(
     df_num_cols: pd.DataFrame = dataframe.select_dtypes(include=NUMERICS)
     df_outlier: pd.DataFrame = df_num_cols.astype("float64")
     clf: LocalOutlierFactor = LocalOutlierFactor(
-        n_neighbors=20, contamination=0.1)
+        n_neighbors=20, contamination=0.1
+    )
     clf.fit_predict(df_outlier)
     df_scores = clf.negative_outlier_factor_
     scores_df: pd.DataFrame = pd.DataFrame(np.sort(df_scores))
@@ -128,8 +133,9 @@ def clean_stopwords(tweet: str) -> list[str]:
     :rtype: list[str]
     """
     tweet_list: list[str] = [ele for ele in tweet.split() if ele != "user"]
-    clean_tokens: list[str] = [t for t in tweet_list if
-                               re.match(STOPWORDS_PATTERN, t)]
+    clean_tokens: list[str] = [
+        t for t in tweet_list if re.match(STOPWORDS_PATTERN, t)
+    ]
     clean_s: str = "" "".join(clean_tokens)
     clean_mess: list[str] = [
         word
@@ -235,8 +241,7 @@ def remove_punc(message):
     :return: Message without punctuations
     :rtype: str
     """
-    return "".join([char for char in message if char not in
-                    string.punctuation])
+    return "".join([char for char in message if char not in string.punctuation])
 
 
 def jaccard_similarity(query: list[str], document: list[str]) -> float16:

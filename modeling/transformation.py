@@ -25,7 +25,7 @@ def normalization(tweet_list: list[str]) -> list[str]:
 
 
 def remove_stopwords_and_tokenize(
-        text: str, stop_words: list[str]
+    text: str, stop_words: list[str]
 ) -> list[str]:
     """
     Removes stopwords from a string of text and tokenizes it
@@ -36,8 +36,11 @@ def remove_stopwords_and_tokenize(
     :return: A list of tokens without stopwords
     :rtype: list[str]
     """
-    return [w for w in simple_preprocess(text) if w not in stop_words and
-            len(w) >= 3]
+    return [
+        w
+        for w in simple_preprocess(text)
+        if w not in stop_words and len(w) >= 3
+    ]
 
 
 def get_ngram_counts(tweet: str, stop_words: list[str]) -> dict[str, int]:
@@ -52,8 +55,9 @@ def get_ngram_counts(tweet: str, stop_words: list[str]) -> dict[str, int]:
     """
     # Tokenize the tweet and remove stop words
     tokens = [
-        w for w in simple_preprocess(tweet) if w not in stop_words and
-                                               len(w) >= 3
+        w
+        for w in simple_preprocess(tweet)
+        if w not in stop_words and len(w) >= 3
     ]
 
     # Check if the tweet contains at least one non-stop word
@@ -76,7 +80,7 @@ def get_ngram_counts(tweet: str, stop_words: list[str]) -> dict[str, int]:
 
 
 def text_to_bow(
-        dataframe: pd.DataFrame, column_name: str
+    dataframe: pd.DataFrame, column_name: str
 ) -> tuple[csr_matrix, CountVectorizer]:
     """
     Convert text in a dataframe column to a bag of words representation

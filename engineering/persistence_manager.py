@@ -4,12 +4,12 @@ Persistence script
 import json
 import logging
 from enum import Enum
-from typing import Union, Optional
+from typing import Optional, Union
 
 import pandas as pd
 from pandas.io.parsers import TextFileReader
 
-from core.config import ENCODING, CHUNK_SIZE
+from core.config import CHUNK_SIZE, ENCODING
 
 logger: logging.Logger = logging.getLogger(__name__)
 
@@ -32,9 +32,9 @@ class PersistenceManager:
 
     @staticmethod
     def save_to_csv(
-            data: Union[list[dict], pd.DataFrame],
-            data_type: DataType = DataType.PROCESSED,
-            filename: str = "data.csv",
+        data: Union[list[dict], pd.DataFrame],
+        data_type: DataType = DataType.PROCESSED,
+        filename: str = "data.csv",
     ) -> bool:
         """
         Save list of dictionaries as csv file
@@ -62,11 +62,11 @@ class PersistenceManager:
 
     @staticmethod
     def load_from_csv(
-            filename: str = "raw_tweets.csv",
-            data_type: DataType = DataType.RAW,
-            chunk_size: int = CHUNK_SIZE,
-            dtypes: Optional[dict] = None,
-            parse_dates: Optional[list[str]] = None,
+        filename: str = "raw_tweets.csv",
+        data_type: DataType = DataType.RAW,
+        chunk_size: int = CHUNK_SIZE,
+        dtypes: Optional[dict] = None,
+        parse_dates: Optional[list[str]] = None,
     ) -> pd.DataFrame:
         """
         Load dataframe from CSV using chunk scheme
@@ -98,9 +98,9 @@ class PersistenceManager:
 
     @staticmethod
     def save_to_pickle(
-            dataframe: pd.DataFrame,
-            filename: str = "optimized_df.pkl",
-            data_type: DataType = DataType.PROCESSED,
+        dataframe: pd.DataFrame,
+        filename: str = "optimized_df.pkl",
+        data_type: DataType = DataType.PROCESSED,
     ) -> None:
         """
         Save dataframe to pickle file
@@ -119,8 +119,8 @@ class PersistenceManager:
 
     @staticmethod
     def load_from_pickle(
-            filename: str = "optimized_df.pkl",
-            data_type: DataType = DataType.PROCESSED
+        filename: str = "optimized_df.pkl",
+        data_type: DataType = DataType.PROCESSED,
     ) -> pd.DataFrame:
         """
         Load dataframe from Pickle file
@@ -139,8 +139,8 @@ class PersistenceManager:
 
     @staticmethod
     def read_from_json(
-            filename: str = "related_words_users.json",
-            data_type: DataType = DataType.REFERENCES,
+        filename: str = "related_words_users.json",
+        data_type: DataType = DataType.REFERENCES,
     ) -> dict:
         """
         Read dataframe from JSON file

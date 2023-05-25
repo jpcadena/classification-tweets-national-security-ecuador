@@ -3,13 +3,12 @@ Data collection process
 """
 import re
 from datetime import date, datetime
-from typing import Union, Optional, Callable, Any
+from typing import Any, Callable, Optional, Union
 
 import pandas as pd
 import snscrape.modules.twitter as sn_twitter
 
 from core.config import DATE_FORMAT
-
 
 # TODO: define operations if data will be required to be written to disk.
 #  If so, define persistence methods to save as csv or any file extension
@@ -24,8 +23,9 @@ def decode_tweet_to_json(obj: sn_twitter.Tweet) -> str:
     :rtype: str
     """
     return (
-        obj.strftime(DATE_FORMAT) if isinstance(obj, (date, datetime)) else
-        obj.__dict__
+        obj.strftime(DATE_FORMAT)
+        if isinstance(obj, (date, datetime))
+        else obj.__dict__
     )
 
 
@@ -82,16 +82,17 @@ def nested_camel(data: Union[list, dict]) -> Union[list, dict]:
     :rtype: list or dict
     """
     if isinstance(data, list):
-        return [nested_camel(i) if isinstance(i, (dict, list)) else i for i
-                in data]
+        return [
+            nested_camel(i) if isinstance(i, (dict, list)) else i for i in data
+        ]
     return {
-        camel_to_snake(a): nested_camel(b) if isinstance(b, (dict, list)) else
-        b for a, b in data.items()
+        camel_to_snake(a): nested_camel(b) if isinstance(b, (dict, list)) else b
+        for a, b in data.items()
     }
 
 
 def flatten(
-        raw_tweet: dict, column_name: str, structure: list[str]
+    raw_tweet: dict, column_name: str, structure: list[str]
 ) -> pd.Series:
     """
     Flat method to nested dictionaries as dataframe column
@@ -122,7 +123,7 @@ def flatten(
 
 
 def get_nested_dict_structure(
-        dataframe: pd.DataFrame, column: str
+    dataframe: pd.DataFrame, column: str
 ) -> list[str]:
     """
     Get nested structure from dictionary in Tweet dictionary
@@ -143,8 +144,10 @@ def get_nested_dict_structure(
 
 
 def combine_flattened(
-        dataframe: pd.DataFrame, column: str, func: Callable[..., Any],
-        structure: list[str]
+    dataframe: pd.DataFrame,
+    column: str,
+    func: Callable[..., Any],
+    structure: list[str],
 ) -> pd.DataFrame:
     """
     Join Tweets dataframe with flatten dictionary as new Series columns

@@ -9,7 +9,7 @@ from schemas.specification import SenderSpecification, TextSpecification
 
 
 def collect_tweets(
-        json_file: dict[str, list[str]]
+    json_file: dict[str, list[str]]
 ) -> tuple[list[dict], list[dict]]:
     """
     Collect tweets from multiple users and topics
@@ -23,7 +23,8 @@ def collect_tweets(
     users: list[str] = json_file.get("users")
     better_filter: BetterFilter = BetterFilter()
     tweets_from_users: list[dict] = collect_tweets_from_users(
-        users, better_filter)
+        users, better_filter
+    )
     tweets_collected: list[dict] = collect_tweets_containing_words(
         insecurity_words, better_filter
     )
@@ -34,7 +35,7 @@ def collect_tweets(
 
 
 def collect_tweets_from_users(
-        users: list[str], better_filter: BetterFilter
+    users: list[str], better_filter: BetterFilter
 ) -> list[dict]:
     """
     Collect tweets from users list
@@ -51,13 +52,14 @@ def collect_tweets_from_users(
         sender_spec: SenderSpecification = SenderSpecification(user)
         tweets_from_users.extend(
             better_filter.filter(
-                sender_spec, limit=150, func=decode_tweet_to_json)
+                sender_spec, limit=150, func=decode_tweet_to_json
+            )
         )
     return tweets_from_users
 
 
 def collect_tweets_containing_words(
-        insecurity_words: list[str], better_filter: BetterFilter
+    insecurity_words: list[str], better_filter: BetterFilter
 ) -> list[dict]:
     """
     Collect tweets from specific words for insecurity topic
@@ -76,7 +78,8 @@ def collect_tweets_containing_words(
         text_spec: TextSpecification = TextSpecification(word)
         tweets_collected.extend(
             better_filter.filter(
-                text_spec, limit=350, func=decode_tweet_to_json)
+                text_spec, limit=350, func=decode_tweet_to_json
+            )
         )
     return tweets_collected
 
@@ -96,7 +99,8 @@ def collect_additional_tweets(better_filter: BetterFilter) -> list[dict]:
         new_spec: TextSpecification = TextSpecification(add_word)
         additional_tweets.extend(
             better_filter.filter(
-                new_spec, limit=1500, func=decode_tweet_to_json)
+                new_spec, limit=1500, func=decode_tweet_to_json
+            )
         )
     return additional_tweets
 

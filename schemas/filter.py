@@ -3,7 +3,7 @@ Filter schema
 """
 import json
 from abc import ABC, abstractmethod
-from typing import Optional, Callable, Any
+from typing import Any, Callable, Optional
 
 import snscrape.modules.twitter as sn_twitter
 
@@ -17,7 +17,7 @@ class Filter(ABC):
 
     @abstractmethod
     def filter(
-            self, spec: Specification, exclude: Optional[str] = None
+        self, spec: Specification, exclude: Optional[str] = None
     ) -> None:
         """
         Abstract method to filter
@@ -36,11 +36,11 @@ class BetterFilter(Filter):
     """
 
     def filter(
-            self,
-            spec: Specification,
-            exclude: Optional[str] = None,
-            limit: int = 100,
-            func: Optional[Callable[..., Any]] = None,
+        self,
+        spec: Specification,
+        exclude: Optional[str] = None,
+        limit: int = 100,
+        func: Optional[Callable[..., Any]] = None,
     ) -> list[dict]:
         """
         Filter method inherited from Filter
@@ -69,10 +69,12 @@ class BetterFilter(Filter):
         #     tweet_dict: dict = json.loads(single_tweet.json())
 
         for idx, tweet in enumerate(
-                sn_twitter.TwitterSearchScraper(query).get_items()):
+            sn_twitter.TwitterSearchScraper(query).get_items()
+        ):
             if idx > limit:
                 break
-            full_tweet_dict: dict = json.loads(json.dumps(
-                tweet.__dict__, default=func))
+            full_tweet_dict: dict = json.loads(
+                json.dumps(tweet.__dict__, default=func)
+            )
             raw_tweets.append(full_tweet_dict)
         return raw_tweets

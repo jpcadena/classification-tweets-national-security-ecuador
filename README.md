@@ -1,6 +1,7 @@
 # classification-tweets-national-security-ecuador
 
 <!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
+
 <a name="readme-top"></a>
 
 <!-- PROJECT SHIELDS -->
@@ -8,7 +9,6 @@
 *** Markdown "reference style" links for readability.
 *** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
 -->
-
 
 <!-- PROJECT LOGO -->
 <br />
@@ -27,8 +27,6 @@ Tweets Classification about national security at Ecuador.
     <br />
   </p>
 </div>
-
-
 
 <!-- TABLE OF CONTENTS -->
 <details>
@@ -54,8 +52,6 @@ Tweets Classification about national security at Ecuador.
   </ol>
 </details>
 
-
-
 <!-- ABOUT THE PROJECT -->
 
 ## About the project
@@ -64,25 +60,23 @@ Tweets Classification about national security at Ecuador.
 
 This project is in development.
 
-
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## Built with
 
-* [![Python][Python.org]][Python-url]
-* [![Pandas][Pandas]][pandas-url]
-* [![numpy][NumPy]][numpy-url]
-* [![scikit-learn][Scikit-Learn]][scikit-learn-url]
-* [![spacy][Spacy]][spacy-url]
-* [![tensorflow][TensorFlow]][tensorflow-url]
-* [![keras][Keras]][keras-url]
-* [![Pylint][Pylint]][pylint-url]
-* [![Jupyter-Notebooks][Jupyter-Notebooks]][Jupyter-Notebooks-url]
-* [![Pycharm][PyCharm]][Pycharm-url]
-* [![Markdown][Markdown]][Markdown-url]
+- [![Python][Python.org]][Python-url]
+- [![Pandas][Pandas]][pandas-url]
+- [![numpy][NumPy]][numpy-url]
+- [![scikit-learn][Scikit-Learn]][scikit-learn-url]
+- [![spacy][Spacy]][spacy-url]
+- [![tensorflow][TensorFlow]][tensorflow-url]
+- [![keras][Keras]][keras-url]
+- [![Pylint][Pylint]][pylint-url]
+- [![Jupyter-Notebooks][Jupyter-Notebooks]][Jupyter-Notebooks-url]
+- [![Pycharm][PyCharm]][Pycharm-url]
+- [![Markdown][Markdown]][Markdown-url]
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 
 <!-- GETTING STARTED -->
 
@@ -90,53 +84,49 @@ This project is in development.
 
 ### Prerequisites
 
-* [Python 3.10+][Python-docs-url]
+- [Python 3.10+][Python-docs-url]
 
 ### Installation
 
 1. Clone the **repository**
-    ```
-    git clone https://github.com/jpcadena/classification-tweets-national-security-ecuador.git
-    ```
+   ```
+   git clone https://github.com/jpcadena/classification-tweets-national-security-ecuador.git
+   ```
 2. Change the directory to **root project**
-    ```
-    cd classification-tweets-national-security-ecuador
-    ```
-3. Create a **virtual environment** *venv*
-    ```
-    python3 -m venv venv
-    ```
+   ```
+   cd classification-tweets-national-security-ecuador
+   ```
+3. Create a **virtual environment** _venv_
+   ```
+   python3 -m venv venv
+   ```
 4. Activate **environment** in Windows
-    ```
-    .\venv\Scripts\activate
-    ```
+   ```
+   .\venv\Scripts\activate
+   ```
 5. Or with Unix/Mac OS X
-    ```
-    source venv/bin/activate
-    ```
+   ```
+   source venv/bin/activate
+   ```
 6. Install requirements with PIP
-    ```
-    pip install -r requirements.txt
-    ```
+   ```
+   pip install -r requirements.txt
+   ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- USAGE EXAMPLES -->
 
 ### Usage
 
 1. Rename file **sample.env** to **.env**.
-2. Replace your **credentials** into the *.env* file.
+2. Replace your **credentials** into the _.env_ file.
 3. Execute with console.
-    ```
-    python main.py
-    ```
+   ```
+   python main.py
+   ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- CONTRIBUTING -->
 
@@ -168,8 +158,6 @@ autocompletion: [Tabnine](https://www.tabnine.com/install)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-
 <!-- LICENSE -->
 
 ## License
@@ -177,8 +165,6 @@ autocompletion: [Tabnine](https://www.tabnine.com/install)
 Distributed under the MIT License.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
 
 <!-- CONTACT -->
 
@@ -189,64 +175,35 @@ Distributed under the MIT License.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 
 [LinkedIn]: https://img.shields.io/badge/linkedin-%230077B5.svg?style=for-the-badge&logo=linkedin&logoColor=white
-
 [linkedin-url]: https://linkedin.com/in/juanpablocadenaaguilar
-
 [Outlook]: https://img.shields.io/badge/Microsoft_Outlook-0078D4?style=for-the-badge&logo=microsoft-outlook&logoColor=white
-
 [project-screenshot]: assets/static/images/project.png
-
 [Python.org]: https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54
-
 [Python-url]: https://www.python.org/
-
 [Python-docs-url]: https://docs.python.org/3.10/
-
 [Pylint]: https://img.shields.io/badge/linting-pylint-yellowgreen
-
 [Pandas]: https://img.shields.io/badge/pandas-%23150458.svg?style=for-the-badge&logo=pandas&logoColor=white
-
 [NumPy]: https://img.shields.io/badge/numpy-%23013243.svg?style=for-the-badge&logo=numpy&logoColor=white
-
 [Scikit-Learn]: https://img.shields.io/badge/scikit--learn-%23F7931E.svg?style=for-the-badge&logo=scikit-learn&logoColor=white
-
 [PyCharm]: https://img.shields.io/badge/PyCharm-21D789?style=for-the-badge&logo=pycharm&logoColor=white
-
 [Markdown]: https://img.shields.io/badge/Markdown-000000?style=for-the-badge&logo=markdown&logoColor=white
-
 [Spacy]: https://img.shields.io/badge/Spacy-09A3D5?style=for-the-badge&logo=spacy&logoColor=white
-
 [TensorFlow]: https://img.shields.io/badge/TensorFlow-FF6F00?style=for-the-badge&logo=tensorflow&logoColor=white
-
 [Keras]: https://img.shields.io/badge/Keras-D00000?style=for-the-badge&logo=keras&logoColor=white
-
 [Jupyter-Notebooks]: https://img.shields.io/badge/Jupyter_Notebooks-F37626?style=for-the-badge&logo=jupyter&logoColor=white
-
 [pylint-url]: https://www.pylint.org/
-
 [pandas-url]: https://pandas.pydata.org/docs/
-
 [numpy-url]: https://numpy.org/
-
 [scikit-learn-url]: https://scikit-learn.org/stable/
-
 [Pycharm-url]: https://www.jetbrains.com/pycharm/
-
 [Markdown-url]: https://daringfireball.net/projects/markdown/
-
 [spacy-url]: https://spacy.io/
-
 [tensorflow-url]: https://www.tensorflow.org/
-
 [keras-url]: https://keras.io/
-
 [Jupyter-Notebooks-url]: https://jupyter.org/
-
 [GitHub]: https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white
-
 [GitHub-Url]: https://github.com/jpcadena/tweets-classification-backend
